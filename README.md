@@ -1,5 +1,8 @@
 # Italovers
 
+**[italovers.vercel.app](https://italovers.vercel.app)** — instalável como app no iPhone e no
+Android. A localização só funciona sob HTTPS: o iOS Safari se recusa a dar posição em `http://`.
+
 PWA mobile-first que cruza os lugares que a gente salvou no Google Maps com o roteiro
 da viagem e o GPS do celular, pra responder bem uma única pergunta:
 
