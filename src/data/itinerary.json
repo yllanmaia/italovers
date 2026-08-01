@@ -1,0 +1,853 @@
+{
+  "trip": {
+    "name": "Europa 2026",
+    "start_date": "2026-09-04",
+    "end_date": "2026-09-22",
+    "note": "Datas/horários em horário local de cada trecho. Brasil (GMT-3) só nos dias de voo Rio<->Frankfurt; resto do trecho (Alemanha/Itália) fica em CEST (GMT+2) o período inteiro."
+  },
+  "phases": [
+    {
+      "id": "travel-outbound",
+      "name": "Ida Rio -> Frankfurt",
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-05",
+      "center": {
+        "lat": 50.0379,
+        "lng": 8.5622
+      },
+      "notes": "Voo GIG->FRA"
+    },
+    {
+      "id": "germany-1",
+      "name": "Alemanha (Darmstadt) - ida",
+      "start_date": "2026-09-05",
+      "end_date": "2026-09-08",
+      "center": {
+        "lat": 49.8728,
+        "lng": 8.6512
+      },
+      "notes": "Visitando a Giovanna, sem detalhamento no roteiro"
+    },
+    {
+      "id": "sicily-castellammare",
+      "name": "Sicilia - Castellammare del Golfo / Scopello",
+      "start_date": "2026-09-08",
+      "end_date": "2026-09-10",
+      "center": {
+        "lat": 38.0167,
+        "lng": 12.8833
+      },
+      "notes": "Base em Castellammare, day trip pra Riserva dello Zingaro e Scopello"
+    },
+    {
+      "id": "favignana",
+      "name": "Favignana",
+      "start_date": "2026-09-10",
+      "end_date": "2026-09-12",
+      "center": {
+        "lat": 37.9333,
+        "lng": 12.3333
+      },
+      "notes": "Ilha, locomocao de bike/barco"
+    },
+    {
+      "id": "palermo",
+      "name": "Palermo",
+      "start_date": "2026-09-12",
+      "end_date": "2026-09-14",
+      "center": {
+        "lat": 38.1157,
+        "lng": 13.3615
+      },
+      "notes": "Base: Addimura rooms"
+    },
+    {
+      "id": "rome-terni",
+      "name": "Roma (base em Terni)",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-17",
+      "center": {
+        "lat": 41.9028,
+        "lng": 12.4964
+      },
+      "notes": "Dorme em Terni, day trips pra Roma de trem"
+    },
+    {
+      "id": "germany-2",
+      "name": "Alemanha (Darmstadt) - volta rapida",
+      "start_date": "2026-09-17",
+      "end_date": "2026-09-18",
+      "center": {
+        "lat": 49.8728,
+        "lng": 8.6512
+      },
+      "notes": "Transito, Mathildenhoehe pela manha do dia 18"
+    },
+    {
+      "id": "munich-oktoberfest",
+      "name": "Munique - Oktoberfest",
+      "start_date": "2026-09-18",
+      "end_date": "2026-09-21",
+      "center": {
+        "lat": 48.1351,
+        "lng": 11.582
+      },
+      "notes": "Base: Ramada Encore by Wyndham Munich Messe"
+    },
+    {
+      "id": "travel-return",
+      "name": "Volta Frankfurt -> Rio",
+      "start_date": "2026-09-21",
+      "end_date": "2026-09-22",
+      "center": {
+        "lat": 50.0379,
+        "lng": 8.5622
+      },
+      "notes": "Voo FRA->GIG"
+    }
+  ],
+  "accommodations": [
+    {
+      "name": "Suite Altamarea – Sea View Studios",
+      "city": "Castellammare del Golfo",
+      "address": "Via Giacomo Puccini, 45, 91014 Castellammare del Golfo TP, Itália",
+      "check_in": "2026-09-08",
+      "check_out": "2026-09-10",
+      "nights": 2,
+      "payment_note": "Sem pre-pagamento - cobranca na acomodacao",
+      "phase_id": "sicily-castellammare",
+      "lat": 38.0283242,
+      "lng": 12.8765216,
+      "geocode_note": "coordenadas de places.json p009 (Suite Altamarea “Sea View Studios”)"
+    },
+    {
+      "name": "Catria",
+      "address": "Via Nicotera 24, 91023 Favignana, Italia",
+      "phone": "+39 376 109 8864",
+      "check_in": "2026-09-10T15:30",
+      "check_out": "2026-09-12T10:00",
+      "nights": 2,
+      "phase_id": "favignana",
+      "lat": 37.9305584,
+      "lng": 12.3286592,
+      "geocode_source": "nominatim"
+    },
+    {
+      "name": "Addimura rooms",
+      "city": "Palermo",
+      "address": "Via Maqueda, 331, 90133 Palermo PA, Itália",
+      "check_in": "2026-09-12",
+      "check_out": "2026-09-14",
+      "nights": 2,
+      "phase_id": "palermo",
+      "lat": 38.1182454,
+      "lng": 13.3598608,
+      "geocode_note": "coordenadas de places.json p005 (Via Maqueda, 331)"
+    },
+    {
+      "name": "Ramada Encore by Wyndham Munich Messe",
+      "address": "Stahlgruberring 45-47, 81829 Munique, Alemanha",
+      "phone": "+49 89 45600620",
+      "check_in": "2026-09-18T15:00",
+      "check_out": "2026-09-20T11:00",
+      "nights": 2,
+      "phase_id": "munich-oktoberfest",
+      "lat": 48.1352645,
+      "lng": 11.6693802,
+      "geocode_source": "nominatim"
+    }
+  ],
+  "flights": [
+    {
+      "date": "2026-09-04",
+      "flight": "LH501",
+      "route": "GIG -> FRA",
+      "departure": "16:15",
+      "arrival": "08:35 (+1, 05/09)",
+      "reservation": "8UVM2S"
+    },
+    {
+      "date": "2026-09-08",
+      "flight": "FR4749 Ryanair",
+      "route": "FKB -> PMO",
+      "departure": "12:50",
+      "arrival": "14:55",
+      "reservation": "F7U57R",
+      "seat": "19A"
+    },
+    {
+      "date": "2026-09-14",
+      "flight": "W4 6254 Wizz Air",
+      "route": "PMO -> FCO (T1)",
+      "departure": "17:45",
+      "arrival": "18:55",
+      "reservation": "NU4MYE",
+      "seat": "15A"
+    },
+    {
+      "date": "2026-09-17",
+      "flight": "EJU2992 easyJet",
+      "route": "FCO -> FRA",
+      "departure": "13:00",
+      "arrival": "15:00",
+      "reservation": "KCMX2QL",
+      "seat": "6A"
+    },
+    {
+      "date": "2026-09-21",
+      "flight": "LH500",
+      "route": "FRA -> GIG",
+      "departure": "22:15",
+      "arrival": "04:55 (+1, 22/09)",
+      "reservation": "8UVM2S"
+    }
+  ],
+  "ferries": [
+    {
+      "date": "2026-09-10",
+      "route": "Trapani -> Favignana",
+      "operator": "Liberty Lines",
+      "duration": "~50min",
+      "chosen_departure": "11:40 ou 12:25",
+      "other_departures": [
+        "06:50",
+        "07:50",
+        "08:05",
+        "08:45",
+        "09:40",
+        "14:10",
+        "14:45",
+        "15:30",
+        "18:00",
+        "19:30"
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "route": "Favignana -> Trapani",
+      "operator": "Liberty Lines",
+      "chosen_departure": "07:50 ou 08:05"
+    }
+  ],
+  "days": [
+    {
+      "date": "2026-09-04",
+      "phase_id": "travel-outbound",
+      "title": "Ida - Rio -> Alemanha",
+      "blocks": [
+        {
+          "time": "12:15",
+          "end_time": "12:30",
+          "type": "transport",
+          "title": "Sair de casa (Leme)"
+        },
+        {
+          "time": "13:15",
+          "type": "transport",
+          "title": "Chegada no Galeao (GIG)",
+          "note": "3h antes do voo internacional"
+        },
+        {
+          "time": "16:15",
+          "type": "flight",
+          "title": "LH501 GIG -> FRA",
+          "reservation": "8UVM2S"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-05",
+      "phase_id": "germany-1",
+      "title": "Pouso em Frankfurt + Alemanha",
+      "blocks": [
+        {
+          "time": "08:35",
+          "type": "transport",
+          "title": "Pouso em Frankfurt (FRA)"
+        },
+        {
+          "type": "activity",
+          "title": "Alemanha - visitando a Giovanna",
+          "note": "05-07/09, sem detalhamento no roteiro original"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-06",
+      "phase_id": "germany-1",
+      "title": "Alemanha (Giovanna)",
+      "blocks": [
+        {
+          "type": "activity",
+          "title": "Sem detalhamento no roteiro original"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "phase_id": "germany-1",
+      "title": "Alemanha (Giovanna)",
+      "blocks": [
+        {
+          "type": "activity",
+          "title": "Sem detalhamento no roteiro original"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "phase_id": "sicily-castellammare",
+      "title": "DIA 1 - Darmstadt -> Baden-Baden -> Palermo -> Castellammare",
+      "blocks": [
+        {
+          "time": "08:30",
+          "end_time": "09:00",
+          "type": "transport",
+          "title": "Sair de Darmstadt de trem rumo a Baden-Baden Hbf"
+        },
+        {
+          "time": "10:30",
+          "end_time": "11:00",
+          "type": "transport",
+          "title": "Chegada Baden-Baden Hbf",
+          "warning": "trecho rapido usa ICE, nao coberto pelo Deutschlandticket - checar alternativa 100% regional ou pagar trecho extra"
+        },
+        {
+          "type": "transport",
+          "title": "Onibus regional Baden-Baden Hbf -> Aeroporto (FKB)",
+          "note": "aceita Deutschlandticket"
+        },
+        {
+          "time": "11:00",
+          "end_time": "11:30",
+          "type": "transport",
+          "title": "Chegada no aeroporto FKB"
+        },
+        {
+          "time": "12:50",
+          "end_time": "14:55",
+          "type": "flight",
+          "title": "Ryanair FR4749, Baden-Baden (FKB) -> Palermo (PMO)",
+          "reservation": "F7U57R",
+          "seat": "19A"
+        },
+        {
+          "time": "15:30",
+          "type": "transport",
+          "title": "Desembarque em Palermo"
+        },
+        {
+          "type": "transport",
+          "title": "Transporte ate Castellammare",
+          "note": "navetta direta (EUR20/pessoa, ~1h, reservar antes) ou taxi/app (~45min-1h) - evitar o trem (dados inconsistentes, pode passar de 1h30)"
+        },
+        {
+          "time": "16:30",
+          "end_time": "17:00",
+          "type": "hotel",
+          "title": "Chegada em Castellammare del Golfo, check-in"
+        },
+        {
+          "type": "activity",
+          "title": "Mercado local (vinho/queijo) antes do jantar -> jantar -> Castello Arabo-Normanno + Lungomare",
+          "period": "noite"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-09",
+      "phase_id": "sicily-castellammare",
+      "title": "DIA 2 - Riserva dello Zingaro + Scopello",
+      "blocks": [
+        {
+          "type": "transport",
+          "title": "Taxi/app ate Scopello",
+          "period": "manha cedo",
+          "note": "~15-25min, EUR17-35 - mais flexivel que o onibus local (so 2-5/dia)"
+        },
+        {
+          "type": "activity",
+          "title": "Entrada na Riserva (lado sul)"
+        },
+        {
+          "type": "activity",
+          "title": "Trilha: Cala Capreria, Punta Corvo",
+          "duration": "~5h"
+        },
+        {
+          "type": "food",
+          "title": "Almoco em Scopello",
+          "period": "meio da tarde"
+        },
+        {
+          "type": "activity",
+          "title": "Tonnara di Scopello",
+          "note": "ingresso EUR15-25, na entrada ou online",
+          "period": "tarde"
+        },
+        {
+          "type": "decision",
+          "title": "Por do sol (~19:30)",
+          "options": [
+            {
+              "id": "a",
+              "name": "Opcao A",
+              "desc": "Voltar cedo pro hotel, ver o por do sol e jantar em Castellammare"
+            },
+            {
+              "id": "b",
+              "name": "Opcao B",
+              "desc": "Ficar em Scopello ate o por do sol na Tonnara, jantar la mesmo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-09-10",
+      "phase_id": "favignana",
+      "title": "DIA 3 - Castellammare -> Favignana (chegada + bike)",
+      "blocks": [
+        {
+          "type": "transport",
+          "title": "Checkout, transporte ate Trapani",
+          "period": "manha",
+          "warning": "checar Trenitalia/AST perto da data - dados conflitantes"
+        },
+        {
+          "time": "11:40",
+          "type": "ferry",
+          "title": "Ferry Trapani -> Favignana (Liberty Lines, ~50min)",
+          "note": "alternativas: 06:50, 07:50, 08:05, 08:45, 09:40, 14:10, 14:45, 15:30, 18:00, 19:30"
+        },
+        {
+          "time": "12:30",
+          "end_time": "13:15",
+          "type": "transport",
+          "title": "Chegada em Favignana"
+        },
+        {
+          "time": "15:30",
+          "type": "hotel",
+          "title": "Check-in no Catria"
+        },
+        {
+          "type": "activity",
+          "title": "Bike pela ilha",
+          "period": "tarde",
+          "note": "rota a definir no app"
+        },
+        {
+          "type": "food",
+          "title": "Jantar + mercado/enoteca local",
+          "period": "noite"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-11",
+      "phase_id": "favignana",
+      "title": "DIA 4 - Favignana: dia de barco",
+      "blocks": [
+        {
+          "time": "09:30",
+          "type": "activity",
+          "title": "Alugar gommone sem carteira (ate 40cv)",
+          "note": "EUR120-180/dia, ate EUR240 alta temporada - local a confirmar no app"
+        },
+        {
+          "time": "10:00",
+          "end_time": "15:00",
+          "type": "activity",
+          "title": "Navegacao: Cala Azzurra, Cala Rossa, Bue Marino",
+          "note": "volta mais cedo por causa das ondas"
+        },
+        {
+          "time": "15:00",
+          "type": "transport",
+          "title": "Devolver barco, voltar pro hotel"
+        },
+        {
+          "type": "activity",
+          "title": "Passeio pela cidade",
+          "period": "tarde"
+        },
+        {
+          "type": "food",
+          "title": "Jantar",
+          "period": "noite"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-12",
+      "phase_id": "palermo",
+      "title": "DIA 5 - Favignana -> Palermo",
+      "blocks": [
+        {
+          "type": "transport",
+          "title": "Checkout do Catria",
+          "period": "bem cedo",
+          "note": "antes das 8:30"
+        },
+        {
+          "time": "07:50",
+          "type": "ferry",
+          "title": "Ferry cedo Favignana -> Trapani"
+        },
+        {
+          "time": "09:15",
+          "type": "transport",
+          "title": "Onibus Trapani -> Palermo"
+        },
+        {
+          "time": "10:45",
+          "type": "transport",
+          "title": "Chegada em Palermo"
+        },
+        {
+          "time": "11:30",
+          "type": "hotel",
+          "title": "Chegada no hotel Addimura, deixar malas"
+        },
+        {
+          "time": "12:00",
+          "end_time": "14:00",
+          "type": "food",
+          "title": "Almoco + Mercato del Capo",
+          "note": "fecha 14h"
+        },
+        {
+          "time": "14:00",
+          "end_time": "15:00",
+          "type": "activity",
+          "title": "Mercato di Ballaro"
+        },
+        {
+          "time": "15:00",
+          "end_time": "18:00",
+          "type": "activity",
+          "title": "Quattro Canti + Cattedrale di Palermo"
+        },
+        {
+          "type": "food",
+          "title": "Jantar primeiro, depois Vucciria",
+          "period": "noite"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "phase_id": "palermo",
+      "title": "DIA 6 - Dia livre - escolher 1 de 4",
+      "blocks": [
+        {
+          "type": "decision",
+          "title": "Escolha do dia",
+          "options": [
+            {
+              "id": "cefalu",
+              "name": "Cefalu",
+              "desc": "Trem ~45-55min - cidade medieval + Duomo + praia - dia inteiro"
+            },
+            {
+              "id": "mondello",
+              "name": "Mondello",
+              "desc": "~20-30min - praia urbana, mais pratica"
+            },
+            {
+              "id": "isola-femmine",
+              "name": "Isola delle Femmine",
+              "desc": "Vila de pescadores, agua calma, boa pra snorkel"
+            },
+            {
+              "id": "palermo-city",
+              "name": "Palermo (cidade)",
+              "desc": "Kalsa (Palazzo Abatellis, Palazzo Butera, Orto Botanico), Catacumbe dos Capuchinhos, Teatro Massimo, Zisa"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "phase_id": "palermo",
+      "title": "DIA 7/8 - Palermo livre + voo pra Roma + chegada em Terni",
+      "note_merge": "no roteiro original esse dia aparece dividido em 'DIA 7' e 'DIA 8', mas e a mesma data (14/09) - mesclado aqui num dia so",
+      "blocks": [
+        {
+          "end_time": "13:30",
+          "type": "activity",
+          "title": "Livre - app sugere pontos ainda nao visitados",
+          "period": "manha",
+          "dynamic": true
+        },
+        {
+          "time": "13:30",
+          "end_time": "14:00",
+          "type": "hotel",
+          "title": "Checkout"
+        },
+        {
+          "time": "14:00",
+          "end_time": "14:45",
+          "type": "transport",
+          "title": "Transporte pro aeroporto"
+        },
+        {
+          "time": "17:45",
+          "end_time": "18:55",
+          "type": "flight",
+          "title": "Wizz Air W4 6254, Palermo -> Roma Fiumicino T1",
+          "reservation": "NU4MYE",
+          "seat": "15A"
+        },
+        {
+          "time": "18:55",
+          "type": "transport",
+          "title": "Pouso FCO T1",
+          "phase_id_override": "rome-terni"
+        },
+        {
+          "time": "19:40",
+          "type": "transport",
+          "title": "Leonardo Express FCO -> Termini"
+        },
+        {
+          "time": "20:30",
+          "type": "transport",
+          "title": "Trem regional Termini -> Terni"
+        },
+        {
+          "time": "21:45",
+          "end_time": "22:15",
+          "type": "transport",
+          "title": "Chegada Terni"
+        },
+        {
+          "time": "22:30",
+          "type": "food",
+          "title": "Jantar em Terni"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "phase_id": "rome-terni",
+      "title": "DIA 9 - Roma: Centro historico (por regiao)",
+      "blocks": [
+        {
+          "type": "transport",
+          "title": "Trem Terni -> Roma",
+          "period": "manha"
+        },
+        {
+          "type": "activity",
+          "title": "Regiao Centro Historico (Trevi, Panteao, Navona)",
+          "period": "manha/tarde",
+          "note": "app sugere pontos mapeados",
+          "dynamic": true
+        },
+        {
+          "time": "15:00",
+          "type": "activity",
+          "title": "Forum Romano + Palatino",
+          "note": "horario fixo, ingresso comprado",
+          "booked": true
+        },
+        {
+          "type": "decision",
+          "title": "Noite",
+          "options": [
+            {
+              "id": "cenario-a",
+              "name": "Cenario A",
+              "desc": "Volta pra Terni normal"
+            },
+            {
+              "id": "cenario-b",
+              "name": "Cenario B",
+              "desc": "Ficar ate 5h - regiao Testaccio/Ostiense (discotecas abrem ~23:30, tocam ate o amanhecer)",
+              "warning": "Se escolher esse cenario, a Audiencia Papal do dia seguinte nao vai rolar, e a volta pra regiao de Roma seria so perto das 12h"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "phase_id": "rome-terni",
+      "title": "DIA 10 - Roma: Papa + Coliseu + Vaticano (por regiao)",
+      "blocks": [
+        {
+          "type": "activity",
+          "title": "Regiao Vaticano - Praca de Sao Pedro, Audiencia Papal",
+          "period": "manha"
+        },
+        {
+          "type": "food",
+          "title": "Almoco - regiao do Coliseu OU regiao do Vaticano",
+          "note": "definir no dia"
+        },
+        {
+          "time": "15:00",
+          "type": "activity",
+          "title": "Coliseu",
+          "note": "ingresso ja garantido",
+          "booked": true
+        },
+        {
+          "type": "food",
+          "title": "Snacks/cafe pela regiao do Coliseu/Monti"
+        },
+        {
+          "time": "17:30",
+          "type": "activity",
+          "title": "Museus do Vaticano + Capela Sistina",
+          "note": "confirmado: aberto ate 20h, ultimo ingresso 18h",
+          "booked": true
+        },
+        {
+          "type": "transport",
+          "title": "Volta pra Terni",
+          "period": "noite"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "phase_id": "germany-2",
+      "title": "DIA 11 - Roma -> Frankfurt -> Darmstadt",
+      "blocks": [
+        {
+          "time": "07:45",
+          "end_time": "08:00",
+          "type": "transport",
+          "title": "Saida de Terni com malas",
+          "warning": "dia mais apertado - atencao nos deslocamentos"
+        },
+        {
+          "time": "09:45",
+          "type": "transport",
+          "title": "Roma Termini"
+        },
+        {
+          "time": "10:05",
+          "type": "transport",
+          "title": "Leonardo Express -> FCO"
+        },
+        {
+          "time": "13:00",
+          "end_time": "15:00",
+          "type": "flight",
+          "title": "easyJet EJU2992, Roma -> Frankfurt",
+          "reservation": "KCMX2QL",
+          "seat": "6A"
+        },
+        {
+          "time": "15:00",
+          "type": "transport",
+          "title": "Chegada Frankfurt, trem ate Darmstadt",
+          "note": "~20min"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-18",
+      "phase_id": "munich-oktoberfest",
+      "title": "DIA 12 - Darmstadt -> Munique",
+      "blocks": [
+        {
+          "type": "activity",
+          "title": "Mathildenhoehe",
+          "period": "manha"
+        },
+        {
+          "type": "transport",
+          "title": "Trem ate Munique"
+        },
+        {
+          "type": "hotel",
+          "title": "Check-in Ramada Encore by Wyndham Munich Messe"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "phase_id": "munich-oktoberfest",
+      "title": "DIA 13 - Oktoberfest",
+      "blocks": [
+        {
+          "time": "09:00",
+          "type": "activity",
+          "title": "Tendas abrem"
+        },
+        {
+          "time": "12:00",
+          "type": "activity",
+          "title": "O'zapft is!"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "phase_id": "munich-oktoberfest",
+      "title": "DIA 14 - Oktoberfest (domingo)",
+      "blocks": [
+        {
+          "time": "10:00",
+          "type": "activity",
+          "title": "Desfile tradicional"
+        },
+        {
+          "time": "11:00",
+          "type": "hotel",
+          "title": "Checkout"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "phase_id": "travel-return",
+      "title": "DIA 15 - Volta pra casa",
+      "blocks": [
+        {
+          "type": "transport",
+          "title": "Munique -> Frankfurt (trem)"
+        },
+        {
+          "time": "22:15",
+          "type": "flight",
+          "title": "LH500, Frankfurt -> Rio de Janeiro",
+          "reservation": "8UVM2S"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "phase_id": "travel-return",
+      "title": "Chegada no Rio",
+      "blocks": [
+        {
+          "time": "04:55",
+          "type": "transport",
+          "title": "Pouso no Rio de Janeiro (GIG)"
+        }
+      ]
+    }
+  ],
+  "decision_points_summary": [
+    {
+      "date": "2026-09-09",
+      "ref": "por do sol Scopello vs voltar cedo"
+    },
+    {
+      "date": "2026-09-13",
+      "ref": "escolha do dia livre - 4 opcoes"
+    },
+    {
+      "date": "2026-09-15",
+      "ref": "cenario A vs B pra noite em Roma/Testaccio"
+    }
+  ]
+}

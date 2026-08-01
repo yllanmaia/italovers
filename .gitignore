@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-ssr
+.vercel
+*.local
+secrets.local.json
+.DS_Store
+.env
+.env.*

@@ -1,0 +1,122 @@
+{
+  "p002": {
+    "opening_hours": "Mo-Sa 07:00-20:00",
+    "osmName": "Mercato Della Vucciria",
+    "osmId": "node/4738003924"
+  },
+  "p004": {
+    "opening_hours": "Mo-Su 19:00-23:00",
+    "osmName": "Gusto (Pizzeria Siculo Napoletana)",
+    "osmId": "node/12996135901"
+  },
+  "p012": {
+    "opening_hours": "Mo-Su 11:00-01:00",
+    "osmName": "Petrolo",
+    "osmId": "node/3949990671"
+  },
+  "p016": {
+    "opening_hours": "Mo,We,Th 11:00-24:00; Fr 11:00-01:00; Sa 11:00-02:30; Su 11:00-00:30; Tu off",
+    "osmName": "Vernaci",
+    "osmId": "node/12578463915"
+  },
+  "p017": {
+    "opening_hours": "Su, Tu-Th 12:00-01:00; Fr-Sa 12:00-02:00; Mo 12:00-00:00",
+    "osmName": "Trapizzino",
+    "osmId": "node/1987147392"
+  },
+  "p019": {
+    "opening_hours": "Mo-Su 19:30-22:00",
+    "osmName": "Poldo e Gianna Osteria",
+    "osmId": "node/4444083193"
+  },
+  "p021": {
+    "opening_hours": "Mo-Sa 12:00-15:00,19:00-23:00",
+    "osmName": "Vecchia Roma",
+    "osmId": "node/2161146588"
+  },
+  "p035": {
+    "opening_hours": "Mo-Sa 10:00-22:00",
+    "osmName": "Suppli Roma",
+    "osmId": "node/4665498889"
+  },
+  "p037": {
+    "opening_hours": "Mo-Su 08:00-01:00",
+    "osmName": "Tonnarello",
+    "osmId": "node/5834021814"
+  },
+  "p039": {
+    "opening_hours": "Mo-Th 10:00-00:00; Fr-Su 10:00-01:00",
+    "osmName": "Venchi",
+    "osmId": "node/5518777449"
+  },
+  "p040": {
+    "opening_hours": "Mo-Th 11:00-21:30; Fr-Sa 11:00-22:30; Su 11:00-21:30",
+    "osmName": "Pompi",
+    "osmId": "node/2274912020"
+  },
+  "p042": {
+    "opening_hours": "Mo-Tu 10:00-18:00; We-Su 10:00-21:00",
+    "osmName": "Pompi",
+    "osmId": "node/10693836277"
+  },
+  "p050": {
+    "opening_hours": "Th-Tu 07:00-01:30, We 09:00-01:30",
+    "osmName": "Focacceria dei Mercanti",
+    "osmId": "node/13417033801"
+  },
+  "p051": {
+    "opening_hours": "Tu-We 18:00-02:00; Th 18:00-03:00; Fr 18:00-04:00; Sa 11:00-04:00; Su 11:00-02:00",
+    "osmName": "The Sanctuary - Eco Retreat",
+    "osmId": "node/6573379647"
+  },
+  "p052": {
+    "opening_hours": "Mo-Su 10:00-23:55",
+    "osmName": "Ke Palle - Arancine d‘autore",
+    "osmId": "node/5476723060"
+  },
+  "p053": {
+    "opening_hours": "Mo-Su 10:00-18:00",
+    "osmName": "I segreti del chiostro - Dolceria Santa Caterina",
+    "osmId": "node/9893106698"
+  },
+  "p061": {
+    "opening_hours": "Mo-Su 07:30-20:00",
+    "osmName": "Forno Roscioli",
+    "osmId": "node/4368644289"
+  },
+  "p065": {
+    "opening_hours": "24/7",
+    "osmName": "Flaminio",
+    "osmId": "node/1578720117"
+  },
+  "p066": {
+    "opening_hours": "Mo-Su 10:00-18:30",
+    "osmName": "Pastasciutta",
+    "osmId": "node/4349079305"
+  },
+  "p069": {
+    "opening_hours": "Mo-Sa 18:00-24:30; Su 12:00-15:30, 18:00-24:30",
+    "osmName": "Ivo a Trastevere",
+    "osmId": "node/2959462937"
+  },
+  "p073": {
+    "opening_hours": "Mo-Su 12:00-01:00",
+    "osmName": "Osteria da Fortunata",
+    "osmId": "node/3639494371"
+  },
+  "p074": {
+    "opening_hours": "Mo-Sa 08:30-19:15; Su 09:00-17:45",
+    "osmName": "Pantheon",
+    "osmId": "relation/3374342"
+  },
+  "p075": {
+    "opening_hours": "Mo-Su 12:00-01:00",
+    "osmName": "Osteria da Fortunata",
+    "osmId": "node/3639494371"
+  },
+  "p076": {
+    "opening_hours": "Mo-Su 12:00-01:00",
+    "osmName": "Osteria da Fortunata",
+    "osmId": "node/3639494371"
+  }
+}

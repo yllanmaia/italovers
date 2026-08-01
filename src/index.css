@@ -1,0 +1,127 @@
+@import 'tailwindcss';
+
+/**
+ * Montserrat, hospedada aqui e nao no Google Fonts: o app e PWA e precisa abrir
+ * sem sinal — @import de CDN quebra offline e adiciona dependencia de terceiro.
+ * So o subconjunto latin (37 KB): portugues, italiano e alemao cabem nele.
+ * Cirilico e vietnamita ficariam de peso morto no precache.
+ * Fonte variavel: um arquivo cobre 100–900. Licenca em public/fonts/.
+ */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/montserrat-latin-var.woff2') format('woff2-variations');
+}
+
+@theme {
+  /* Paleta: terracota sobre off-white quente. Contraste alto de proposito —
+     esse app vai ser lido no sol, cinza sobre cinza nao serve. */
+  --color-sand-50: #fbf7f2;
+  --color-sand-100: #f5eee5;
+  --color-sand-200: #e8ddd0;
+  --color-sand-300: #d4c4b2;
+
+  --color-ink: #1f1a17;
+  --color-ink-soft: #5c5049;
+  --color-ink-faint: #8a7c72;
+
+  --color-terra-50: #fdf1ec;
+  --color-terra-100: #f6ded3;
+  --color-terra-500: #c4643b;
+  --color-terra-600: #b4522f;
+  --color-terra-700: #8f3f24;
+
+  --color-olive-50: #eef2ec;
+  --color-olive-600: #4f6b4a;
+  --color-olive-700: #3d5439;
+
+  --color-warn: #8a5a06;
+  --color-warn-bg: #fdf3e0;
+
+  /* Montserrat na interface, serifa na nota pessoal. O contraste entre as duas
+     e o que faz a nota parecer escrita por gente, e nao um campo de banco. */
+  --font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-note: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-sand-50);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Evita o bounce do iOS arrastando a UI inteira */
+    overscroll-behavior-y: none;
+  }
+
+  /**
+   * Montserrat e geometrica e larga: no corpo isso e legivel, mas em titulo
+   * grande e negrito as letras ficam frouxas. Apertar o tracking conforme o
+   * tamanho sobe e o que faz ela parecer desenhada, e nao so aplicada.
+   */
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+  h3 {
+    letter-spacing: -0.01em;
+  }
+}
+
+@utility pad-nav {
+  /* Espaco pro bottom nav nao cobrir o fim da lista */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5.75rem);
+}
+
+@utility safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Leaflet: o popup padrao tem cara de 2011, deixa combinar com os cards */
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  padding: 0;
+  box-shadow: 0 8px 30px rgb(31 26 23 / 0.18);
+}
+.leaflet-popup-content {
+  margin: 0;
+  width: 17.5rem !important;
+}
+.leaflet-container {
+  font: inherit;
+  background: var(--color-sand-100);
+}
+/* Zoom acima do botao "centralizar em mim" (que fica em bottom-32, 3.25rem de
+   altura) e acima do bottom nav. No topo ele cobria os chips de fase. */
+.leaflet-bottom.leaflet-right {
+  bottom: 11.75rem;
+}
+
+/* O unico popup do app e o do hotel. As regras acima zeram padding e margem
+   pro popup nao ter cara de 2011, entao o espaco interno vem daqui. */
+.hotel-popup {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+}
+.hotel-popup strong {
+  font-size: 0.9375rem;
+  line-height: 1.25;
+  color: var(--color-ink);
+}
+.hotel-popup span {
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--color-ink-soft);
+}
+.hotel-popup .datas {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
