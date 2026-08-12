@@ -46,32 +46,32 @@ export default function EmptyNearby({
   const copy = (COPY[reason] ?? COPY.far)(phase)
 
   return (
-    <div className="mt-6 rounded-3xl border border-sand-200 bg-white/60 p-5">
+    <div className="mt-6 rounded-3xl border border-line bg-surface/60 p-5">
       <div className="flex items-start gap-3">
-        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-sand-100 text-ink-faint">
+        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-elevated text-fg-faint">
           <Icon name="pin" size={19} />
         </span>
         <div className="min-w-0">
-          <h2 className="text-lg leading-snug font-bold text-ink">{copy.titulo}</h2>
-          <p className="mt-1 text-[0.875rem] leading-snug text-ink-soft">{copy.texto}</p>
+          <h2 className="text-lg leading-snug font-bold text-fg">{copy.titulo}</h2>
+          <p className="mt-1 text-[0.875rem] leading-snug text-fg-dim">{copy.texto}</p>
         </div>
       </div>
 
       {nextDay && (
-        <div className="mt-4 rounded-2xl bg-sand-100 p-4">
-          <h3 className="text-[0.6875rem] font-bold tracking-wide text-ink-faint uppercase">
+        <div className="mt-4 rounded-2xl bg-elevated p-4">
+          <h3 className="text-[0.6875rem] font-bold tracking-wide text-fg-faint uppercase">
             Amanhã · {formatDateShort(nextDay.date)}
           </h3>
-          <p className="mt-1 text-[0.9375rem] leading-snug font-semibold text-ink">
+          <p className="mt-1 text-[0.9375rem] leading-snug font-semibold text-fg">
             {nextDay.title}
           </p>
           <ul className="mt-2 space-y-1">
             {nextDay.blocks.slice(0, 4).map((block, i) => (
               <li
                 key={i}
-                className="flex gap-2 text-[0.8125rem] leading-snug text-ink-soft"
+                className="flex gap-2 text-[0.8125rem] leading-snug text-fg-dim"
               >
-                <span className="w-11 shrink-0 font-semibold text-ink-faint tabular-nums">
+                <span className="w-11 shrink-0 font-semibold text-fg-faint tabular-nums">
                   {block.time ?? block.period ?? '—'}
                 </span>
                 <span className="min-w-0 flex-1">{block.title}</span>
@@ -84,7 +84,7 @@ export default function EmptyNearby({
       {topPlaces.length > 0 && (
         <div className="mt-4">
           {reason !== 'no-gps' && (
-            <h3 className="mb-2 text-[0.6875rem] font-bold tracking-wide text-ink-faint uppercase">
+            <h3 className="mb-2 text-[0.6875rem] font-bold tracking-wide text-fg-faint uppercase">
               Melhores de {phase?.name ?? 'la'}
             </h3>
           )}

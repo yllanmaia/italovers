@@ -20,7 +20,7 @@ export default function HoursBadge({ hours, now }) {
   // Regra fora do subconjunto que o parser cobre: mostra sem interpretar
   if (!s) {
     return (
-      <p className="mt-1 flex items-center gap-1 text-[0.75rem] text-ink-faint">
+      <p className="mt-1 flex items-center gap-1 text-[0.75rem] text-fg-faint">
         <Icon name="clock" size={13} className="shrink-0" />
         <span className="tabular-nums">{hours.opening_hours}</span>
       </p>
@@ -33,7 +33,7 @@ export default function HoursBadge({ hours, now }) {
     <p
       className={[
         'mt-1 flex items-center gap-1 text-[0.75rem] font-semibold',
-        tom === 'aberto' ? 'text-olive-600' : 'text-warn',
+        tom === 'aberto' ? 'text-olive' : 'text-warn',
       ].join(' ')}
     >
       <Icon name="clock" size={13} className="shrink-0" />

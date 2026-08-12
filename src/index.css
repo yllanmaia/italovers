@@ -39,29 +39,40 @@
 }
 
 @theme {
-  /* Paleta: terracota sobre off-white quente. Contraste alto de proposito —
-     esse app vai ser lido no sol, cinza sobre cinza nao serve. */
-  --color-sand-50: #fbf7f2;
-  --color-sand-100: #f5eee5;
-  --color-sand-200: #e8ddd0;
-  --color-sand-300: #d4c4b2;
+  /**
+   * Paleta escura. A anterior era creme com terracota, que e bonita e e
+   * exatamente por isso o problema: e a saida default mais comum de LLM, e o
+   * app inteiro parecia gerado.
+   *
+   * Os nomes sao por PAPEL, nao por cor. "sand-200" so quer dizer alguma coisa
+   * se voce souber que sand era o bege; "line" diz o que e em qualquer tema.
+   */
+  --color-deep: #0a1420;
+  --color-surface: #14263a;
+  --color-elevated: #1c3247;
+  --color-line: rgba(255, 255, 255, 0.08);
+  --color-sheet: #ffffff;
 
-  --color-ink: #1f1a17;
-  --color-ink-soft: #5c5049;
-  --color-ink-faint: #8a7c72;
+  --color-fg: #ffffff;
+  --color-fg-dim: rgba(255, 255, 255, 0.6);
+  --color-fg-faint: rgba(255, 255, 255, 0.38);
+  --color-on-light: #0f2942;
 
-  --color-terra-50: #fdf1ec;
-  --color-terra-100: #f6ded3;
-  --color-terra-500: #c4643b;
-  --color-terra-600: #b4522f;
-  --color-terra-700: #8f3f24;
+  /**
+   * O #B4522F antigo fica lamacento sobre navy — ele foi escolhido pra
+   * contrastar com creme. Clareado, mantem a identidade quente e volta a
+   * gritar. So em CTA, estado ativo da nav, trecho percorrido da rota e numero
+   * da fase atual.
+   */
+  --color-accent: #e8683c;
+  --color-accent-soft: rgba(232, 104, 60, 0.16);
 
-  --color-olive-50: #eef2ec;
-  --color-olive-600: #4f6b4a;
-  --color-olive-700: #3d5439;
+  /* Verde do "Ver" e do visitado, tambem clareado pro escuro */
+  --color-olive: #7fae74;
+  --color-olive-soft: rgba(127, 174, 116, 0.16);
 
-  --color-warn: #8a5a06;
-  --color-warn-bg: #fdf3e0;
+  --color-warn: #f0b35c;
+  --color-warn-bg: rgba(240, 179, 92, 0.14);
 
   /* Tres papeis, tres fontes. Clash so em titulo de tela e cabecalho de
      capitulo; Satoshi em todo o resto da interface; Caveat exclusivamente na
@@ -75,12 +86,15 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    /* Avisa o browser que o tema e escuro: campo de busca, barra de rolagem e
+       autofill nascem escuros em vez de brancos gritando no meio da tela. */
+    color-scheme: dark;
   }
 
   body {
     margin: 0;
-    background-color: var(--color-sand-50);
-    color: var(--color-ink);
+    background-color: var(--color-deep);
+    color: var(--color-fg);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     /* Evita o bounce do iOS arrastando a UI inteira */
@@ -116,8 +130,15 @@
 }
 
 @utility pad-nav {
-  /* Espaco pro bottom nav nao cobrir o fim da lista */
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5.75rem);
+  /**
+   * Espaco pro bottom nav nao cobrir o fim da lista.
+   *
+   * A conta: pilula de ~4.25rem (icone 21px + rotulo 11px + paddings) mais
+   * 0.75rem de margem inferior mais o safe area do iPhone, e ainda uma folga
+   * pro ultimo card nao encostar. Casado com o BottomNav.jsx a olho — mudar la
+   * exige mudar aqui.
+   */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6.5rem);
 }
 
 @utility safe-bottom {

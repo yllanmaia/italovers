@@ -31,24 +31,24 @@ export default function PlaceSheet({
         type="button"
         aria-label="Fechar"
         onClick={onClose}
-        className="absolute inset-0 cursor-pointer bg-ink/45"
+        className="absolute inset-0 cursor-pointer bg-elevated/45"
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-label={place.name}
-        className="relative max-h-[85vh] overflow-y-auto rounded-t-3xl bg-sand-50 p-4 pb-8 shadow-[0_-8px_40px_rgba(31,26,23,0.25)] safe-bottom"
+        className="relative max-h-[85vh] overflow-y-auto rounded-t-3xl bg-deep p-4 pb-8 shadow-[0_-8px_40px_rgba(0,0,0,0.6)] safe-bottom"
       >
         <div className="mb-3 flex items-center justify-between">
           <span
             aria-hidden="true"
-            className="mx-auto h-1.5 w-10 rounded-full bg-sand-300"
+            className="mx-auto h-1.5 w-10 rounded-full bg-elevated"
           />
           <button
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="absolute top-3 right-4 grid size-11 cursor-pointer place-items-center rounded-full bg-sand-100 text-ink-soft transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+            className="absolute top-3 right-4 grid size-11 cursor-pointer place-items-center rounded-full bg-elevated text-fg-dim transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
             <Icon name="close" size={19} />
           </button>
@@ -63,7 +63,7 @@ export default function PlaceSheet({
         />
 
         {place.address && (
-          <p className="mt-3 px-1 text-[0.8125rem] leading-snug text-ink-faint">
+          <p className="mt-3 px-1 text-[0.8125rem] leading-snug text-fg-faint">
             {place.address}
           </p>
         )}
@@ -73,14 +73,14 @@ export default function PlaceSheet({
             Checa `author`, nao `foto`: as nossas fotos nao tem autor externo e
             renderizariam "Foto: null". */}
         {foto?.author && (
-          <p className="mt-2 px-1 text-[0.6875rem] leading-snug text-ink-faint">
+          <p className="mt-2 px-1 text-[0.6875rem] leading-snug text-fg-faint">
             Foto: {foto.author} ·{' '}
             {foto.licenseUrl ? (
               <a
                 href={foto.licenseUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="underline decoration-sand-300 underline-offset-2"
+                className="underline decoration-fg-faint underline-offset-2"
               >
                 {foto.license}
               </a>
@@ -94,7 +94,7 @@ export default function PlaceSheet({
                   href={foto.source}
                   target="_blank"
                   rel="noreferrer"
-                  className="underline decoration-sand-300 underline-offset-2"
+                  className="underline decoration-fg-faint underline-offset-2"
                 >
                   Wikimedia Commons
                 </a>

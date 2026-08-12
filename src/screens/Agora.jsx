@@ -49,7 +49,7 @@ export default function Agora({
   const nadaPerto = linhas.length === 0
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pad-nav">
+    <div className="px-4 pt-4 pad-nav">
       <ContextHeader
         dayInfo={dayInfo}
         phase={phase}
@@ -124,7 +124,7 @@ export default function Agora({
                 )}
               />
             ) : (
-              <p className="rounded-2xl bg-white/60 px-4 py-3 text-[0.875rem] text-ink-soft">
+              <p className="rounded-2xl bg-surface/60 px-4 py-3 text-[0.875rem] text-fg-dim">
                 Nada pra comer mapeado num raio de {RAIO_KM} km.
               </p>
             )}
@@ -147,7 +147,7 @@ export default function Agora({
                 )}
               />
             ) : (
-              <p className="rounded-2xl bg-white/60 px-4 py-3 text-[0.875rem] text-ink-soft">
+              <p className="rounded-2xl bg-surface/60 px-4 py-3 text-[0.875rem] text-fg-dim">
                 Nenhum ponto mapeado num raio de {RAIO_KM} km.
               </p>
             )}
@@ -182,7 +182,7 @@ export default function Agora({
 function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
   if (dayInfo.status === 'before') {
     return (
-      <header className="rounded-3xl bg-ink p-5 text-white">
+      <header className="rounded-3xl bg-elevated p-5 text-white">
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Ainda não começou
         </p>
@@ -198,7 +198,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
 
   if (dayInfo.status === 'after') {
     return (
-      <header className="rounded-3xl bg-ink p-5 text-white">
+      <header className="rounded-3xl bg-elevated p-5 text-white">
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Viagem encerrada
         </p>
@@ -211,7 +211,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
   }
 
   return (
-    <header className="rounded-3xl bg-ink p-5 text-white">
+    <header className="rounded-3xl bg-elevated p-5 text-white">
       <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase tabular-nums">
         Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {formatDateLong(dayInfo.day.date)}
       </p>
@@ -225,7 +225,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
         type="button"
         onClick={onTrocarFase}
         aria-expanded={trocandoFase}
-        className="mt-3 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-white/15 px-3.5 text-[0.8125rem] font-semibold text-white transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        className="mt-3 inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full bg-surface/15 px-3.5 text-[0.8125rem] font-semibold text-white transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         {source === 'manual'
           ? 'Fase escolhida à mão'
@@ -244,8 +244,8 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
 
 function PhasePicker({ phases, atual, scheduled, onEscolher, onLimpar, isOverride }) {
   return (
-    <div className="mt-2 rounded-3xl border border-sand-200 bg-white p-3">
-      <p className="px-1 pb-2 text-[0.75rem] text-ink-faint">
+    <div className="mt-2 rounded-3xl border border-line bg-surface p-3">
+      <p className="px-1 pb-2 text-[0.75rem] text-fg-faint">
         Trocar a fase à mão. Vale só pra hoje.
       </p>
       <ul className="space-y-1">
@@ -256,13 +256,13 @@ function PhasePicker({ phases, atual, scheduled, onEscolher, onLimpar, isOverrid
               onClick={() => onEscolher(p.id)}
               className={[
                 'flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-[0.875rem]',
-                'transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
-                p.id === atual ? 'bg-terra-50 font-bold text-terra-700' : 'text-ink',
+                'transition duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+                p.id === atual ? 'bg-accent-soft font-bold text-accent' : 'text-fg',
               ].join(' ')}
             >
               <span className="flex-1">{p.name}</span>
               {p.id === scheduled && (
-                <span className="rounded-full bg-sand-100 px-2 py-0.5 text-[0.6875rem] font-semibold text-ink-faint">
+                <span className="rounded-full bg-elevated px-2 py-0.5 text-[0.6875rem] font-semibold text-fg-faint">
                   roteiro
                 </span>
               )}
@@ -275,7 +275,7 @@ function PhasePicker({ phases, atual, scheduled, onEscolher, onLimpar, isOverrid
         <button
           type="button"
           onClick={onLimpar}
-          className="mt-2 min-h-11 w-full cursor-pointer rounded-xl bg-sand-100 text-[0.875rem] font-semibold text-ink-soft transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+          className="mt-2 min-h-11 w-full cursor-pointer rounded-xl bg-elevated text-[0.875rem] font-semibold text-fg-dim transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           Voltar pro automático
         </button>
@@ -286,19 +286,19 @@ function PhasePicker({ phases, atual, scheduled, onEscolher, onLimpar, isOverrid
 
 function BookedAlert({ block }) {
   return (
-    <div className="mt-3 flex items-start gap-3 rounded-3xl border-2 border-terra-600 bg-terra-50 p-4">
-      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-terra-600 text-white">
+    <div className="mt-3 flex items-start gap-3 rounded-3xl border-2 border-accent bg-accent-soft p-4">
+      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-white">
         <Icon name="ticket" size={20} />
       </span>
       <div className="min-w-0">
-        <p className="text-[0.6875rem] font-bold tracking-wide text-terra-700 uppercase">
+        <p className="text-[0.6875rem] font-bold tracking-wide text-accent uppercase">
           Ingresso pago — daqui a pouco
         </p>
-        <p className="mt-0.5 text-[1.0625rem] leading-snug font-bold text-ink">
+        <p className="mt-0.5 text-[1.0625rem] leading-snug font-bold text-fg">
           <span className="tabular-nums">{block.time}</span> · {block.title}
         </p>
         {block.note && (
-          <p className="mt-0.5 text-[0.8125rem] text-ink-soft">{block.note}</p>
+          <p className="mt-0.5 text-[0.8125rem] text-fg-dim">{block.note}</p>
         )}
       </div>
     </div>
@@ -308,15 +308,15 @@ function BookedAlert({ block }) {
 function LocationStatus({ status, error, onRetry, position }) {
   if (status === 'granted' && position) {
     return (
-      <div className="mt-3 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3">
+      <div className="mt-3 flex items-center gap-2.5 rounded-2xl bg-surface px-4 py-3">
         <span className="relative flex size-2.5 shrink-0">
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-olive-600 opacity-60" />
-          <span className="relative inline-flex size-2.5 rounded-full bg-olive-600" />
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-olive opacity-60" />
+          <span className="relative inline-flex size-2.5 rounded-full bg-olive" />
         </span>
-        <p className="min-w-0 flex-1 text-[0.8125rem] text-ink-soft">
+        <p className="min-w-0 flex-1 text-[0.8125rem] text-fg-dim">
           Localização ativa
           {position.accuracy && (
-            <span className="text-ink-faint"> · ±{Math.round(position.accuracy)} m</span>
+            <span className="text-fg-faint"> · ±{Math.round(position.accuracy)} m</span>
           )}
         </p>
       </div>
@@ -337,14 +337,14 @@ function LocationStatus({ status, error, onRetry, position }) {
           : { titulo: 'Localização desligada', texto: 'Liga o GPS pra ver o que a gente salvou por perto.' }
 
   return (
-    <div className="mt-3 rounded-2xl border border-sand-200 bg-white p-4">
+    <div className="mt-3 rounded-2xl border border-line bg-surface p-4">
       <div className="flex items-start gap-3">
-        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-sand-100 text-ink-soft">
+        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-elevated text-fg-dim">
           <Icon name="crosshair" size={19} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[0.9375rem] font-bold text-ink">{conteudo.titulo}</p>
-          <p className="mt-0.5 text-[0.8125rem] leading-snug text-ink-soft">
+          <p className="text-[0.9375rem] font-bold text-fg">{conteudo.titulo}</p>
+          <p className="mt-0.5 text-[0.8125rem] leading-snug text-fg-dim">
             {conteudo.texto}
           </p>
         </div>
@@ -353,7 +353,7 @@ function LocationStatus({ status, error, onRetry, position }) {
         <button
           type="button"
           onClick={onRetry}
-          className="mt-3 min-h-11 w-full cursor-pointer rounded-full bg-terra-600 text-[0.9375rem] font-semibold text-white transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+          className="mt-3 min-h-11 w-full cursor-pointer rounded-full bg-accent text-[0.9375rem] font-semibold text-white transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           Tentar de novo
         </button>
@@ -369,27 +369,27 @@ function PlanoDeHoje({ dayInfo }) {
 
   return (
     <section className="mt-6">
-      <h2 className="px-1 text-lg font-bold tracking-tight text-ink">
+      <h2 className="px-1 text-lg font-bold tracking-tight text-fg">
         {ehHoje ? 'Plano de hoje' : 'Primeiro dia'}
       </h2>
-      <ul className="mt-2 divide-y divide-sand-200 overflow-hidden rounded-3xl bg-white">
+      <ul className="mt-2 divide-y divide-line overflow-hidden rounded-3xl bg-surface">
         {day.blocks.map((block, i) => (
           <li key={i} className="flex items-start gap-3 px-4 py-3">
-            <span className="w-12 shrink-0 pt-0.5 text-[0.8125rem] font-bold text-ink-soft tabular-nums">
+            <span className="w-12 shrink-0 pt-0.5 text-[0.8125rem] font-bold text-fg-dim tabular-nums">
               {block.time ?? (block.period ? '' : '—')}
               {!block.time && block.period && (
-                <span className="text-[0.6875rem] font-semibold text-ink-faint">
+                <span className="text-[0.6875rem] font-semibold text-fg-faint">
                   {block.period}
                 </span>
               )}
             </span>
-            <span className="mt-0.5 shrink-0 text-ink-faint">
+            <span className="mt-0.5 shrink-0 text-fg-faint">
               <Icon name={BLOCK_ICON[block.type] ?? 'activity'} size={16} />
             </span>
             <span className="min-w-0 flex-1">
               <span
                 className={`block text-[0.875rem] leading-snug ${
-                  block.booked ? 'font-bold text-terra-700' : 'text-ink'
+                  block.booked ? 'font-bold text-accent' : 'text-fg'
                 }`}
               >
                 {block.title}

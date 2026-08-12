@@ -13,8 +13,8 @@ import sharp from 'sharp'
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC = join(ROOT, 'public')
 
-const TERRA = '#B4522F'
-const SAND = '#FBF7F2'
+const TERRA = '#E8683C'
+const SAND = '#0A1420'
 
 /** Marca: um pino sobre o mar, em terracota. */
 const glyph = (bg, inset = 0) => `

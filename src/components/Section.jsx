@@ -11,8 +11,8 @@ export default function Section({
   children,
 }) {
   const [open, setOpen] = useState(defaultOpen)
-  const cor = accent === 'olive' ? 'text-olive-600' : 'text-terra-600'
-  const fundo = accent === 'olive' ? 'bg-olive-50' : 'bg-terra-50'
+  const cor = accent === 'olive' ? 'text-olive' : 'text-accent'
+  const fundo = accent === 'olive' ? 'bg-olive-soft' : 'bg-accent-soft'
 
   return (
     <section className="mt-6">
@@ -20,15 +20,15 @@ export default function Section({
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-1 py-2 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-1 py-2 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <span className={`grid size-9 place-items-center rounded-xl ${fundo} ${cor}`}>
           <Icon name={icon} size={19} />
         </span>
-        <h2 className="flex-1 text-lg font-bold tracking-tight text-ink">
+        <h2 className="flex-1 text-lg font-bold tracking-tight text-fg">
           {title}
           {count != null && (
-            <span className="ml-2 text-[0.9375rem] font-semibold text-ink-faint tabular-nums">
+            <span className="ml-2 text-[0.9375rem] font-semibold text-fg-faint tabular-nums">
               {count}
             </span>
           )}
@@ -36,7 +36,7 @@ export default function Section({
         <Icon
           name="chevron"
           size={20}
-          className={`text-ink-faint transition-transform duration-200 ${
+          className={`text-fg-faint transition-transform duration-200 ${
             open ? '' : '-rotate-90'
           }`}
         />
@@ -60,7 +60,7 @@ export function ExpandableList({ items, limit = 10, render, moreLabel = 'Ver mai
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-2xl border border-dashed border-sand-300 text-[0.9375rem] font-semibold text-ink-soft transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+          className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-1.5 rounded-2xl border border-dashed border-line text-[0.9375rem] font-semibold text-fg-dim transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           {moreLabel} ({restante})
           <Icon name="chevron" size={16} />

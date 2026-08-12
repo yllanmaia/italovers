@@ -55,10 +55,10 @@ export default function Lugares({
   const cardProps = { visited, onToggleVisited, now }
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pad-nav">
+    <div className="px-4 pt-4 pad-nav">
       <header className="px-1">
-        <h1 className="title-display text-3xl leading-none text-ink">Lugares</h1>
-        <p className="mt-1.5 text-[0.875rem] text-ink-soft">
+        <h1 className="title-display text-3xl leading-none text-fg">Lugares</h1>
+        <p className="mt-1.5 text-[0.875rem] text-fg-dim">
           {suggestable(places).length} salvos no Maps, por região
         </p>
       </header>
@@ -185,10 +185,10 @@ function Controles({ filtro, ordem, onFiltro, onOrdem, total }) {
             className={[
               'min-h-11 cursor-pointer rounded-full px-4 text-[0.8125rem] font-bold',
               'transition duration-200 active:scale-95',
-              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
+              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
               filtro === id
-                ? 'bg-ink text-white'
-                : 'border border-sand-200 bg-white text-ink-soft',
+                ? 'bg-elevated text-white'
+                : 'border border-line bg-surface text-fg-dim',
             ].join(' ')}
           >
             {label}
@@ -199,13 +199,13 @@ function Controles({ filtro, ordem, onFiltro, onOrdem, total }) {
       <button
         type="button"
         onClick={() => onOrdem(ordem === 'rating' ? 'alfabetica' : 'rating')}
-        className="ml-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[0.8125rem] font-semibold text-ink-soft transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+        className="ml-auto inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full px-3 text-[0.8125rem] font-semibold text-fg-dim transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <Icon name="filter" size={15} />
         {ordem === 'rating' ? 'Por nota' : 'A–Z'}
       </button>
 
-      <p className="w-full px-1 text-[0.75rem] text-ink-faint tabular-nums">
+      <p className="w-full px-1 text-[0.75rem] text-fg-faint tabular-nums">
         {total} {total === 1 ? 'lugar' : 'lugares'}
       </p>
     </div>
@@ -223,26 +223,26 @@ function FaseAccordion({ fase, aberta, onAlternar, onOpenPlace, cardProps }) {
    */
   if (vazia) {
     return (
-      <p className="flex items-baseline gap-2 px-4 py-1.5 text-[0.8125rem] text-ink-faint">
-        <span className="font-semibold text-ink-soft">{fase.short ?? fase.name}</span>
+      <p className="flex items-baseline gap-2 px-4 py-1.5 text-[0.8125rem] text-fg-faint">
+        <span className="font-semibold text-fg-dim">{fase.short ?? fase.name}</span>
         nenhum lugar mapeado
       </p>
     )
   }
 
   return (
-    <section className="overflow-hidden rounded-3xl border border-sand-200 bg-white">
+    <section className="overflow-hidden rounded-3xl border border-line bg-surface">
       <button
         type="button"
         onClick={onAlternar}
         aria-expanded={aberta}
-        className="flex w-full cursor-pointer items-center gap-3 px-4 py-3.5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-terra-600"
+        className="flex w-full cursor-pointer items-center gap-3 px-4 py-3.5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
       >
         <div className="min-w-0 flex-1">
-          <h2 className="title-display text-[1.25rem] leading-tight text-ink">
+          <h2 className="title-display text-[1.25rem] leading-tight text-fg">
             {fase.short ?? fase.name}
           </h2>
-          <p className="mt-0.5 text-[0.8125rem] text-ink-faint tabular-nums">
+          <p className="mt-0.5 text-[0.8125rem] text-fg-faint tabular-nums">
             {fase.total} lugares
             {fase.sublocais.length > 1 && ` · ${fase.sublocais.length} regiões`}
           </p>
@@ -250,21 +250,21 @@ function FaseAccordion({ fase, aberta, onAlternar, onOpenPlace, cardProps }) {
         <Icon
           name="chevron"
           size={20}
-          className={`shrink-0 text-ink-faint transition-transform duration-200 ${
+          className={`shrink-0 text-fg-faint transition-transform duration-200 ${
             aberta ? '' : '-rotate-90'
           }`}
         />
       </button>
 
       {aberta && !vazia && (
-        <div className="space-y-4 border-t border-sand-200 px-4 pt-3 pb-4">
+        <div className="space-y-4 border-t border-line px-4 pt-3 pb-4">
           {fase.sublocais.map((sub) => (
             <div key={sub.nome}>
               {/* O espaco explicito importa: sem ele o JSX cola os dois nos e
                   o leitor de tela anuncia "Trastevere12". */}
-              <h3 className="px-1 pb-2 text-[0.8125rem] font-bold text-ink-soft">
+              <h3 className="px-1 pb-2 text-[0.8125rem] font-bold text-fg-dim">
                 {sub.nome}{' '}
-                <span className="font-semibold text-ink-faint tabular-nums">
+                <span className="font-semibold text-fg-faint tabular-nums">
                   {sub.lugares.length}
                 </span>
               </h3>
@@ -289,7 +289,7 @@ function FaseAccordion({ fase, aberta, onAlternar, onOpenPlace, cardProps }) {
                        */
                       className={[
                         'block w-full cursor-pointer text-left transition-transform',
-                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
+                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
                         i % 3 === 0 ? 'rotate-[0.55deg] pr-1.5' : '',
                         i % 3 === 1 ? '-rotate-[0.75deg] pl-1.5' : '',
                         i % 3 === 2 ? 'px-0.5' : '',

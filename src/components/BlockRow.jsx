@@ -35,32 +35,32 @@ export default function BlockRow({
       <div className="flex w-14 shrink-0 flex-col items-end pt-0.5">
         {intervalo ? (
           <span className="text-right text-[0.8125rem] leading-tight tabular-nums">
-            <span className="block font-bold text-ink">{block.time}</span>
-            <span className="block font-semibold text-ink-faint">{block.end_time}</span>
+            <span className="block font-bold text-fg">{block.time}</span>
+            <span className="block font-semibold text-fg-faint">{block.end_time}</span>
           </span>
         ) : horaUnica || ateFim ? (
-          <span className="text-[0.8125rem] leading-tight font-bold text-ink tabular-nums">
+          <span className="text-[0.8125rem] leading-tight font-bold text-fg tabular-nums">
             {ateFim ? (
               <span className="block text-right">
-                <span className="font-semibold text-ink-faint">até</span> {ateFim}
+                <span className="font-semibold text-fg-faint">até</span> {ateFim}
               </span>
             ) : (
               horaUnica
             )}
           </span>
         ) : block.period ? (
-          <span className="text-[0.75rem] leading-tight font-semibold text-ink-faint">
+          <span className="text-[0.75rem] leading-tight font-semibold text-fg-faint">
             {block.period}
           </span>
         ) : (
-          <span className="text-[0.75rem] text-ink-faint">—</span>
+          <span className="text-[0.75rem] text-fg-faint">—</span>
         )}
       </div>
 
       <div
         className={[
           'grid size-8 shrink-0 place-items-center rounded-xl',
-          isBooked ? 'bg-terra-600 text-white' : 'bg-sand-100 text-ink-soft',
+          isBooked ? 'bg-accent text-white' : 'bg-elevated text-fg-dim',
         ].join(' ')}
       >
         <Icon name={icone} size={17} />
@@ -70,11 +70,11 @@ export default function BlockRow({
       <div
         className={[
           'min-w-0 flex-1 pb-4',
-          isBooked ? 'rounded-2xl border border-terra-100 bg-terra-50 -mt-1 p-3' : '',
+          isBooked ? 'rounded-2xl border border-accent-soft bg-accent-soft -mt-1 p-3' : '',
         ].join(' ')}
       >
         {isBooked && (
-          <p className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-terra-600 px-2.5 py-1 text-[0.6875rem] font-bold tracking-wide text-white uppercase">
+          <p className="mb-1 inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-[0.6875rem] font-bold tracking-wide text-white uppercase">
             <Icon name="ticket" size={13} />
             Ingresso pago
           </p>
@@ -84,7 +84,7 @@ export default function BlockRow({
         {!block.dynamic && (
           <p
             className={`text-[0.9375rem] leading-snug ${
-              isBooked ? 'font-bold text-terra-700' : 'font-semibold text-ink'
+              isBooked ? 'font-bold text-accent' : 'font-semibold text-fg'
             }`}
           >
             {block.title}
@@ -92,7 +92,7 @@ export default function BlockRow({
         )}
 
         {block.dynamic && (
-          <p className="text-[0.9375rem] leading-snug font-semibold text-ink">
+          <p className="text-[0.9375rem] leading-snug font-semibold text-fg">
             {block.period
               ? `Livre — ${block.period}`
               : 'Livre'}
@@ -100,11 +100,11 @@ export default function BlockRow({
         )}
 
         {block.note && !block.dynamic && (
-          <p className="mt-1 text-[0.875rem] leading-snug text-ink-soft">{block.note}</p>
+          <p className="mt-1 text-[0.875rem] leading-snug text-fg-dim">{block.note}</p>
         )}
 
         {block.duration && (
-          <p className="mt-1 inline-flex items-center gap-1 text-[0.8125rem] font-medium text-ink-faint">
+          <p className="mt-1 inline-flex items-center gap-1 text-[0.8125rem] font-medium text-fg-faint">
             <Icon name="clock" size={13} />
             {block.duration}
           </p>
@@ -117,23 +117,23 @@ export default function BlockRow({
          * nao resolve isso; monospace resolve.
          */}
         {(block.reservation || block.seat) && (
-          <div className="mt-2 flex flex-wrap items-stretch gap-px overflow-hidden rounded-xl border border-dashed border-sand-300 bg-sand-50">
+          <div className="mt-2 flex flex-wrap items-stretch gap-px overflow-hidden rounded-xl border border-dashed border-line bg-deep">
             {block.reservation && (
               <div className="min-w-0 flex-1 px-3 py-2">
-                <p className="text-[0.625rem] font-bold tracking-wide text-ink-faint uppercase">
+                <p className="text-[0.625rem] font-bold tracking-wide text-fg-faint uppercase">
                   Reserva
                 </p>
-                <p className="font-mono text-[0.9375rem] leading-tight font-bold tracking-wider text-ink">
+                <p className="font-mono text-[0.9375rem] leading-tight font-bold tracking-wider text-fg">
                   {block.reservation}
                 </p>
               </div>
             )}
             {block.seat && (
-              <div className="border-l border-dashed border-sand-300 px-3 py-2">
-                <p className="text-[0.625rem] font-bold tracking-wide text-ink-faint uppercase">
+              <div className="border-l border-dashed border-line px-3 py-2">
+                <p className="text-[0.625rem] font-bold tracking-wide text-fg-faint uppercase">
                   Assento
                 </p>
-                <p className="font-mono text-[0.9375rem] leading-tight font-bold text-ink">
+                <p className="font-mono text-[0.9375rem] leading-tight font-bold text-fg">
                   {block.seat}
                 </p>
               </div>
@@ -169,7 +169,7 @@ export default function BlockRow({
 function DynamicSuggestions({ rows, onOpenPlace }) {
   if (!rows.length) {
     return (
-      <p className="mt-2 rounded-xl bg-sand-100 px-3 py-2 text-[0.8125rem] text-ink-soft">
+      <p className="mt-2 rounded-xl bg-elevated px-3 py-2 text-[0.8125rem] text-fg-dim">
         Nada mapeado nessa fase pra sugerir.
       </p>
     )
@@ -185,22 +185,22 @@ function DynamicSuggestions({ rows, onOpenPlace }) {
             <button
               type="button"
               onClick={() => onOpenPlace?.(place)}
-              className="flex w-full cursor-pointer items-start gap-2 rounded-xl bg-sand-100 px-3 py-2.5 text-left transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+              className="flex w-full cursor-pointer items-start gap-2 rounded-xl bg-elevated px-3 py-2.5 text-left transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
-              <Icon name="pin" size={15} className="mt-0.5 shrink-0 text-terra-600" />
+              <Icon name="pin" size={15} className="mt-0.5 shrink-0 text-accent" />
               <span className="min-w-0 flex-1">
                 <span className="flex items-baseline justify-between gap-2">
-                  <span className="truncate text-[0.875rem] font-semibold text-ink">
+                  <span className="truncate text-[0.875rem] font-semibold text-fg">
                     {place.name}
                   </span>
                   {dist && (
-                    <span className="shrink-0 text-[0.75rem] font-semibold text-ink-faint tabular-nums">
+                    <span className="shrink-0 text-[0.75rem] font-semibold text-fg-faint tabular-nums">
                       {dist}
                     </span>
                   )}
                 </span>
                 {hero.isPersonal && (
-                  <span className="mt-0.5 block truncate font-note text-[0.9375rem] leading-snug text-ink-soft">
+                  <span className="mt-0.5 block truncate font-note text-[0.9375rem] leading-snug text-fg-dim">
                     {hero.text}
                   </span>
                 )}

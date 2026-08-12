@@ -91,14 +91,20 @@ export default function App() {
       : null
 
   /**
-   * Coluna de altura fixa, nao `min-h`. A aba Viagem tem um mapa que ocupa a
-   * sobra da tela, e isso so funciona se a sobra for calculavel — com min-h a
-   * tarja de simulacao somava 44px em cima de 100dvh e o mapa vazava por baixo,
-   * escondendo a Sicilia. O <main> e quem rola; as telas de lista continuam
-   * usando pad-nav pro bottom nav nao cobrir o fim.
+   * Coluna unica de 480px, e o mapa vive dentro dela.
+   *
+   * Antes o conteudo era uma coluna estreita centralizada e o mapa sangrava pra
+   * largura toda da janela: no celular ninguem nota, no desktop os dois nao
+   * conversavam e o resultado parecia site responsivo mal resolvido. Com tudo
+   * na mesma coluna fica claro que e um app mobile, e o mapa full-bleed passa a
+   * sangrar ate a borda DA COLUNA, que e o que o full-bleed devia significar.
+   *
+   * Altura fixa, nao `min-h`: a aba Viagem da ao mapa a sobra da tela, e sobra
+   * so e calculavel se o total for fixo. O <main> e quem rola; as telas de
+   * lista usam pad-nav pro bottom nav nao cobrir o fim.
    */
   return (
-    <div className="flex h-[100dvh] flex-col">
+    <div className="mx-auto flex h-[100dvh] max-w-[480px] flex-col">
       {dateSim && (
         <DateSimBanner
           sim={dateSim}
@@ -189,7 +195,7 @@ export default function App() {
  */
 function DateSimBanner({ sim, onClear }) {
   return (
-    <div className="sticky top-0 z-30 flex items-center gap-2 bg-ink px-4 py-1.5 text-white">
+    <div className="sticky top-0 z-30 flex items-center gap-2 bg-elevated px-4 py-1.5 text-white">
       <Icon name="clock" size={14} className="shrink-0 text-white/60" />
       <p className="flex-1 text-[0.75rem] font-medium tabular-nums">
         Simulando {sim.date.split('-').reverse().join('/')} às {sim.time}

@@ -25,15 +25,15 @@ export default function PlaceCard({
      e estado ativo, e rotulo de categoria e informacao secundaria. A hospedagem
      nao tem secao, entao fica neutra. */
   const marcador =
-    secao === 'ver' ? 'bg-olive-600' : secao === 'comer' ? 'bg-terra-600' : 'bg-ink-faint'
+    secao === 'ver' ? 'bg-olive' : secao === 'comer' ? 'bg-accent' : 'bg-elevated-faint'
   const foto = photoFor(place)
 
   return (
     <article
       className={[
-        'relative isolate overflow-hidden rounded-3xl bg-white transition-opacity',
+        'relative isolate overflow-hidden rounded-3xl bg-surface transition-opacity',
         compact ? 'p-4' : 'p-5',
-        'shadow-[0_1px_2px_rgba(31,26,23,0.06),0_8px_24px_-12px_rgba(31,26,23,0.18)]',
+        'shadow-[0_1px_2px_rgba(0,0,0,0.35),0_8px_24px_-12px_rgba(0,0,0,0.45)]',
         visited ? 'opacity-55' : '',
       ].join(' ')}
     >
@@ -45,7 +45,7 @@ export default function PlaceCard({
       {visited && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -top-1 -right-3 -z-10 -rotate-12 rounded-lg border-2 border-olive-600/45 px-2.5 py-0.5 text-[0.75rem] font-bold tracking-widest text-olive-600/45 uppercase"
+          className="pointer-events-none absolute -top-1 -right-3 -z-10 -rotate-12 rounded-lg border-2 border-olive/45 px-2.5 py-0.5 text-[0.75rem] font-bold tracking-widest text-olive/45 uppercase"
         >
           Visitado
         </span>
@@ -61,15 +61,15 @@ export default function PlaceCard({
             height="72"
             loading="lazy"
             decoding="async"
-            className="size-18 shrink-0 rounded-2xl bg-sand-100 object-cover"
+            className="size-18 shrink-0 rounded-2xl bg-elevated object-cover"
           />
         )}
 
         <div className="min-w-0 flex-1">
-          <h3 className="text-[1.0625rem] leading-snug font-semibold text-ink">
+          <h3 className="text-[1.0625rem] leading-snug font-semibold text-fg">
             {place.name}
           </h3>
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.8125rem] text-ink-faint">
+          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.8125rem] text-fg-faint">
             <span className="inline-flex items-center gap-1.5 font-medium">
               <span
                 aria-hidden="true"
@@ -80,7 +80,7 @@ export default function PlaceCard({
             {distancia && (
               <>
                 <span aria-hidden="true">·</span>
-                <span className="font-semibold text-ink-soft tabular-nums">
+                <span className="font-semibold text-fg-dim tabular-nums">
                   {distancia}
                 </span>
               </>
@@ -109,10 +109,10 @@ export default function PlaceCard({
             className={[
               'grid size-11 shrink-0 place-items-center rounded-full border transition',
               'duration-200 active:scale-95 cursor-pointer',
-              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
+              'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
               visited
-                ? 'border-olive-600 bg-olive-600 text-white'
-                : 'border-sand-200 bg-sand-50 text-ink-faint',
+                ? 'border-olive bg-olive text-white'
+                : 'border-line bg-deep text-fg-faint',
             ].join(' ')}
           >
             <Icon name="check" size={19} />
@@ -128,8 +128,8 @@ export default function PlaceCard({
                    e o tamanho do nome do lugar logo acima. Precisa empatar em
                    tamanho pra ganhar em presenca — a nota e o texto heroi do
                    card, o nome e so a etiqueta. */
-                'mt-3 font-note text-[1.375rem] leading-[1.25] font-medium text-ink'
-              : 'mt-2 text-[0.9375rem] leading-snug text-ink-soft'
+                'mt-3 font-note text-[1.375rem] leading-[1.25] font-medium text-fg'
+              : 'mt-2 text-[0.9375rem] leading-snug text-fg-dim'
           }
         >
           {hero.text}
@@ -139,20 +139,20 @@ export default function PlaceCard({
       {!compact && (
         <>
           {(rating != null || place.price_range) && (
-            <p className="mt-3 flex flex-wrap items-center gap-x-2 text-[0.8125rem] text-ink-soft">
+            <p className="mt-3 flex flex-wrap items-center gap-x-2 text-[0.8125rem] text-fg-dim">
               {rating != null && (
                 <span className="inline-flex items-center gap-1">
                   {/* Estrela em cinza, nao no accent: a nota do Google e
                       secundaria e nao disputa com a nota pessoal. */}
-                  <Icon name="star" size={14} filled className="text-ink-faint" />
+                  <Icon name="star" size={14} filled className="text-fg-faint" />
                   <span className="font-semibold tabular-nums">
                     {place.rating}
                   </span>
-                  {count && <span className="text-ink-faint">({count})</span>}
+                  {count && <span className="text-fg-faint">({count})</span>}
                 </span>
               )}
               {rating != null && place.price_range && (
-                <span aria-hidden="true" className="text-ink-faint">
+                <span aria-hidden="true" className="text-fg-faint">
                   ·
                 </span>
               )}
@@ -164,7 +164,7 @@ export default function PlaceCard({
 
           {place.public_review_summary && hero.isPersonal && (
             <details className="group mt-3">
-              <summary className="inline-flex cursor-pointer list-none items-center gap-1 py-1 text-[0.8125rem] font-medium text-ink-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600">
+              <summary className="inline-flex cursor-pointer list-none items-center gap-1 py-1 text-[0.8125rem] font-medium text-fg-faint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                 O que dizem no Google
                 <Icon
                   name="chevron"
@@ -172,7 +172,7 @@ export default function PlaceCard({
                   className="transition-transform duration-200 group-open:rotate-180"
                 />
               </summary>
-              <p className="mt-1 text-[0.875rem] leading-relaxed text-ink-soft">
+              <p className="mt-1 text-[0.875rem] leading-relaxed text-fg-dim">
                 {place.public_review_summary}
               </p>
             </details>
@@ -183,7 +183,7 @@ export default function PlaceCard({
               href={place.maps_link}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-sand-100 px-4 text-[0.9375rem] font-semibold text-ink transition duration-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-elevated px-4 text-[0.9375rem] font-semibold text-fg transition duration-200 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             >
               Abrir no Maps
               <Icon name="external" size={16} />

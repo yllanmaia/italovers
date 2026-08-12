@@ -20,18 +20,18 @@ export default function DecisionToggle({ block, chosen, onChoose }) {
               className={[
                 'flex w-full cursor-pointer items-start gap-3 rounded-2xl border p-3.5 text-left',
                 'transition duration-200 active:scale-[0.99]',
-                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
+                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
                 isChosen
-                  ? 'border-terra-600 bg-terra-50'
-                  : 'border-sand-200 bg-white',
+                  ? 'border-accent bg-accent-soft'
+                  : 'border-line bg-surface',
               ].join(' ')}
             >
               <span
                 className={[
                   'mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border-2 transition',
                   isChosen
-                    ? 'border-terra-600 bg-terra-600 text-white'
-                    : 'border-sand-300 text-transparent',
+                    ? 'border-accent bg-accent text-white'
+                    : 'border-line text-transparent',
                 ].join(' ')}
               >
                 <Icon name="check" size={12} strokeWidth="3" />
@@ -39,12 +39,12 @@ export default function DecisionToggle({ block, chosen, onChoose }) {
               <span className="min-w-0">
                 <span
                   className={`block text-[0.9375rem] font-semibold ${
-                    isChosen ? 'text-terra-700' : 'text-ink'
+                    isChosen ? 'text-accent' : 'text-fg'
                   }`}
                 >
                   {option.name}
                 </span>
-                <span className="mt-0.5 block text-[0.875rem] leading-snug text-ink-soft">
+                <span className="mt-0.5 block text-[0.875rem] leading-snug text-fg-dim">
                   {option.desc}
                 </span>
               </span>

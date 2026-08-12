@@ -44,7 +44,7 @@ export default function Photo({
           {estado === 'carregando' && (
             <span
               aria-hidden="true"
-              className="absolute inset-0 -z-10 animate-pulse bg-sand-100"
+              className="absolute inset-0 -z-10 animate-pulse bg-elevated"
             />
           )}
           {estado !== 'erro' && (
@@ -70,7 +70,7 @@ export default function Photo({
        * uso. So aparece quando a imagem de fato carregou.
        */}
       {credito && estado === 'ok' && (
-        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/75 to-transparent px-2.5 pt-6 pb-1.5 text-[0.625rem] leading-tight text-white/85">
+        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-deep/75 to-transparent px-2.5 pt-6 pb-1.5 text-[0.625rem] leading-tight text-white/85">
           {credito.author}
           {credito.license && ` · ${credito.license}`}
         </figcaption>
@@ -91,7 +91,7 @@ export function CoverFallback({ numero, nome }) {
   return (
     <span
       aria-hidden="true"
-      className="absolute inset-0 grid place-items-center overflow-hidden bg-gradient-to-br from-terra-600 via-terra-500 to-terra-700"
+      className="absolute inset-0 grid place-items-center overflow-hidden bg-gradient-to-br from-accent via-accent to-accent"
     >
       {numero != null && (
         <span className="title-display translate-y-[0.06em] text-[7rem] leading-none text-white/15 tabular-nums select-none">

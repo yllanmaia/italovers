@@ -60,10 +60,10 @@ export default function Roteiro({
     })
 
   return (
-    <div className="mx-auto max-w-lg px-4 pt-4 pad-nav">
+    <div className="px-4 pt-4 pad-nav">
       <header className="mb-4 px-1">
-        <h1 className="title-display text-3xl leading-none text-ink">Roteiro</h1>
-        <p className="mt-1.5 text-[0.875rem] text-ink-soft">
+        <h1 className="title-display text-3xl leading-none text-fg">Roteiro</h1>
+        <p className="mt-1.5 text-[0.875rem] text-fg-dim">
           {capitulos.length} capítulos · {itinerary.days.length} dias ·{' '}
           {itinerary.trip.name}
         </p>
@@ -88,7 +88,7 @@ export default function Roteiro({
         ))}
       </div>
 
-      <p className="mt-6 px-2 text-center text-[0.75rem] leading-relaxed text-ink-faint">
+      <p className="mt-6 px-2 text-center text-[0.75rem] leading-relaxed text-fg-faint">
         {itinerary.trip.note}
       </p>
     </div>
@@ -147,8 +147,8 @@ function Capitulo({
   return (
     <section
       className={[
-        'overflow-hidden rounded-3xl border bg-white',
-        cap.temHoje ? 'border-terra-600' : 'border-sand-200',
+        'overflow-hidden rounded-3xl border bg-surface',
+        cap.temHoje ? 'border-accent' : 'border-line',
       ].join(' ')}
     >
       <button
@@ -158,14 +158,14 @@ function Capitulo({
         disabled={vazio}
         className={[
           'flex w-full items-center gap-3 px-4 py-3.5 text-left',
-          'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-terra-600',
+          'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent',
           vazio ? 'cursor-default' : 'cursor-pointer',
         ].join(' ')}
       >
         <span
           className={[
             'grid size-9 shrink-0 place-items-center rounded-full text-[0.9375rem] font-bold tabular-nums',
-            cap.temHoje ? 'bg-terra-600 text-white' : 'bg-sand-100 text-ink-soft',
+            cap.temHoje ? 'bg-accent text-white' : 'bg-elevated text-fg-dim',
           ].join(' ')}
         >
           {cap.numero}
@@ -176,16 +176,16 @@ function Capitulo({
             duas e colidia com ele. */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <h2 className="title-display truncate text-[1.25rem] leading-tight text-ink">
+            <h2 className="title-display truncate text-[1.25rem] leading-tight text-fg">
               {cap.short ?? cap.name}
             </h2>
             {cap.temHoje && (
-              <span className="shrink-0 rounded-full bg-terra-600 px-2 py-0.5 text-[0.625rem] font-bold tracking-wide text-white uppercase">
+              <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-[0.625rem] font-bold tracking-wide text-white uppercase">
                 Hoje
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-[0.8125rem] text-ink-faint tabular-nums">
+          <p className="mt-0.5 text-[0.8125rem] text-fg-faint tabular-nums">
             {cap.intervalo}
             {cap.dias > 0 && ` · ${cap.dias} ${cap.dias === 1 ? 'dia' : 'dias'}`}
             {cap.lugares > 0 && ` · ${cap.lugares} lugares`}
@@ -196,7 +196,7 @@ function Capitulo({
           <Icon
             name="chevron"
             size={20}
-            className={`shrink-0 text-ink-faint transition-transform duration-200 ${
+            className={`shrink-0 text-fg-faint transition-transform duration-200 ${
               aberto ? '' : '-rotate-90'
             }`}
           />
@@ -213,10 +213,10 @@ function Capitulo({
             src={photoSrc(cap.cover_photo)}
             alt={cap.cover_photo ? `Foto de ${cap.name}` : ''}
             ratio="16 / 9"
-            className="border-t border-sand-200"
+            className="border-t border-line"
             fallback={<CoverFallback numero={cap.numero} nome={cap.short ?? cap.name} />}
           />
-          <div className="space-y-3 bg-sand-50 p-3">
+          <div className="space-y-3 bg-deep p-3">
           {cap.entradas.map(({ day, dayNumber, segmento }) => (
             <DayCard
               key={`${day.date}-${segmento.phaseId}`}

@@ -59,7 +59,7 @@ export default function Viagem({
   return (
     <div className="flex h-full flex-col">
       <div className="shrink-0 px-4 pt-4 pb-3">
-        <div className="mx-auto max-w-lg">
+        <div className="w-full">
           <ContextHeader
             itinerary={itinerary}
             dayInfo={dayInfo}
@@ -105,7 +105,7 @@ export default function Viagem({
           onClick={centralizarEmMim}
           disabled={!position}
           aria-label="Centralizar na minha localizacao"
-          className="absolute right-4 bottom-32 z-[500] grid size-13 cursor-pointer place-items-center rounded-full bg-white text-ink shadow-lg transition duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+          className="absolute right-4 bottom-32 z-[500] grid size-13 cursor-pointer place-items-center rounded-full bg-surface text-fg shadow-lg transition duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
           <Icon name="crosshair" size={22} />
         </button>
@@ -122,7 +122,7 @@ export default function Viagem({
 function ContextHeader({ itinerary, dayInfo, phase, now, places, visited }) {
   if (dayInfo.status === 'before') {
     return (
-      <header className="rounded-3xl bg-ink p-5 text-white">
+      <header className="rounded-3xl bg-elevated p-5 text-white">
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Ainda não começou
         </p>
@@ -141,7 +141,7 @@ function ContextHeader({ itinerary, dayInfo, phase, now, places, visited }) {
     const visitados = mapeados.filter((p) => visited.has(p.id)).length
     const km = routeLegs(itinerary, now).reduce((s, l) => s + l.km, 0)
     return (
-      <header className="rounded-3xl bg-ink p-5 text-white">
+      <header className="rounded-3xl bg-elevated p-5 text-white">
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Viagem encerrada
         </p>
@@ -158,13 +158,13 @@ function ContextHeader({ itinerary, dayInfo, phase, now, places, visited }) {
   const proximo = upcomingBooked(dayInfo.day, now, 3)[0]
 
   return (
-    <header className="rounded-3xl bg-ink p-5 text-white">
+    <header className="rounded-3xl bg-elevated p-5 text-white">
       <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase tabular-nums">
         Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {formatDateLong(dayInfo.day.date)}
       </p>
       <h1 className="title-display mt-1.5 text-[1.75rem] leading-[1.1]">{phase.name}</h1>
       {proximo && (
-        <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-terra-600 px-3 py-1.5 text-[0.8125rem] font-bold">
+        <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-[0.8125rem] font-bold">
           <Icon name="ticket" size={14} />
           {proximo.time} · {proximo.title}
         </p>
@@ -203,16 +203,16 @@ function StatsRow({ stats }) {
   // Uma linha so, a 12px: em duas linhas o cabecalho comia 40% da tela e
   // sobrava pouco mapa, que e o conteudo.
   return (
-    <dl className="mt-2 flex flex-nowrap items-baseline gap-x-2 px-1 text-[0.75rem] whitespace-nowrap text-ink-soft">
+    <dl className="mt-2 flex flex-nowrap items-baseline gap-x-2 px-1 text-[0.75rem] whitespace-nowrap text-fg-dim">
       {itens.map(({ chave, valor, rotulo, visivel }, i) => (
         <div key={chave} className="flex shrink-0 items-baseline gap-1">
           {i > 0 && (
-            <span aria-hidden="true" className="mr-1 text-ink-faint">
+            <span aria-hidden="true" className="mr-1 text-fg-faint">
               ·
             </span>
           )}
           <dt className="sr-only">{rotulo}</dt>
-          <dd className="font-bold text-ink tabular-nums">{valor}</dd>
+          <dd className="font-bold text-fg tabular-nums">{valor}</dd>
           {visivel && <span aria-hidden="true">{rotulo}</span>}
         </div>
       ))}
@@ -225,7 +225,7 @@ function ModeToggle({ mode, onChange }) {
     <div
       role="tablist"
       aria-label="Modo do mapa"
-      className="mt-3 flex gap-1 rounded-full bg-sand-100 p-1"
+      className="mt-3 flex gap-1 rounded-full bg-elevated p-1"
     >
       {[
         ['rota', 'Rota'],
@@ -240,8 +240,8 @@ function ModeToggle({ mode, onChange }) {
           className={[
             'min-h-11 flex-1 cursor-pointer rounded-full text-[0.875rem] font-bold',
             'transition duration-200 active:scale-[0.98]',
-            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
-            mode === id ? 'bg-white text-ink shadow-sm' : 'text-ink-faint',
+            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+            mode === id ? 'bg-surface text-fg shadow-sm' : 'text-fg-faint',
           ].join(' ')}
         >
           {label}
@@ -260,9 +260,9 @@ function ModeToggle({ mode, onChange }) {
  */
 function RouteLegend() {
   return (
-    <p className="mt-2 flex items-center justify-center gap-4 px-1 text-[0.75rem] font-semibold text-ink-faint">
+    <p className="mt-2 flex items-center justify-center gap-4 px-1 text-[0.75rem] font-semibold text-fg-faint">
       <span className="flex items-center gap-1.5">
-        <span aria-hidden="true" className="h-0.5 w-5 rounded-full bg-terra-600" />
+        <span aria-hidden="true" className="h-0.5 w-5 rounded-full bg-accent" />
         percorrido
       </span>
       <span className="flex items-center gap-1.5">
@@ -279,7 +279,7 @@ function RouteLegend() {
 function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, total, vazio }) {
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] p-3">
-      <div className="pointer-events-auto mx-auto max-w-lg space-y-2">
+      <div className="pointer-events-auto space-y-2">
         <div className="flex gap-2 overflow-x-auto pb-1">
           {fases.map((fase) => (
             <Chip
@@ -306,12 +306,12 @@ function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, t
           <Chip active={sectionFilter === 'ver'} onClick={() => onSection('ver')} tone="olive">
             Ver
           </Chip>
-          <span className="ml-auto self-center rounded-full bg-white/90 px-3 py-1.5 text-[0.75rem] font-semibold text-ink-soft shadow-sm tabular-nums">
+          <span className="ml-auto self-center rounded-full bg-surface/90 px-3 py-1.5 text-[0.75rem] font-semibold text-fg-dim shadow-sm tabular-nums">
             {total}
           </span>
         </div>
         {vazio && (
-          <p className="rounded-2xl bg-white/95 px-4 py-3 text-center text-[0.875rem] font-medium text-ink-soft shadow-lg">
+          <p className="rounded-2xl bg-surface/95 px-4 py-3 text-center text-[0.875rem] font-medium text-fg-dim shadow-lg">
             Nenhum lugar mapeado com esse filtro.
           </p>
         )}
@@ -334,10 +334,10 @@ function Chip({ active, onClick, children, tone = 'ink', autoScroll = false }) {
 
   const ativo =
     tone === 'olive'
-      ? 'bg-olive-600 text-white'
+      ? 'bg-olive text-white'
       : tone === 'terra'
-        ? 'bg-terra-600 text-white'
-        : 'bg-ink text-white'
+        ? 'bg-accent text-white'
+        : 'bg-elevated text-white'
   return (
     <button
       ref={ref}
@@ -347,8 +347,8 @@ function Chip({ active, onClick, children, tone = 'ink', autoScroll = false }) {
       className={[
         'shrink-0 cursor-pointer rounded-full px-3.5 py-2 text-[0.8125rem] font-semibold whitespace-nowrap shadow-sm',
         'transition duration-200 active:scale-95',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
-        active ? ativo : 'bg-white/95 text-ink-soft',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
+        active ? ativo : 'bg-surface/95 text-fg-dim',
       ].join(' ')}
     >
       {children}
