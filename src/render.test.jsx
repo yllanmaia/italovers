@@ -135,15 +135,54 @@ describe('aba Roteiro', () => {
     fireEvent.click(screen.getByRole('button', { name: /Roteiro/ }))
   }
 
-  it('renderiza os 19 dias', () => {
+  /**
+   * Os capitulos nascem fechados menos o de hoje, entao os testes que olham a
+   * viagem inteira precisam abrir todos. Clicar em cada cabecalho e mais fiel
+   * ao uso real do que expor um atalho so pro teste.
+   */
+  const abrirTodosCapitulos = () => {
+    for (const botao of screen.getAllByRole('button', { expanded: false })) {
+      fireEvent.click(botao)
+    }
+  }
+
+  it('agrupa os 19 dias em 9 capitulos', () => {
     setDate('2026-09-15')
     abrirRoteiro()
-    expect(screen.getAllByText(/^Dia \d+ · \d{2}\/\d{2}$/)).toHaveLength(19)
+    expect(screen.getAllByRole('button', { name: /^\d+ ?[A-Za-zÀ-ú]/ }).length).toBeGreaterThan(0)
+    expect(screen.getByText(/9 capítulos · 19 dias/)).toBeTruthy()
+  })
+
+  it('so o capitulo de hoje nasce aberto', () => {
+    setDate('2026-09-15') // Roma
+    abrirRoteiro()
+    // Um dia visivel por capitulo aberto; fechado nao renderiza dia nenhum
+    const visiveis = screen.getAllByText(/^Dia \d+ · \d{2}\/\d{2}$/)
+    expect(visiveis.length).toBeGreaterThan(0)
+    expect(visiveis.length).toBeLessThan(19)
+  })
+
+  it('abrindo todos, o 14/09 aparece duas vezes: Palermo e Roma', () => {
+    setDate('2026-09-15')
+    abrirRoteiro()
+    abrirTodosCapitulos()
+    // 19 dias + o 14/09 fatiado em dois = 20 cards
+    expect(screen.getAllByText(/^Dia \d+ · \d{2}\/\d{2}$/)).toHaveLength(20)
+
+    // Escopado no card: "noite" tambem aparece no trilho de horario de outros
+    // blocos, entao buscar o texto solto acharia demais
+    const cards = screen.getAllByText('Dia 11 · 14/09').map((el) => el.closest('article'))
+    expect(cards).toHaveLength(2)
+    expect(cards[0].textContent).toContain('manhã e tarde')
+    expect(cards[0].textContent).toContain('Wizz Air')
+    expect(cards[1].textContent).toContain('noite')
+    expect(cards[1].textContent).toContain('Terni')
   })
 
   it('mostra os warnings sem precisar de toque', () => {
     setDate('2026-09-15')
     abrirRoteiro()
+    abrirTodosCapitulos()
     expect(
       screen.getByText(/nao coberto pelo Deutschlandticket|não coberto pelo Deutschlandticket/)
     ).toBeTruthy()
@@ -152,6 +191,7 @@ describe('aba Roteiro', () => {
   it('mostra os codigos de reserva que ficaram', () => {
     setDate('2026-09-15')
     abrirRoteiro()
+    abrirTodosCapitulos()
     expect(screen.getAllByText('8UVM2S').length).toBeGreaterThan(0)
   })
 
@@ -187,6 +227,7 @@ describe('aba Roteiro', () => {
 
     setDate('2026-09-15')
     abrirRoteiro()
+    abrirTodosCapitulos()
     const texto = document.body.textContent
     for (const segredo of segredos) {
       // A mensagem tambem nao pode conter o valor
@@ -197,6 +238,7 @@ describe('aba Roteiro', () => {
   it('renderiza os 3 blocos de decisao como opcoes clicaveis', () => {
     setDate('2026-09-15')
     abrirRoteiro()
+    abrirTodosCapitulos()
     expect(screen.getByText('Cenario B')).toBeTruthy()
     expect(screen.getByText('Cefalu')).toBeTruthy()
   })

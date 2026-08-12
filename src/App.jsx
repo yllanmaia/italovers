@@ -63,12 +63,17 @@ export default function App() {
     [now, setPhaseOverride]
   )
 
+  /**
+   * A chave e "data:indice do bloco", nao so a data. Um dia com dois blocos de
+   * decisao compartilharia a escolha — nao acontece hoje, mas o roteiro e dado,
+   * nao codigo, e o custo de fechar essa porta e uma string.
+   */
   const onChooseOption = useCallback(
-    (date, optionId) =>
+    (chave, optionId) =>
       setDecisions((prev) => {
         const next = { ...prev }
-        if (optionId == null) delete next[date]
-        else next[date] = optionId
+        if (optionId == null) delete next[chave]
+        else next[chave] = optionId
         return next
       }),
     [setDecisions]

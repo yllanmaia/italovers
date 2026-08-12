@@ -98,6 +98,71 @@ export function scheduledPhaseId(itinerary, now) {
   return phaseId
 }
 
+/**
+ * Fatia um dia nos pedacos que pertencem a cada fase.
+ *
+ * Mesma varredura do scheduledPhaseId, mas guardando os blocos em vez de so a
+ * fase final. Serve pros capitulos: o 14/09 e uma data so no dado — e esta
+ * certo, e uma data so de calendario — mas metade dele acontece em Palermo e a
+ * outra metade em Roma. Como capitulo, ele precisa aparecer nos dois.
+ *
+ * Devolve 1 segmento pros 18 dias normais e 2 pro 14/09.
+ */
+export function splitDayByPhase(day) {
+  const segmentos = []
+  let atual = day.phase_id
+
+  for (const block of day.blocks) {
+    if (block.phase_id_override) atual = block.phase_id_override
+    const ultimo = segmentos[segmentos.length - 1]
+    if (!ultimo || ultimo.phaseId !== atual) {
+      segmentos.push({ phaseId: atual, blocks: [block] })
+    } else {
+      ultimo.blocks.push(block)
+    }
+  }
+
+  if (!segmentos.length) segmentos.push({ phaseId: day.phase_id, blocks: [] })
+
+  return segmentos.map((seg) => ({
+    ...seg,
+    parcial: segmentos.length > 1,
+    periodo: segmentos.length > 1 ? periodoDe(seg.blocks) : null,
+  }))
+}
+
+const PERIODO_LABEL = { manha: 'manhã', tarde: 'tarde', noite: 'noite' }
+
+/**
+ * "manhã e tarde", "noite". So aparece em dia partido, pra dizer que pedaco do
+ * dia aquele capitulo pegou.
+ *
+ * O campo `period` do bloco ganha da hora quando existe, porque ele e dado
+ * escrito a mao e a hora e inferencia. O bloco livre do 14/09 e o caso: ele so
+ * tem `end_time: "13:30"`, entao pela hora cairia em "tarde" — mas o `period`
+ * dele diz "manha", que e o certo, e uma manha livre que termina 13:30.
+ */
+function periodoDe(blocks) {
+  const nomes = new Set()
+  for (const b of blocks) {
+    if (b.period) {
+      b.period.split('/').forEach((p) => nomes.add(p.trim()))
+      continue
+    }
+    const min = toMinutes(b.time) ?? toMinutes(b.end_time)
+    if (min == null) continue
+    if (min < 12 * 60) nomes.add('manha')
+    else if (min < 18 * 60) nomes.add('tarde')
+    else nomes.add('noite')
+  }
+  const lista = ['manha', 'tarde', 'noite']
+    .filter((p) => nomes.has(p))
+    .map((p) => PERIODO_LABEL[p])
+  if (!lista.length) return null
+  if (lista.length === 1) return lista[0]
+  return `${lista.slice(0, -1).join(', ')} e ${lista[lista.length - 1]}`
+}
+
 /** Fase cujo center esta mais perto da posicao dada. */
 export function nearestPhase(phases, position) {
   let best = null
