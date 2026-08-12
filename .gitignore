@@ -10,3 +10,8 @@ secrets.local.json
 
 .vercel
 .env*
+
+# Excecao: o modelo sem valores precisa ser versionado, senao uma maquina nova
+# nao tem como saber quais variaveis existem. A negacao vem depois do .env*
+# porque no gitignore o ultimo padrao que casa e o que vale.
+!.env.example

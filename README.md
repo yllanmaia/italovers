@@ -40,8 +40,20 @@ aparecem no mapa como hotel mas nunca em lista de sugestão.)*
 Mapbox. Mapa é **Leaflet + tiles do CARTO** (dados do OpenStreetMap), geolocalização é a `navigator.geolocation`
 nativa, e a distância é Haversine escrito à mão — não vale uma dependência por 15 linhas.
 
-**Sem backend, sem banco, sem login.** Os dados são JSON estático no repositório. O que
-precisa persistir (lugares visitados, escolhas de roteiro) vive no `localStorage`.
+**O catálogo é JSON estático no repositório.** Os 83 lugares e o roteiro não mudam durante
+a viagem, então não têm por que estar num banco: mudá-los é um commit.
+
+**O estado do casal, esse sim, sincroniza — e essa decisão foi revertida no meio.** O
+projeto nasceu sem backend, com tudo no `localStorage`. Só que somos dois: o que um marca
+como visitado nunca chegava no outro, e a aba Notas, que existe pra ser a avaliação *dos
+dois*, jamais via as duas opiniões juntas. Entrou **Supabase** (Postgres + Auth + Realtime,
+plano grátis) guardando visitados, notas e decisões de roteiro.
+
+**Mas o `localStorage` continua sendo a fonte imediata da verdade**, e o login é opcional.
+Escrita grava local na hora e entra numa fila que esvazia quando há rede; deslogado, o app
+funciona exatamente como antes. Sem isso, marcar um restaurante sem sinal não funcionaria —
+pior que o problema original. O convite pra entrar fica dentro da aba Notas, nunca na
+porta: o app precisa abrir no avião.
 
 **Detecção de fase por GPS, não só por data.** A viagem tem vários dias de deslocamento em
 que a data mente: dia 12/09 o calendário diz "Palermo", mas às 07:00 a gente ainda está em
@@ -102,10 +114,11 @@ ganha: ela não disputa com a nota pessoal.
 | Estilo | Tailwind CSS 4 |
 | Mapa | Leaflet + tiles escuros do CARTO (dados OpenStreetMap) |
 | PWA | vite-plugin-pwa (manifest + service worker) |
+| Sincronização | Supabase (Postgres + Auth + Realtime), plano grátis |
 | Geocoding | Nominatim (OSM), via script one-off |
 | Tipografia | Clash Display nos títulos, Satoshi na interface, Caveat nas notas — todas variáveis e auto-hospedadas |
 | Movimento | Framer Motion + scroll-driven animations nativas |
-| Testes | Vitest + Testing Library — 208 testes |
+| Testes | Vitest + Testing Library — 251 testes |
 | Lint | Oxlint |
 
 ## Rodando
@@ -118,7 +131,7 @@ npm run dev
 | Script | O que faz |
 |---|---|
 | `npm run dev` | servidor de desenvolvimento |
-| `npm test` | 208 testes (lógica pura em node, render em jsdom) |
+| `npm test` | 251 testes (lógica pura em node, render em jsdom) |
 | `npm run build` | verifica que não há dado sensível e builda |
 | `npm run lint` | Oxlint |
 | `npm run geocode` | geocodifica lugares e hotéis sem coordenada via Nominatim |
@@ -137,7 +150,7 @@ A viagem é em setembro de 2026, então sem simular data não há nada pra ver:
 ```
 ?d=2026-09-16&t=13:30   simula data e hora (mostra uma tarja avisando)
 ?d=off                  desliga a simulação
-?tab=lugares            abre direto numa aba: viagem, agora, lugares ou roteiro
+?tab=lugares            abre direto numa aba: viagem, agora, lugares, roteiro ou notas
 ```
 
 E pra tirar print com viewport de celular de verdade (o `--window-size` do Chrome headless
@@ -312,12 +325,32 @@ o `scripts/strip-secrets.mjs` os move pra um arquivo local fora do Git, e o `npm
 falha se algum deles reaparecer — inclusive por uma trava que procura os valores literais,
 não só os nomes dos campos.
 
+O backend não muda isso. A chave que vai no cliente é a **publicável**, feita pra ficar
+exposta; quem protege os dados é a RLS, que só aceita e-mail presente na tabela `membros`.
+Anônimo lendo as tabelas recebe lista vazia, e escrevendo recebe `42501`. Os e-mails de
+login (`@italovers.app`) são fictícios — servem só de identificador, não existem.
+
+## Rodando em outra máquina
+
+O `.env.local` com as chaves do Supabase não está no repositório e nunca vai estar. Copie o
+`.env.example` e preencha, ou puxe direto da Vercel:
+
+```bash
+npx vercel link && npx vercel env pull .env.local
+```
+
+Sem esse arquivo o app roda normalmente — `src/lib/supabase.js` exporta `null` e tudo cai
+no modo local. É por isso que a suíte de testes passa sem rede.
+
 ## Limitações assumidas
 
 - **O mapa não funciona offline.** Os tiles do OSM vêm da rede. O shell do app e os dois
   JSON ficam em cache, então o roteiro abre sem sinal e o mapa degrada. Tile offline de
   verdade estava fora de escopo.
-- **Os dois celulares não sincronizam.** "Visitado" e as decisões ficam no `localStorage`,
-  por aparelho. Sincronizar exigiria backend, que a premissa de custo zero descartou.
+- **A sincronização depende de login.** Deslogado, "visitado" e as notas ficam só no
+  aparelho — o que é proposital, porque o app tem que abrir sem sinal e sem conta. Quem
+  não entrar não vê o que o outro marcou.
+- **O projeto grátis do Supabase hiberna** depois de ~1 semana sem uso e leva alguns
+  segundos pra acordar. Durante a viagem não acontece; entre uma viagem e outra, sim.
 - **O Nominatim é menos preciso que o Google** em viela de centro storico. Os pinos foram
   conferidos no olho depois de geocodificar.
