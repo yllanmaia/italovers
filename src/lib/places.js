@@ -1,4 +1,18 @@
-/** Filtro, split e ordenacao dos 83 lugares. */
+/**
+ * Filtro, split e ordenacao dos 83 lugares.
+ *
+ * CAMPOS DE FOTO RESERVADOS, hoje ausentes em 100% dos dados. Todos opcionais:
+ * o app tem que ficar bonito sem nenhum deles, porque e assim que ele esta.
+ *
+ *   trip.hero_photo         string        capa da viagem
+ *   phases[].cover_photo    string        capa do capitulo, 16:9
+ *   days[].photos[]         {url, caption}[]
+ *   places[].photos[]       string[]      nossas fotos, por URL externa
+ *
+ * URL externa porque foto nao cabe no localStorage (~5 MB) e porque commitar
+ * as fotos da viagem num repositorio publico e outra conversa. O componente
+ * <Photo> distingue a origem pelo prefixo: http e externa, o resto e /public.
+ */
 import { haversine, parseCount, parseRating } from './geo.js'
 import photos from '../data/photos.json'
 import hours from '../data/hours.json'
@@ -248,14 +262,20 @@ export function phasesOnMap(itinerary, places) {
 }
 
 /**
- * Foto do lugar, ou null.
+ * Foto do lugar, ou null. Duas origens, nesta ordem:
  *
- * So 13 dos 83 tem: os monumentos, praias e mercados que existem no Wikimedia
- * Commons. Os 67 de comer nao tem foto em fonte livre — quem tem e o Google
- * Places, que e pago e proibe armazenar. Card sem foto nao ganha placeholder:
- * ausencia nao pode virar ruido visual.
+ * 1. `place.photos[]` — as NOSSAS fotos, por URL externa. Campo opcional, hoje
+ *    vazio em todos os 83. Nao levam credito: a foto e nossa.
+ * 2. `photos.json` — as 13 do Wikimedia Commons, com autor e licenca. 12 sao
+ *    CC BY ou CC BY-SA, que exigem atribuicao visivel onde a imagem aparece.
+ *
+ * Os 67 de comer nao tem foto em fonte livre — quem tem e o Google Places, que
+ * e pago e proibe armazenar. Card sem foto nao ganha placeholder: ausencia nao
+ * pode virar ruido visual.
  */
 export function photoFor(place) {
+  const nossa = place.photos?.[0]
+  if (nossa) return { file: nossa, author: null, license: null }
   return photos[place.id] ?? null
 }
 

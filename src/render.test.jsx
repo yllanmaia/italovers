@@ -411,6 +411,54 @@ describe('aba Lugares', () => {
   })
 })
 
+describe('componente Photo', () => {
+  /**
+   * O caso que importa aqui e a ausencia, nao o carregamento: 100% dos campos
+   * de foto novos estao vazios, e vao ficar ate as URLs entrarem.
+   */
+  it('sem src nao renderiza img nenhuma, so o fallback', async () => {
+    const { default: Photo, CoverFallback } = await import('./components/Photo.jsx')
+    const { container } = render(
+      <Photo fallback={<CoverFallback numero={3} nome="Castellammare" />} />
+    )
+    expect(container.querySelector('img')).toBeNull()
+    expect(screen.getByText('Castellammare')).toBeTruthy()
+    expect(screen.getByText('3')).toBeTruthy()
+  })
+
+  it('reserva a proporcao mesmo vazio, pra nao empurrar a pagina depois', async () => {
+    const { default: Photo } = await import('./components/Photo.jsx')
+    const { container } = render(<Photo ratio="16 / 9" />)
+    expect(container.querySelector('figure').style.aspectRatio).toBe('16 / 9')
+  })
+
+  it('erro de carga cai no fallback em vez de imagem quebrada', async () => {
+    const { default: Photo } = await import('./components/Photo.jsx')
+    const { container } = render(
+      <Photo src="https://exemplo.invalido/foto.jpg" alt="x" fallback={<span>vazio</span>} />
+    )
+    fireEvent.error(container.querySelector('img'))
+    expect(container.querySelector('img')).toBeNull()
+    expect(screen.getByText('vazio')).toBeTruthy()
+  })
+
+  it('credito so aparece depois que a imagem carrega', async () => {
+    const { default: Photo } = await import('./components/Photo.jsx')
+    const credito = { author: 'FeaturedPics', license: 'CC BY-SA 4.0' }
+    const { container } = render(<Photo src="/places/p079.webp" alt="x" credito={credito} />)
+    expect(screen.queryByText(/FeaturedPics/)).toBeNull()
+    fireEvent.load(container.querySelector('img'))
+    expect(screen.getByText(/FeaturedPics · CC BY-SA 4.0/)).toBeTruthy()
+  })
+
+  it('distingue foto externa de local pelo prefixo', async () => {
+    const { photoSrc } = await import('./components/Photo.jsx')
+    expect(photoSrc('https://cdn.exemplo/a.jpg')).toBe('https://cdn.exemplo/a.jpg')
+    expect(photoSrc('places/p079.webp')).toBe('/places/p079.webp')
+    expect(photoSrc(null)).toBeNull()
+  })
+})
+
 describe('badge de horario', () => {
   const em = (diaSemana, hora, min = 0) => new Date(2026, 8, 13 + diaSemana, hora, min)
 

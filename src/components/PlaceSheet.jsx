@@ -69,8 +69,10 @@ export default function PlaceSheet({
         )}
 
         {/* Credito da foto. Quase tudo e CC BY-SA, que EXIGE autor + licenca
-            visiveis. Nao e cortesia, e condicao de uso. */}
-        {foto && (
+            visiveis. Nao e cortesia, e condicao de uso.
+            Checa `author`, nao `foto`: as nossas fotos nao tem autor externo e
+            renderizariam "Foto: null". */}
+        {foto?.author && (
           <p className="mt-2 px-1 text-[0.6875rem] leading-snug text-ink-faint">
             Foto: {foto.author} ·{' '}
             {foto.licenseUrl ? (
