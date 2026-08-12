@@ -16,7 +16,8 @@
       "public_review_summary": "Muito elogiada pelo cacio e pepe e pelo tiramisù; termos mais citados nas avaliações são cacio e pepe, ravioli mimosa e a finalização na roda de queijo. Alguns clientes acham o preço alto e reclamam de atendimento irregular.",
       "address": "Via del Politeama, 23/25, 00153 Roma RM, Itália",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Taverna+Trilussa/@41.8907016,12.4711323,17z"
+      "maps_link": "https://www.google.com/maps/place/Taverna+Trilussa/@41.8907016,12.4711323,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p002",
@@ -34,7 +35,8 @@
       "public_review_summary": "Mercado histórico conhecido pela comida de rua e pelo clima de festa à noite; visitantes destacam o folclore e a cozinha siciliana, mas alertam para vendedores insistentes.",
       "address": "P.zza Vicerè Caracciolo, 90133 Palermo PA, Itália",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/La+Vucciria/@38.1173914,13.3637435,17z"
+      "maps_link": "https://www.google.com/maps/place/La+Vucciria/@38.1173914,13.3637435,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p003",
@@ -53,7 +55,8 @@
       "address": "Via Don Leonardo Zangara, 3, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
       "maps_link": "https://www.google.com/maps/search/Ristorante+Cump%C3%A0+Osteria+al+mare",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p004",
@@ -71,7 +74,8 @@
       "public_review_summary": "Pizza napolitana é o ponto mais citado, junto com antepastos e sobremesas de pistache; atendimento descrito como rápido e organizado.",
       "address": "Piazza Europa, 7, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Gusto+-+Pizzeria+Siculo+Napoletana/@38.0274249,12.8826994,17z"
+      "maps_link": "https://www.google.com/maps/place/Gusto+-+Pizzeria+Siculo+Napoletana/@38.0274249,12.8826994,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p005",
@@ -90,7 +94,8 @@
       "address": "Via Maqueda, 331, 90133 Palermo PA, Itália",
       "city_raw": "Palermo",
       "maps_link": "https://www.google.com/maps/search/Via+Maqueda+331+Palermo",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Palermo"
     },
     {
       "id": "p006",
@@ -107,8 +112,9 @@
       "personal_note": "Rest chique",
       "public_review_summary": "Comentários citam vinhos, pizza e espaguete; opiniões divididas — alguns elogiam o cardápio variado, outros se decepcionaram com a relação preço/qualidade.",
       "address": "Piazza Europa, 2, 91023 Favignana TP, Itália",
-      "city_raw": "Favignana (Egadi, TP)",
-      "maps_link": "https://www.google.com/maps/place/Delle+Palme/@37.9310098,12.3270212,17z"
+      "city_raw": "Favignana (Egadi, Trapani)",
+      "maps_link": "https://www.google.com/maps/place/Delle+Palme/@37.9310098,12.3270212,17z",
+      "sublocal": "Favignana"
     },
     {
       "id": "p007",
@@ -125,9 +131,10 @@
       "personal_note": null,
       "public_review_summary": "Destaques nas avaliações: risoto, atum e a qualidade da matéria-prima; há queixas recorrentes de porções pequenas para o preço e de atendimento.",
       "address": "Via Roma, 52, 91023 Favignana TP, Itália",
-      "city_raw": "Favignana (Egadi, TP)",
+      "city_raw": "Favignana (Egadi, Trapani)",
       "maps_link": "https://www.google.com/maps/search/Formica+ristorante+Favignana",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Favignana"
     },
     {
       "id": "p008",
@@ -144,9 +151,10 @@
       "personal_note": "Nosso hotel",
       "public_review_summary": "Sem ficha própria no Google Maps, portanto sem avaliações públicas. Anotação da lista indica que era a hospedagem do grupo.",
       "address": "Via Giovanni Nicotera, 24/1, 00195 Roma RM (endereço provável – a confirmar)",
-      "city_raw": "Roma (Prati)",
+      "city_raw": "Favignana (Egadi, Trapani)",
       "maps_link": "https://www.google.com/maps/place/Via+Giovanni+Nicotera,+24,+00195+Roma+RM,+It%C3%A1lia/@41.9165327,12.4683278,17z",
-      "note_correction": "Coordenadas originais do CSV apontavam pra Roma por engano (rua homonima). Este e o endereco do hotel Catria em Favignana, ja presente em accommodations no itinerary.json - nao precisa geocodificar de novo."
+      "note_correction": "Coordenadas originais do CSV apontavam pra Roma por engano (rua homonima). Este e o endereco do hotel Catria em Favignana, ja presente em accommodations no itinerary.json - nao precisa geocodificar de novo.",
+      "sublocal": "Favignana"
     },
     {
       "id": "p009",
@@ -164,7 +172,8 @@
       "public_review_summary": "Poucas avaliações, todas muito positivas (nota máxima); hospedagem pequena com vista para o mar.",
       "address": "Via Giacomo Puccini, 45, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Suite+Altamarea+Sea+View+Studios/@38.0283242,12.8765216,17z"
+      "maps_link": "https://www.google.com/maps/place/Suite+Altamarea+Sea+View+Studios/@38.0283242,12.8765216,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p010",
@@ -182,7 +191,8 @@
       "public_review_summary": "As cassatelle de ricota são o item mais mencionado, seguidas da pastelaria e da rotisseria; muita gente para no caminho e volta mais de uma vez.",
       "address": "Contrada Gemma D'Oro, 92, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Bar+La+Sorgente/@38.016824,12.889946,17z"
+      "maps_link": "https://www.google.com/maps/place/Bar+La+Sorgente/@38.016824,12.889946,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p011",
@@ -200,7 +210,8 @@
       "public_review_summary": "Frango assado é o campeão das menções, com arancini, frituras e cassatelle; preço baixo e comida elogiada, mas costuma ter fila.",
       "address": "Via Francesco Crispi, 45, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/L'Antica+Brace/@38.0205193,12.8819113,17z"
+      "maps_link": "https://www.google.com/maps/place/L'Antica+Brace/@38.0205193,12.8819113,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p012",
@@ -218,7 +229,8 @@
       "public_review_summary": "Busiate, peixe-espada, mexilhões e polvo são os pratos mais citados; atendimento familiar e acolhedor aparece em quase todas as avaliações recentes.",
       "address": "Via Marina di Petrolo, 33, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Ristorante+Petrolo/@38.0279455,12.8845445,17z"
+      "maps_link": "https://www.google.com/maps/place/Ristorante+Petrolo/@38.0279455,12.8845445,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p013",
@@ -236,7 +248,8 @@
       "public_review_summary": "Cannoli, granita e cornetto são os itens mais mencionados; bom para café da manhã rápido, com clientes que voltam vários dias seguidos.",
       "address": "Corso Giuseppe Garibaldi, 69, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Tipicamente/@38.0266391,12.8811056,17z"
+      "maps_link": "https://www.google.com/maps/place/Tipicamente/@38.0266391,12.8811056,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p014",
@@ -254,7 +267,8 @@
       "public_review_summary": "Antepastos, atum, busiate e peixe-espada dominam os comentários; maioria elogia, mas há relatos isolados de má experiência.",
       "address": "Via Don Leonardo Zangara, 29, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Ristorante+La+Tonnara/@38.0280719,12.880219,17z"
+      "maps_link": "https://www.google.com/maps/place/Ristorante+La+Tonnara/@38.0280719,12.880219,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p015",
@@ -272,7 +286,8 @@
       "public_review_summary": "Ambiente externo à beira-mar e aperitivos são os pontos mais citados; clientes descrevem o lugar como agradável e acolhedor.",
       "address": "Via Don Leonardo Zangara, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/jamo_Fish%26Drinks/@38.0294185,12.881351,17z"
+      "maps_link": "https://www.google.com/maps/place/jamo_Fish%26Drinks/@38.0294185,12.881351,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p016",
@@ -290,7 +305,8 @@
       "public_review_summary": "Granita com brioche é de longe o mais citado; muitos dizem ser o melhor gelato da viagem, com opções sem glúten e sabor de amêndoa.",
       "address": "Corso Bernardo Mattarella, 40, 91014 Castellammare del Golfo TP, Itália",
       "city_raw": "Castellammare del Golfo (TP)",
-      "maps_link": "https://www.google.com/maps/place/Gelateria+Vernaci/@38.0262923,12.8800331,17z"
+      "maps_link": "https://www.google.com/maps/place/Gelateria+Vernaci/@38.0262923,12.8800331,17z",
+      "sublocal": "Castellammare del Golfo"
     },
     {
       "id": "p017",
@@ -308,7 +324,8 @@
       "public_review_summary": "Supplì e o trapizzino de pollo alla cacciatora são os mais citados; considerado ótima opção de comida de rua romana, leve e saborosa.",
       "address": "Piazza Trilussa, 46, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Trapizzino+%7C+Trastevere/@41.891494,12.4698437,17z"
+      "maps_link": "https://www.google.com/maps/place/Trapizzino+%7C+Trastevere/@41.891494,12.4698437,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p018",
@@ -326,7 +343,8 @@
       "public_review_summary": "Carbonara e cozinha romana tradicional lideram as menções, junto com amatriciana e bollito misto; citado no guia Michelin e recomenda-se reservar.",
       "address": "Via Cipro, 106, 00137 Roma RM, Itália",
       "city_raw": "Roma (Prati/Cipro)",
-      "maps_link": "https://www.google.com/maps/place/Roman%C3%A8/@41.9058993,12.4451712,17z"
+      "maps_link": "https://www.google.com/maps/place/Roman%C3%A8/@41.9058993,12.4451712,17z",
+      "sublocal": "Prati / Vaticano"
     },
     {
       "id": "p019",
@@ -345,7 +363,8 @@
       "address": "Vicolo Rosini, 6, 00186 Roma RM, Itália",
       "city_raw": "Roma (Centro/Montecitorio)",
       "maps_link": "https://www.google.com/maps/search/Poldo+e+Gianna+Osteria+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p020",
@@ -363,7 +382,8 @@
       "public_review_summary": "Focaccia/schiacciata com mortadela é o carro-chefe; a maioria acha que faz jus à fama, mas reclama de fila e de atendimento apressado nesta unidade.",
       "address": "V. del Corso, 510, 00186 Roma RM, Itália",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/All'Antico+Vinaio/@41.9085271,12.477138,17z"
+      "maps_link": "https://www.google.com/maps/place/All'Antico+Vinaio/@41.9085271,12.477138,17z",
+      "sublocal": "Flaminio / Popolo"
     },
     {
       "id": "p021",
@@ -381,7 +401,8 @@
       "public_review_summary": "O prato flambado na roda de queijo é a menção número 1, seguido de gricia, coda alla vaccinara e supplì; reserva é praticamente obrigatória.",
       "address": "V. Ferrùccio, 12/b/c, 00185 Roma RM, Itália",
       "city_raw": "Roma (Esquilino)",
-      "maps_link": "https://www.google.com/maps/place/Trattoria+Vecchia+Roma/@41.8936997,12.502435,17z"
+      "maps_link": "https://www.google.com/maps/place/Trattoria+Vecchia+Roma/@41.8936997,12.502435,17z",
+      "sublocal": "Monti"
     },
     {
       "id": "p022",
@@ -399,7 +420,8 @@
       "public_review_summary": "Carbonara é o item mais citado (mais de 500 menções), junto com cacio e pepe e amatriciana; há avaliações recentes negativas sobre atendimento.",
       "address": "Via della Pelliccia, 29a, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/La+Tavernetta+29+da+Tony+e+Andrea/@41.8904071,12.4704865,17z"
+      "maps_link": "https://www.google.com/maps/place/La+Tavernetta+29+da+Tony+e+Andrea/@41.8904071,12.4704865,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p023",
@@ -417,7 +439,8 @@
       "public_review_summary": "Cacio e pepe, carciofi alla giudia e amatriciana são os destaques; clientes falam em experiência italiana autêntica, mas o serviço divide opiniões.",
       "address": "Piazza dei Ponziani, 7A, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Trattoria+Da+Teo/@41.8885147,12.4776931,17z"
+      "maps_link": "https://www.google.com/maps/place/Trattoria+Da+Teo/@41.8885147,12.4776931,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p024",
@@ -436,7 +459,8 @@
       "address": "Via dei Serpenti, 113, 00184 Roma RM, Itália",
       "city_raw": "Roma (Monti)",
       "maps_link": "https://www.google.com/maps/search/Dar+Bruttone+Rione+Monti",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Monti"
     },
     {
       "id": "p025",
@@ -454,7 +478,8 @@
       "public_review_summary": "Cacio e pepe, amatriciana e alcachofra à romana são os pratos citados; ambiente amplo, bem decorado e com bom atendimento.",
       "address": "Piazza di S. Cosimato, 27, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+Corsetti+1921+Roma/@41.8871551,12.4690431,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+Corsetti+1921+Roma/@41.8871551,12.4690431,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p026",
@@ -472,7 +497,8 @@
       "public_review_summary": "Lasanha e Aperol aparecem muito nos comentários; parte dos visitantes ama o lugar, outra parte o classifica como armadilha para turistas.",
       "address": "Viale di Trastevere, 8/14, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Ristorante+Da+Augustea+a+Trastevere/@41.8884175,12.473333,17z"
+      "maps_link": "https://www.google.com/maps/place/Ristorante+Da+Augustea+a+Trastevere/@41.8884175,12.473333,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p027",
@@ -490,7 +516,8 @@
       "public_review_summary": "Alcachofra, carbonara e spaghetti alle vongole são os pratos citados; clima familiar e boa carta de vinhos.",
       "address": "P.za di Sant'Apollonia, 11, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+Der+Belli/@41.8898728,12.4707929,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+Der+Belli/@41.8898728,12.4707929,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p028",
@@ -508,7 +535,8 @@
       "public_review_summary": "A vista do Coliseu é quase unânime como o único ponto forte (781 menções ao Coliseu); comida, preços e atendimento recebem muitas críticas.",
       "address": "Via delle Terme di Tito, 72, 00184 Roma RM, Itália",
       "city_raw": "Roma (Colosseo)",
-      "maps_link": "https://www.google.com/maps/place/Oppio+Caff%C3%A8/@41.891486,12.492751,17z"
+      "maps_link": "https://www.google.com/maps/place/Oppio+Caff%C3%A8/@41.891486,12.492751,17z",
+      "sublocal": "Colosseo / Celio"
     },
     {
       "id": "p029",
@@ -526,7 +554,8 @@
       "public_review_summary": "Terraço com vista para o Coliseu e para Roma é o principal atrativo, junto com spritz; bom para uma parada rápida.",
       "address": "Piazza d'Aracoeli, 1, 00186 Roma RM, Itália",
       "city_raw": "Roma (Centro/Vittoriano)",
-      "maps_link": "https://www.google.com/maps/place/Caffetteria+Italia+al+Vittoriano/@41.8942875,12.4838436,17z"
+      "maps_link": "https://www.google.com/maps/place/Caffetteria+Italia+al+Vittoriano/@41.8942875,12.4838436,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p030",
@@ -544,7 +573,8 @@
       "public_review_summary": "Vista direta para o Coliseu é o principal elogio; atendimento muito citado (Corina, Mário). Vários dizem que os preços são altos, mas que a vista compensa.",
       "address": "P.za del Colosseo, 3, 00184 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Ristorante+Caffè+Martini/@41.889791,12.4941466,17z"
+      "maps_link": "https://www.google.com/maps/place/Ristorante+Caffè+Martini/@41.889791,12.4941466,17z",
+      "sublocal": "Colosseo / Celio"
     },
     {
       "id": "p031",
@@ -563,7 +593,8 @@
       "address": "Via della Madonna dei Monti, 79, 00184 Roma RM, Itália",
       "city_raw": "Roma (Monti)",
       "maps_link": "https://www.google.com/maps/search/Taverna+Romana+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Monti"
     },
     {
       "id": "p032",
@@ -581,7 +612,8 @@
       "public_review_summary": "Amatriciana, carciofi alla giudia e zabaglione são os destaques; clientes falam em comida saborosa e atendimento gentil.",
       "address": "Via Garibaldi, 56, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Da+Fabrizio+al+56/@41.8910129,12.4666079,17z"
+      "maps_link": "https://www.google.com/maps/place/Da+Fabrizio+al+56/@41.8910129,12.4666079,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p033",
@@ -599,7 +631,8 @@
       "public_review_summary": "Banca no Mercato di Testaccio famosa pelos paninos de allesso e trippa; nota altíssima e muito citada como parada obrigatória de comida de rua.",
       "address": "Nuovo Mercato Comunale di Testaccio BOX 15, Via Beniamino Franklin, 12/E, 00153 Roma RM, Itália",
       "city_raw": "Roma (Testaccio)",
-      "maps_link": "https://www.google.com/maps/place/Mordi+%26+Vai/@41.8775111,12.4734033,17z"
+      "maps_link": "https://www.google.com/maps/place/Mordi+%26+Vai/@41.8775111,12.4734033,17z",
+      "sublocal": "Testaccio"
     },
     {
       "id": "p034",
@@ -617,7 +650,8 @@
       "public_review_summary": "Poucas avaliações, mas muito positivas: fatias pesadas e generosas, ingredientes bons e preço baixo.",
       "address": "Via Vetulonia, 12, 00183 Roma RM, Itália",
       "city_raw": "Roma (Appio-Latino)",
-      "maps_link": "https://www.google.com/maps/place/Pizza+al+Taglio/@41.8765951,12.5041619,17z"
+      "maps_link": "https://www.google.com/maps/place/Pizza+al+Taglio/@41.8765951,12.5041619,17z",
+      "sublocal": "San Giovanni / Appio-Latino"
     },
     {
       "id": "p035",
@@ -635,7 +669,8 @@
       "public_review_summary": "Supplì (principalmente o cacio e pepe) é a menção dominante; considerado clássico da comida de rua romana, com fila constante.",
       "address": "Via di S. Francesco a Ripa, 137, 00153 Roma RM, Itália",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Suppl%C3%AC+Roma/@41.8871466,12.4717456,17z"
+      "maps_link": "https://www.google.com/maps/place/Suppl%C3%AC+Roma/@41.8871466,12.4717456,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p036",
@@ -653,7 +688,8 @@
       "public_review_summary": "O croissant de pistache é de longe o item mais mencionado, seguido de maritozzo, panini e porchetta. Clientes destacam padaria pequena e rápida perto da Fontana di Trevi.",
       "address": "Via delle Muratte, 8, 00187 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/L'+Antico+Forno+Di+Fontana+Di+Trevi/@41.9006456,12.4830964,17z"
+      "maps_link": "https://www.google.com/maps/place/L'+Antico+Forno+Di+Fontana+Di+Trevi/@41.9006456,12.4830964,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p037",
@@ -671,7 +707,8 @@
       "public_review_summary": "Muito elogiado por comida romana boa e barata (cacio e pepe, carciofi alla giudia). Fila longa é comum, mas anda rápido; garçons Cristiano e Rocky são citados por nome.",
       "address": "V. della Paglia, 1/2/3, 00153 Roma RM",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Tonnarello/@41.889804,12.4693004,17z"
+      "maps_link": "https://www.google.com/maps/place/Tonnarello/@41.889804,12.4693004,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p038",
@@ -689,7 +726,8 @@
       "public_review_summary": "Descrito como experiência cultural imersiva de comida de rua palermitana, com folclore local, frutas e pratos feitos na hora. Ambiente movimentado e barato.",
       "address": "Via Chiappara Al Carmine, 23, 90134 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Mercato+Ballarò/@38.1106144,13.3636751,17z"
+      "maps_link": "https://www.google.com/maps/place/Mercato+Ballarò/@38.1106144,13.3636751,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p039",
@@ -707,7 +745,8 @@
       "public_review_summary": "A parede de chocolate derretido e o cone recheado são as atrações mais citadas, junto com atendentes muito simpáticos. Costuma ter fila.",
       "address": "V. del Corso, 335, 00186 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Venchi+Cioccolato+e+Gelato,+Roma+Via+del+Corso+-+Fontana+di+Trevi/@41.9001204,12.4806874,17z"
+      "maps_link": "https://www.google.com/maps/place/Venchi+Cioccolato+e+Gelato,+Roma+Via+del+Corso+-+Fontana+di+Trevi/@41.9001204,12.4806874,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p040",
@@ -725,7 +764,8 @@
       "public_review_summary": "Famosa pelo tiramisù (clássico, de pistache e de morango) servido em potinho para levar. Muitos comem nas escadarias da Praça da Espanha, ali perto.",
       "address": "V. della Croce, 88, 00187 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Pompi/@41.9065421,12.4808551,17z"
+      "maps_link": "https://www.google.com/maps/place/Pompi/@41.9065421,12.4808551,17z",
+      "sublocal": "Flaminio / Popolo"
     },
     {
       "id": "p041",
@@ -743,7 +783,8 @@
       "public_review_summary": "Elogiada pela pizza de massa fina e crocante e pelos suppli/croquetes. Serviço rápido e atendimento simpático são muito mencionados.",
       "address": "P.za della Cancelleria, 92, 00186 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Mariuccia+-+Campo+dè+Fiori/@41.8960899,12.4719437,17z"
+      "maps_link": "https://www.google.com/maps/place/Mariuccia+-+Campo+dè+Fiori/@41.8960899,12.4719437,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p042",
@@ -761,7 +802,8 @@
       "public_review_summary": "Unidade perto da Fontana di Trevi da mesma casa de tiramisù; o clássico e o de pistache são os mais citados. Rápido, para levar, avaliações um pouco mais baixas que a loja principal.",
       "address": "Via Santa Maria in Via, 17, 00187 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Pompi/@41.9008,12.4818,17z"
+      "maps_link": "https://www.google.com/maps/place/Pompi/@41.9008,12.4818,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p043",
@@ -779,7 +821,8 @@
       "public_review_summary": "Muito elogiado pelas massas frescas romanas (cacio e pepe, amatriciana, carbonara, ravioli); vários dizem ser a melhor massa que comeram em Roma. Nota altíssima e porções generosas por preço baixo.",
       "address": "Via Torino, 129, 00184 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/Quel+che+c%E2%80%99%C3%A8+laboratorio+Di+Cucina/@41.9013225,12.4957909,17z"
+      "maps_link": "https://www.google.com/maps/place/Quel+che+c%E2%80%99%C3%A8+laboratorio+Di+Cucina/@41.9013225,12.4957909,17z",
+      "sublocal": "Termini / Esquilino"
     },
     {
       "id": "p044",
@@ -798,7 +841,8 @@
       "address": "Via Urbana, 54, 00184 Roma RM",
       "city_raw": "Roma (Monti)",
       "maps_link": "https://www.google.com/maps/search/Zia+Rosetta+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Monti"
     },
     {
       "id": "p045",
@@ -816,7 +860,8 @@
       "public_review_summary": "Atenção: não é o Tazza d'Oro do Panteão — várias avaliações alertam a confusão. É um café de bairro elogiado pelo espresso, cappuccino e granita com creme, com pedido no caixa.",
       "address": "Via Appia Nuova, 231, 00183 Roma RM",
       "city_raw": "Roma (Appio-Latino)",
-      "maps_link": "https://www.google.com/maps/place/Tazza+d'Oro/@41.8793195,12.5175098,17z"
+      "maps_link": "https://www.google.com/maps/place/Tazza+d'Oro/@41.8793195,12.5175098,17z",
+      "sublocal": "San Giovanni / Appio-Latino"
     },
     {
       "id": "p046",
@@ -834,7 +879,8 @@
       "public_review_summary": "A focaccia quentinha e bem recheada é o destaque absoluto dos comentários, com elogios aos ingredientes e à massa crocante. Atendimento cordial e bom preço também aparecem muito.",
       "address": "Piazza S. Francesco di Paola, 8, 90138 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Crocchia/@38.1211372,13.3532086,17z"
+      "maps_link": "https://www.google.com/maps/place/Crocchia/@38.1211372,13.3532086,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p047",
@@ -852,7 +898,8 @@
       "public_review_summary": "Considerada por muitos a melhor pizza de Palermo, com elogios também aos antepastos e sobremesas. Tempero e ambiente para jantar são bem avaliados.",
       "address": "Via Emanuele Notarbartolo, 2/F, 90149 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Archestrato+di+Gela+(Palermo)/@38.1333286,13.3489862,17z"
+      "maps_link": "https://www.google.com/maps/place/Archestrato+di+Gela+(Palermo)/@38.1333286,13.3489862,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p048",
@@ -870,7 +917,8 @@
       "public_review_summary": "Muito elogiado como lugar de café da manhã: croissant, cornetto e cappuccino são os itens mais citados. Clientes falam de produtos frescos, preço baixo e atendimento acolhedor.",
       "address": "V. Nicolò Turrisi, 2, 90138 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Fava's+Bar+e+Cucina/@38.1199937,13.3523784,17z"
+      "maps_link": "https://www.google.com/maps/place/Fava's+Bar+e+Cucina/@38.1199937,13.3523784,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p049",
@@ -888,7 +936,8 @@
       "public_review_summary": "Massas são o destaque (lasanha, carbonara, pesto) além da burrata. Reconhecidamente turístico, mas a maioria diz que vale pela comida e pelo atendimento (Francesco é citado várias vezes).",
       "address": "Via Maqueda, 205, 90133 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/SCARPETTA/@38.1159102,13.3614411,17z"
+      "maps_link": "https://www.google.com/maps/place/SCARPETTA/@38.1159102,13.3614411,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p050",
@@ -906,7 +955,8 @@
       "public_review_summary": "A focaccia é de longe o item mais mencionado, elogiada por ser crocante e recheada com salumi/mortadela. Atendimento do proprietário e ótimo custo-benefício aparecem muito.",
       "address": "Via Vittorio Emanuele, 156, 90133 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Focacceria+dei+Mercanti/@38.1173413,13.3656761,17z"
+      "maps_link": "https://www.google.com/maps/place/Focacceria+dei+Mercanti/@38.1173413,13.3656761,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p051",
@@ -924,7 +974,8 @@
       "public_review_summary": "Avaliações bem divididas (nota 3,1): elogios ao ambiente, piscina, sushi e drinques, mas muitas reclamações de segurança/legão de chácara na porta e funcionários grosseiros ou seletivos na entrada.",
       "address": "Via delle Terme di Traiano, 4A, 00184 Roma RM",
       "city_raw": "Roma",
-      "maps_link": "https://www.google.com/maps/place/The+Sanctuary+Eco+Retreat/@41.8934119,12.4983917,17z"
+      "maps_link": "https://www.google.com/maps/place/The+Sanctuary+Eco+Retreat/@41.8934119,12.4983917,17z",
+      "sublocal": "Monti"
     },
     {
       "id": "p052",
@@ -943,7 +994,8 @@
       "address": "Via Maqueda, 270, 90134 Palermo PA",
       "city_raw": "Palermo",
       "maps_link": "https://www.google.com/maps/place/Ke+Palle/@38.1177114,13.3600239,17z",
-      "note_correction": "Estava como viewpoint por engano no CSV do Google. O tipo_original diz \"Delicatessen / comida de rua\" e a nota pessoal diz \"padariaa/lanches tipicos\" — é a loja de arancine da Via Maqueda. Categoria alinhada com p011, também delicatessen. Antes aparecia na aba Ver em vez de Comer."
+      "note_correction": "Estava como viewpoint por engano no CSV do Google. O tipo_original diz \"Delicatessen / comida de rua\" e a nota pessoal diz \"padariaa/lanches tipicos\" — é a loja de arancine da Via Maqueda. Categoria alinhada com p011, também delicatessen. Antes aparecia na aba Ver em vez de Comer.",
+      "sublocal": "Palermo"
     },
     {
       "id": "p053",
@@ -961,7 +1013,8 @@
       "public_review_summary": "O cannolo de ricota é o item mais citado de longe; muitos dizem ser o melhor que já comeram. Funciona dentro de um mosteiro histórico, com receitas de freiras — a entrada escondida é parte do charme.",
       "address": "P.za Bellini, 33, 90133 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/I+Segreti+del+Chiostro/@38.1154255,13.3630905,17z"
+      "maps_link": "https://www.google.com/maps/place/I+Segreti+del+Chiostro/@38.1154255,13.3630905,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p054",
@@ -978,8 +1031,9 @@
       "personal_note": "lugar de aperitivos",
       "public_review_summary": "Pequena bottega com produtos locais, vinhos, sanduíches e pratos de atum. Comentários destacam o cenário e o clima romântico do jantar em Scopello e o atendimento acolhedor.",
       "address": "XXIV Maggio, Strada di Accesso a Torre Bennistra, 12, 91014 Scopello TP",
-      "city_raw": "Scopello (Castellammare del Golfo, Trapani)",
-      "maps_link": "https://www.google.com/maps/place/La+bottega+di+Beppe.+Il+Giardino+dell%E2%80%99Amore/@38.0709256,12.8171607,17z"
+      "city_raw": "Scopello (Trapani)",
+      "maps_link": "https://www.google.com/maps/place/La+bottega+di+Beppe.+Il+Giardino+dell%E2%80%99Amore/@38.0709256,12.8171607,17z",
+      "sublocal": "Scopello"
     },
     {
       "id": "p055",
@@ -997,7 +1051,8 @@
       "public_review_summary": "Cozinha siciliana com destaque para atum fresco, busiate e tiramisu. A maioria fala de pratos muito frescos e jantar acima das expectativas, num clima simples de trattoria de ilha.",
       "address": "Via Giuseppe Garibaldi, 41, 91023 Favignana TP",
       "city_raw": "Favignana (Egadi, Trapani)",
-      "maps_link": "https://www.google.com/maps/place/Trattoria+La+Pinnata+-+da+Mamma+Rina/@37.929983,12.3278488,17z"
+      "maps_link": "https://www.google.com/maps/place/Trattoria+La+Pinnata+-+da+Mamma+Rina/@37.929983,12.3278488,17z",
+      "sublocal": "Favignana"
     },
     {
       "id": "p056",
@@ -1016,7 +1071,8 @@
       "address": "91014 Scopello, Castellammare del Golfo TP",
       "city_raw": "Scopello (Trapani)",
       "maps_link": "https://www.google.com/maps/search/Scopello+Castellammare+del+Golfo",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Scopello"
     },
     {
       "id": "p057",
@@ -1034,7 +1090,8 @@
       "public_review_summary": "Estação Vittorio Emanuele da Linha A, na Piazza Vittorio Emanuele II (bairro Esquilino). Nota baixa (3,6): avaliações reclamam de limpeza e segurança no entorno; serve de acesso a pé até Santa Maria Maggiore.",
       "address": "Piazza Vittorio Emanuele II, 00185 Roma RM",
       "city_raw": "Roma (Esquilino)",
-      "maps_link": "https://www.google.com/maps/place/Vittorio+Emanuele/@41.894505,12.50426,17z"
+      "maps_link": "https://www.google.com/maps/place/Vittorio+Emanuele/@41.894505,12.50426,17z",
+      "sublocal": "Termini / Esquilino"
     },
     {
       "id": "p058",
@@ -1052,7 +1109,8 @@
       "public_review_summary": "Bar boteco clássico de Trastevere, baratíssimo, famoso pelo aperol spritz, cappuccino e maritozzo. Divide opiniões: muitos amam o clima autêntico, outros reclamam de hype e do público turístico.",
       "address": "Piazza di S. Calisto, 3, 00153 Roma RM",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Bar+San+Calisto/@41.8890617,12.4708035,17z"
+      "maps_link": "https://www.google.com/maps/place/Bar+San+Calisto/@41.8890617,12.4708035,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p059",
@@ -1069,8 +1127,9 @@
       "personal_note": "lugar pra tirar foto com vista top do coliseu",
       "public_review_summary": "Rua sem ficha de avaliações; é o trecho entre o Coliseu e a Domus Aurea muito usado para fotos com o Coliseu ao fundo.",
       "address": "Via Nicola Salvi, 00184 Roma RM",
-      "city_raw": "Roma (Coliseu)",
-      "maps_link": "https://www.google.com/maps/place/Via+Nicola+Salvi,+00184+Roma+RM,+It%C3%A1lia/@41.8911445,12.493369,17z"
+      "city_raw": "Roma (Colosseo)",
+      "maps_link": "https://www.google.com/maps/place/Via+Nicola+Salvi,+00184+Roma+RM,+It%C3%A1lia/@41.8911445,12.493369,17z",
+      "sublocal": "Colosseo / Celio"
     },
     {
       "id": "p060",
@@ -1088,7 +1147,8 @@
       "public_review_summary": "Famoso pelo aperitivo com vista do pôr do sol na costa sul de Favignana; drinques, tábuas e pratos de peixe são os mais citados. Vários relatam ter comemorado datas especiais no local.",
       "address": "Str. Costiera di Mezzogiorno, 91023 Favignana TP",
       "city_raw": "Favignana (Egadi, Trapani)",
-      "maps_link": "https://www.google.com/maps/place/La+Costa+Sunset+Bar+Cala+Trono+Favignana/@37.911258,12.3483629,17z"
+      "maps_link": "https://www.google.com/maps/place/La+Costa+Sunset+Bar+Cala+Trono+Favignana/@37.911258,12.3483629,17z",
+      "sublocal": "Favignana"
     },
     {
       "id": "p061",
@@ -1106,7 +1166,8 @@
       "public_review_summary": "Clássico forno romano: pizza al taglio de massa fina, supplì e porchetta lideram as menções. Muita variedade e qualidade constante, com ressalvas ao movimento e ao preço por peso.",
       "address": "Via dei Chiavari, 34, 00186 Roma RM",
       "city_raw": "Roma (Campo de' Fiori)",
-      "maps_link": "https://www.google.com/maps/place/Antico+Forno+Roscioli/@41.8945667,12.4742778,17z"
+      "maps_link": "https://www.google.com/maps/place/Antico+Forno+Roscioli/@41.8945667,12.4742778,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p062",
@@ -1124,7 +1185,8 @@
       "public_review_summary": "Focaccia/schiacciata com mortadela é a menção dominante; muito citada a proximidade do Panteão e da Fontana di Trevi. Alguns acham que a fama supera a experiência.",
       "address": "Piazza della Maddalena, 3, 00186 Roma RM, Itália",
       "city_raw": "Roma (Panteão)",
-      "maps_link": "https://www.google.com/maps/place/All'Antico+Vinaio/@41.8999637,12.4764773,17z"
+      "maps_link": "https://www.google.com/maps/place/All'Antico+Vinaio/@41.8999637,12.4764773,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p063",
@@ -1142,7 +1204,8 @@
       "public_review_summary": "Mercado histórico do bairro Capo, com comida de rua, especiarias, arancini e souvenirs. A maioria destaca o folclore e o cotidiano local; alguns acham menor e menos animado que o Ballarò.",
       "address": "V. Mura di Porta Carini, 90134 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Mercato+del+Capo/@38.1188438,13.35396,17z"
+      "maps_link": "https://www.google.com/maps/place/Mercato+del+Capo/@38.1188438,13.35396,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p064",
@@ -1160,7 +1223,8 @@
       "public_review_summary": "Massa fresca feita na hora perto da Fontana di Trevi; cacio e pepe e pappardelle são os mais pedidos. Fila costuma andar rápido e o custo-benefício é muito elogiado.",
       "address": "Largo Pietro di Brazza', 27, 00187 Roma RM",
       "city_raw": "Roma (Centro/Trevi)",
-      "maps_link": "https://www.google.com/maps/place/Pastasciutta/@41.899918,12.4837005,17z"
+      "maps_link": "https://www.google.com/maps/place/Pastasciutta/@41.899918,12.4837005,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p065",
@@ -1179,7 +1243,8 @@
       "address": "Piazzale Flaminio, 10, 00196 Roma RM",
       "city_raw": "Roma (Flaminio)",
       "maps_link": "https://www.google.com/maps/search/Pastasciutta+Piazzale+Flaminio+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Flaminio / Popolo"
     },
     {
       "id": "p066",
@@ -1197,7 +1262,8 @@
       "public_review_summary": "Unidade mais movimentada, a poucos passos da Basílica de São Pedro; cacio e pepe e carbonara lideram os comentários. Porções generosas, pronta em minutos, mas há fila e pouco lugar para sentar.",
       "address": "Via delle Grazie, 5, 00193 Roma RM",
       "city_raw": "Roma (Prati/Vaticano)",
-      "maps_link": "https://www.google.com/maps/place/Pastasciutta/@41.9046721,12.4580838,17z"
+      "maps_link": "https://www.google.com/maps/place/Pastasciutta/@41.9046721,12.4580838,17z",
+      "sublocal": "Prati / Vaticano"
     },
     {
       "id": "p067",
@@ -1216,7 +1282,8 @@
       "address": "Via dei Maroniti, 32, 00187 Roma RM",
       "city_raw": "Roma (Centro/Trevi)",
       "maps_link": "https://www.google.com/maps/search/Trattoria+Della+Stampa+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p068",
@@ -1234,7 +1301,8 @@
       "public_review_summary": "O forte são a vista do terraço, o pôr do sol e os drinques. A comida divide opiniões (nota 4,0) — vários dizem que se vai pelo cenário mais do que pelo prato.",
       "address": "Via Roma, 111, 90133 Palermo PA",
       "city_raw": "Palermo",
-      "maps_link": "https://www.google.com/maps/place/Seven+Restaurant+Palermo/@38.1142044,13.3650084,17z"
+      "maps_link": "https://www.google.com/maps/place/Seven+Restaurant+Palermo/@38.1142044,13.3650084,17z",
+      "sublocal": "Palermo"
     },
     {
       "id": "p069",
@@ -1252,7 +1320,8 @@
       "public_review_summary": "Pizzaria romana clássica de Trastevere, com supplì e cacio e pepe entre os mais pedidos. Porções fartas e bom preço; reclamações recorrentes são o atendimento apressado e a espera.",
       "address": "Via di S. Francesco a Ripa, 158, 00153 Roma RM",
       "city_raw": "Roma (Trastevere)",
-      "maps_link": "https://www.google.com/maps/place/Ivo+a+Trastevere/@41.8881329,12.4710707,17z"
+      "maps_link": "https://www.google.com/maps/place/Ivo+a+Trastevere/@41.8881329,12.4710707,17z",
+      "sublocal": "Trastevere"
     },
     {
       "id": "p070",
@@ -1271,7 +1340,8 @@
       "address": "Contrada Macari, 91010 San Vito Lo Capo TP",
       "city_raw": "Macari / San Vito Lo Capo (Trapani)",
       "maps_link": "https://www.google.com/maps/search/Spiaggia+di+Macari+San+Vito+Lo+Capo",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "San Vito Lo Capo / Macari"
     },
     {
       "id": "p071",
@@ -1289,7 +1359,8 @@
       "public_review_summary": "Água de cor incrível e vista de cima muito elogiada; dá para chegar de bicicleta. Reclamações comuns são pouca areia, algas e lotação na alta temporada.",
       "address": "91023 Favignana TP",
       "city_raw": "Favignana (Egadi, Trapani)",
-      "maps_link": "https://www.google.com/maps/place/Cala+azzurra/@37.9090757,12.3614625,17z"
+      "maps_link": "https://www.google.com/maps/place/Cala+azzurra/@37.9090757,12.3614625,17z",
+      "sublocal": "Favignana"
     },
     {
       "id": "p072",
@@ -1307,7 +1378,8 @@
       "public_review_summary": "Primeira enseada da Riserva dello Zingaro, a 15–20 min de caminhada da entrada; água clara e cenário muito elogiados. É de seixos, então vários recomendam calçado adequado para a trilha e o mar.",
       "address": "Contrada Sughero, 91010 San Vito Lo Capo TP",
       "city_raw": "Riserva dello Zingaro / San Vito Lo Capo (Trapani)",
-      "maps_link": "https://www.google.com/maps/place/Cala+Capreria/@38.0876479,12.8048571,15z"
+      "maps_link": "https://www.google.com/maps/place/Cala+Capreria/@38.0876479,12.8048571,15z",
+      "sublocal": "Riserva dello Zingaro"
     },
     {
       "id": "p073",
@@ -1326,7 +1398,8 @@
       "address": "Via del Pellegrino, 11/12, 00186 Roma RM",
       "city_raw": "Roma (Campo de' Fiori)",
       "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata/@41.8961166,12.4716707,17z",
-      "note_correction": "Nome ganhou o sufixo da rua: p076 é a mesma osteria na Piazza della Cancelleria, com nota pessoal idêntica. Sem o sufixo as duas filiais pareciam duplicata na lista de \"por perto\"."
+      "note_correction": "Nome ganhou o sufixo da rua: p076 é a mesma osteria na Piazza della Cancelleria, com nota pessoal idêntica. Sem o sufixo as duas filiais pareciam duplicata na lista de \"por perto\".",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p074",
@@ -1344,7 +1417,8 @@
       "public_review_summary": "Unidade com vista para o Panteão, a mais elogiada em atendimento (garçons citados por nome). Massas frescas e tiramisu aparecem muito; espera na fila é comum pela localização.",
       "address": "Piazza della Rotonda, 6, 00186 Roma RM",
       "city_raw": "Roma (Panteão)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Pantheon/@41.8992918,12.4764534,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Pantheon/@41.8992918,12.4764534,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p075",
@@ -1362,7 +1436,8 @@
       "public_review_summary": "Unidade perto de Campo de' Fiori onde as senhoras fazem a massa na vitrine; gricia, cacio e pepe e coda alla vaccinara são os mais citados. Tem fila, mas anda rápido e o atendimento é elogiado.",
       "address": "Via dei Baullari, 112, 00186 Roma RM",
       "city_raw": "Roma (Campo de' Fiori)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Baullari/@41.8955166,12.4715911,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Baullari/@41.8955166,12.4715911,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p076",
@@ -1380,7 +1455,8 @@
       "public_review_summary": "Unidade mais tranquila da rede, com mesas na praça; amatriciana, pesto e gnocchi com coda alla vaccinara são os destaques. Avaliações muito positivas e fila menor que nas outras casas.",
       "address": "P.za della Cancelleria, 87, 00186 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Cancelleria/@41.896218,12.472092,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Cancelleria/@41.896218,12.472092,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p077",
@@ -1398,7 +1474,8 @@
       "public_review_summary": "Unidade grande perto da Piazza Navona; coda alla vaccinara e strozzapreti lideram as menções. Espera de 30 min é comum e parte das avaliações diz que o hype é maior que a entrega.",
       "address": "Corso del Rinascimento, 17, 00186 Roma RM",
       "city_raw": "Roma (Piazza Navona)",
-      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Rinascimento/@41.8976934,12.4739066,17z"
+      "maps_link": "https://www.google.com/maps/place/Osteria+da+Fortunata+-+Rinascimento/@41.8976934,12.4739066,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p078",
@@ -1416,7 +1493,8 @@
       "public_review_summary": "A escadaria da Praça de Espanha (Trinità dei Monti) domina os comentários, junto com a fonte de Bernini e as lojas de luxo da Via Condotti. Acesso fácil pelo metrô linha A; lotada em qualquer horário.",
       "address": "Piazza di Spagna, 00187 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Piazza+di+Spagna/@41.9056978,12.482327,17z"
+      "maps_link": "https://www.google.com/maps/place/Piazza+di+Spagna/@41.9056978,12.482327,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p079",
@@ -1435,7 +1513,8 @@
       "address": "P.za del Colosseo, 1, 00184 Roma RM",
       "city_raw": "Roma",
       "maps_link": "https://www.google.com/maps/search/Coliseu+Roma",
-      "geocode_source": "nominatim"
+      "geocode_source": "nominatim",
+      "sublocal": "Colosseo / Celio"
     },
     {
       "id": "p080",
@@ -1453,7 +1532,8 @@
       "public_review_summary": "As fontes barrocas de Bernini são o destaque absoluto; muitos recomendam visitar de dia e voltar à noite. Ressalvas atuais: obras/restauro em partes da praça e restaurantes caros no entorno.",
       "address": "Piazza Navona, 00186 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Piazza+Navona/@41.8991633,12.4730742,17z"
+      "maps_link": "https://www.google.com/maps/place/Piazza+Navona/@41.8991633,12.4730742,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p081",
@@ -1471,7 +1551,8 @@
       "public_review_summary": "A cúpula é o assunto dominante nas avaliações, junto com o oculus e o túmulo de Rafael. Muitos recomendam áudio guia e avisam sobre a fila na entrada.",
       "address": "Piazza della Rotonda, 00186 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Pante%C3%A3o/@41.8986108,12.4768729,17z"
+      "maps_link": "https://www.google.com/maps/place/Pante%C3%A3o/@41.8986108,12.4768729,17z",
+      "sublocal": "Centro Storico"
     },
     {
       "id": "p082",
@@ -1489,7 +1570,8 @@
       "public_review_summary": "Jogar a moeda por cima do ombro é o comentário mais repetido, junto com a beleza da obra. Avisos frequentes: multidão enorme, novo sistema de acesso organizado por fila e cuidado com furtos.",
       "address": "Piazza di Trevi, 00187 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Fontana+di+Trevi/@41.9010333,12.4832729,17z"
+      "maps_link": "https://www.google.com/maps/place/Fontana+di+Trevi/@41.9010333,12.4832729,17z",
+      "sublocal": "Trevi / Quirinale"
     },
     {
       "id": "p083",
@@ -1507,7 +1589,8 @@
       "public_review_summary": "Praça monumental sem ficha de avaliações próprias, dominada pelo Altare della Patria (Vittoriano). Ponto central de Roma e nó de ônibus, sempre movimentado.",
       "address": "Piazza Venezia, 00186 Roma RM",
       "city_raw": "Roma (Centro)",
-      "maps_link": "https://www.google.com/maps/place/Piazza+Venezia,+Roma+RM,+It%C3%A1lia/@41.8957614,12.4829496,17z"
+      "maps_link": "https://www.google.com/maps/place/Piazza+Venezia,+Roma+RM,+It%C3%A1lia/@41.8957614,12.4829496,17z",
+      "sublocal": "Trevi / Quirinale"
     }
   ],
   "meta": {
