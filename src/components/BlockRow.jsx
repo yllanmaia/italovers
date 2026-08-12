@@ -110,22 +110,35 @@ export default function BlockRow({
           </p>
         )}
 
+        {/**
+         * Cartao de embarque. Borda tracejada e o codigo em monospace porque e
+         * o unico dado do roteiro que a gente vai LER EM VOZ ALTA num balcao —
+         * "8UVM2S" em fonte proporcional confunde 0 com O e 1 com l. Tabular
+         * nao resolve isso; monospace resolve.
+         */}
         {(block.reservation || block.seat) && (
-          <p className="mt-1.5 flex flex-wrap gap-x-3 text-[0.8125rem] text-ink-soft">
+          <div className="mt-2 flex flex-wrap items-stretch gap-px overflow-hidden rounded-xl border border-dashed border-sand-300 bg-sand-50">
             {block.reservation && (
-              <span>
-                Reserva{' '}
-                <span className="font-bold tracking-wide tabular-nums">
+              <div className="min-w-0 flex-1 px-3 py-2">
+                <p className="text-[0.625rem] font-bold tracking-wide text-ink-faint uppercase">
+                  Reserva
+                </p>
+                <p className="font-mono text-[0.9375rem] leading-tight font-bold tracking-wider text-ink">
                   {block.reservation}
-                </span>
-              </span>
+                </p>
+              </div>
             )}
             {block.seat && (
-              <span>
-                Assento <span className="font-bold tabular-nums">{block.seat}</span>
-              </span>
+              <div className="border-l border-dashed border-sand-300 px-3 py-2">
+                <p className="text-[0.625rem] font-bold tracking-wide text-ink-faint uppercase">
+                  Assento
+                </p>
+                <p className="font-mono text-[0.9375rem] leading-tight font-bold text-ink">
+                  {block.seat}
+                </p>
+              </div>
             )}
-          </p>
+          </div>
         )}
 
         {/* Warnings nunca ficam escondidos */}

@@ -148,14 +148,28 @@ try {
     await sleep(700)
   }
 
-  // --scroll=<px>: pra fotografar secao que fica abaixo da dobra
+  /**
+   * --scroll=<px>: pra fotografar secao que fica abaixo da dobra.
+   *
+   * Quem rola nao e mais a pagina: o app virou uma coluna de altura fixa com um
+   * <main> proprio pra rolagem, pra aba Viagem conseguir dar ao mapa a sobra
+   * exata da tela. Entao procura o container que de fato rola e desiste do
+   * document so se nao achar nenhum.
+   */
   const scrollArg = process.argv.find((a) => a.startsWith('--scroll='))
   if (scrollArg) {
     const y = Number(scrollArg.slice(9))
-    await send('Runtime.evaluate', {
-      expression: `(document.scrollingElement || document.documentElement).scrollTo(0, ${y})`,
+    const r = await send('Runtime.evaluate', {
+      expression: `(() => {
+        const alvo = [...document.querySelectorAll('main, [class*=overflow-y-auto]')]
+          .find((el) => el.scrollHeight > el.clientHeight + 4)
+          ?? document.scrollingElement ?? document.documentElement
+        alvo.scrollTo(0, ${y})
+        return alvo.tagName + ':' + Math.round(alvo.scrollTop)
+      })()`,
+      returnByValue: true,
     })
-    console.log(`  rolou pra ${y}px`)
+    console.log(`  rolou pra ${y}px (${r.result?.result?.value ?? '?'})`)
     await sleep(600)
   }
 

@@ -31,12 +31,25 @@ export default function PlaceCard({
   return (
     <article
       className={[
-        'rounded-3xl bg-white transition-opacity',
+        'relative isolate overflow-hidden rounded-3xl bg-white transition-opacity',
         compact ? 'p-4' : 'p-5',
         'shadow-[0_1px_2px_rgba(31,26,23,0.06),0_8px_24px_-12px_rgba(31,26,23,0.18)]',
         visited ? 'opacity-55' : '',
       ].join(' ')}
     >
+      {/**
+       * Carimbo de visitado. So opacidade dizia "desativado"; carimbo diz
+       * "fomos" — que e uma conquista, nao um card apagado. Rotacionado e meio
+       * transparente pra nao competir com a nota pessoal.
+       */}
+      {visited && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-1 -right-3 -z-10 -rotate-12 rounded-lg border-2 border-olive-600/45 px-2.5 py-0.5 text-[0.75rem] font-bold tracking-widest text-olive-600/45 uppercase"
+        >
+          Visitado
+        </span>
+      )}
       <header className="flex items-start gap-3">
         {/* Miniatura, nao foto grande: a nota pessoal continua sendo o herói
             do card, e 72px pesa pouco no 4G. */}

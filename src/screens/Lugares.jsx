@@ -272,12 +272,28 @@ function FaseAccordion({ fase, aberta, onAlternar, onOpenPlace, cardProps }) {
                 <ExpandableList
                   items={sub.lugares}
                   limit={LIMITE_SUBLOCAL}
-                  render={({ place, meters, visited: v }) => (
+                  render={({ place, meters, visited: v }, i) => (
                     <button
                       key={place.id}
                       type="button"
                       onClick={() => onOpenPlace(place)}
-                      className="block w-full cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600"
+                      /**
+                       * Inclinacao alternada, so aqui. E o que tira a cara de
+                       * grade: todo card com o mesmo raio, o mesmo padding e a
+                       * mesma largura era metade do problema.
+                       *
+                       * A aba Agora NAO leva isso de proposito — aquela tela e
+                       * lida de pe, no sol, com uma mao, e card torto e
+                       * decoracao cobrando pedagio de legibilidade. Aqui a
+                       * pessoa esta navegando, sentada.
+                       */
+                      className={[
+                        'block w-full cursor-pointer text-left transition-transform',
+                        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terra-600',
+                        i % 3 === 0 ? 'rotate-[0.55deg] pr-1.5' : '',
+                        i % 3 === 1 ? '-rotate-[0.75deg] pl-1.5' : '',
+                        i % 3 === 2 ? 'px-0.5' : '',
+                      ].join(' ')}
                     >
                       <PlaceCard
                         place={place}
