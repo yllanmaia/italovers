@@ -261,7 +261,8 @@ describe('aba Viagem · modo Rota', () => {
   it('mostra os numeros calculados, nada escrito a mao', () => {
     abrirViagem()
     expect(screen.getByText('22.624 km')).toBeTruthy()
-    expect(screen.getByText('83')).toBeTruthy()
+    // 80, nao 83: os 3 enderecos de hospedagem nao aparecem em lista nenhuma
+    expect(screen.getByText('80')).toBeTruthy()
   })
 })
 
@@ -312,6 +313,59 @@ describe('aba Viagem · modo Lugares', () => {
     linhas.length = 0
     fireEvent.click(screen.getByRole('button', { name: 'Palermo' }))
     expect(linhas).toHaveLength(0)
+  })
+})
+
+describe('aba Lugares', () => {
+  const abrirLugares = (date = '2026-09-16') => {
+    setDate(date, '12:00', 'lugares')
+    render(<App />)
+  }
+
+  it('anuncia os 80 navegaveis, nao os 83 do arquivo', () => {
+    abrirLugares()
+    expect(screen.getByText(/80 salvos no Maps/)).toBeTruthy()
+  })
+
+  it('abre com a fase atual expandida e as outras fechadas', () => {
+    abrirLugares('2026-09-16') // Roma
+    // Pelo nome completo do botao: so "Roma" casaria com "Taverna Romana"
+    expect(
+      screen.getByRole('button', { name: /^Roma 51 lugares/ }).getAttribute('aria-expanded')
+    ).toBe('true')
+    expect(
+      screen.getByRole('button', { name: /^Palermo 11 lugares/ }).getAttribute('aria-expanded')
+    ).toBe('false')
+  })
+
+  it('quebra Roma por bairro em vez de listar 51 seguidos', () => {
+    abrirLugares('2026-09-16')
+    expect(screen.getByRole('button', { name: /51 lugares · 10 regiões/ })).toBeTruthy()
+    // O nome acessivel do cabecalho de bairro traz a contagem junto, o que o
+    // distingue dos lugares chamados "Ivo a Trastevere" e afins
+    expect(screen.getByRole('heading', { name: 'Trastevere 12' })).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Testaccio 1' })).toBeTruthy()
+  })
+
+  it('fases sem lugar viram linha fina, nao card vazio', () => {
+    abrirLugares()
+    // As 5 sem lugar nenhum: 2x Alemanha, Munique e os 2 travel-*
+    expect(screen.getAllByText(/nenhum lugar mapeado/)).toHaveLength(5)
+    // e nenhuma delas vira accordion clicavel
+    expect(screen.queryByRole('button', { name: /Munique/ })).toBeNull()
+  })
+
+  it('busca acha pelo bairro, que so existe no campo sublocal', () => {
+    abrirLugares()
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'testaccio' } })
+    expect(screen.getByText(/Mordi & Vai/)).toBeTruthy()
+  })
+
+  it('filtro de categoria muda a contagem', () => {
+    abrirLugares()
+    expect(screen.getByText('80 lugares')).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Ver' }))
+    expect(screen.queryByText('80 lugares')).toBeNull()
   })
 })
 

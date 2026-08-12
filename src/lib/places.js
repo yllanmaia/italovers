@@ -1,5 +1,5 @@
 /** Filtro, split e ordenacao dos 83 lugares. */
-import { haversine } from './geo.js'
+import { haversine, parseCount, parseRating } from './geo.js'
 import photos from '../data/photos.json'
 import hours from '../data/hours.json'
 
@@ -119,12 +119,15 @@ const dobra = (s) =>
     .trim()
 
 /**
- * Busca nos 83 lugares por nome, nota pessoal e tipo.
+ * Busca nos 83 lugares por nome, nota pessoal, tipo e bairro.
  *
  * Busca em TODOS, nao so no raio de 30 km: quem procura pelo nome geralmente
  * quer lembrar onde ficava, e a resposta util pode estar em outra cidade.
  * A nota pessoal entra na busca de proposito — "aquele do tiramisu" so acha
  * assim, porque a palavra tiramisu nao esta no nome do lugar.
+ *
+ * `sublocal` entra junto com `city_raw`: com o catalogo agrupado por bairro,
+ * "trastevere" virou um termo de busca natural.
  *
  * Todos os termos precisam casar (busca AND), em qualquer um dos campos.
  */
@@ -136,7 +139,13 @@ export function searchPlaces(places, query, position = null, visited = new Set()
     .map((place) => ({
       place,
       alvo: dobra(
-        [place.name, place.personal_note, place.tipo_original, place.city_raw].join(' ')
+        [
+          place.name,
+          place.personal_note,
+          place.tipo_original,
+          place.city_raw,
+          place.sublocal,
+        ].join(' ')
       ),
     }))
     .filter(({ alvo }) => termos.every((t) => alvo.includes(t)))
@@ -176,12 +185,10 @@ export function topRatedInPhase(places, phaseId, { limit = 5, visited = new Set(
     .map((place) => ({ place, visited: visited.has(place.id) }))
     .sort((a, b) => {
       if (a.visited !== b.visited) return a.visited - b.visited
-      const ra = Number(String(a.place.rating ?? '0').replace(',', '.'))
-      const rb = Number(String(b.place.rating ?? '0').replace(',', '.'))
+      const ra = parseRating(a.place.rating) ?? 0
+      const rb = parseRating(b.place.rating) ?? 0
       if (rb !== ra) return rb - ra
-      const ca = Number(a.place.review_count ?? 0)
-      const cb = Number(b.place.review_count ?? 0)
-      return cb - ca
+      return (parseCount(b.place.review_count) ?? 0) - (parseCount(a.place.review_count) ?? 0)
     })
     .slice(0, limit)
 }

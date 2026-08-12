@@ -12,6 +12,7 @@
 export const TABS = [
   { id: 'viagem', label: 'Viagem', icon: 'viagem' },
   { id: 'agora', label: 'Agora', icon: 'agora' },
+  { id: 'lugares', label: 'Lugares', icon: 'lugares' },
   { id: 'roteiro', label: 'Roteiro', icon: 'roteiro' },
 ]
 

@@ -6,6 +6,7 @@
  */
 import { haversine } from './geo.js'
 import { toDateKey } from './phase.js'
+import { suggestable } from './places.js'
 
 /**
  * O Rio nao e uma fase (a viagem comeca no aeroporto de Frankfurt, que e o
@@ -124,7 +125,13 @@ export function routeLegs(itinerary, now) {
   return legs
 }
 
-/** Numeros do cabecalho da aba Viagem. Nada hardcoded. */
+/**
+ * Numeros do cabecalho da aba Viagem. Nada hardcoded.
+ *
+ * `places` conta os 80 navegaveis, nao os 83 do arquivo: os outros 3 sao os
+ * enderecos das nossas hospedagens, que nenhuma lista do app mostra. Anunciar
+ * 83 e so conseguir chegar em 80 e a diferenca que o usuario percebe.
+ */
 export function routeStats(itinerary, places) {
   const legs = routeLegs(itinerary, null)
   const paises = new Set([ORIGIN.country])
@@ -135,7 +142,7 @@ export function routeStats(itinerary, places) {
     countries: paises.size,
     phases: itinerary.phases.length,
     days: itinerary.days.length,
-    places: places.length,
+    places: suggestable(places).length,
   }
 }
 

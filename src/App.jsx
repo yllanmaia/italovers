@@ -4,6 +4,7 @@ import placesData from './data/places.json'
 
 import Viagem from './screens/Viagem.jsx'
 import Agora from './screens/Agora.jsx'
+import Lugares from './screens/Lugares.jsx'
 import Roteiro from './screens/Roteiro.jsx'
 import BottomNav from './components/BottomNav.jsx'
 import PlaceSheet from './components/PlaceSheet.jsx'
@@ -130,6 +131,19 @@ export default function App() {
           visited={visited}
           onToggleVisited={toggleVisited}
           onOverridePhase={onOverridePhase}
+        />
+      )}
+
+      {tab === 'lugares' && (
+        <Lugares
+          itinerary={itinerary}
+          places={places}
+          now={now}
+          activePhase={phaseInfo.phase}
+          position={geo.position}
+          visited={visited}
+          onToggleVisited={toggleVisited}
+          onOpenPlace={setSheetPlace}
         />
       )}
 

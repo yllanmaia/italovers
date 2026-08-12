@@ -1,12 +1,21 @@
 import Icon from './Icon.jsx'
 
 /**
- * Busca nos lugares salvos. Fica na aba Agora porque e onde se pergunta
- * "cade aquele lugar?" — 51 dos 83 estao em Roma e rolar a lista nao serve.
+ * Busca nos lugares salvos. Nasceu na aba Agora — "cade aquele lugar?" — e
+ * agora serve tambem o catalogo na aba Lugares, que pergunta a mesma coisa de
+ * outro jeito. Dai as props de placeholder e espacamento: o `mt-4` era do
+ * contexto da Agora e nao cabia numa barra grudada no topo de outra tela.
  */
-export default function SearchBar({ value, onChange, resultados = null }) {
+export default function SearchBar({
+  value,
+  onChange,
+  resultados = null,
+  placeholder = 'Buscar por nome ou pela sua nota',
+  className = 'mt-4',
+  minChars = 2,
+}) {
   return (
-    <div className="relative mt-4">
+    <div className={`relative ${className}`}>
       <span className="pointer-events-none absolute inset-y-0 left-4 grid place-items-center text-ink-faint">
         <Icon name="search" size={18} />
       </span>
@@ -15,8 +24,8 @@ export default function SearchBar({ value, onChange, resultados = null }) {
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Buscar por nome ou pela sua nota"
-        aria-label="Buscar nos lugares salvos"
+        placeholder={placeholder}
+        aria-label={placeholder}
         /* inputMode text + enterKeyHint search: teclado do celular mostra
            "buscar" em vez de "enter", e nao sobe o teclado numerico */
         enterKeyHint="search"
@@ -35,7 +44,7 @@ export default function SearchBar({ value, onChange, resultados = null }) {
         </button>
       )}
 
-      {resultados != null && value.trim().length >= 2 && (
+      {resultados != null && value.trim().length >= minChars && (
         <p className="mt-2 px-1 text-[0.8125rem] text-ink-faint">
           {resultados === 0
             ? 'Nenhum lugar salvo com esse termo.'
