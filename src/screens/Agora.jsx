@@ -25,7 +25,7 @@ export default function Agora({
   onToggleVisited,
   onOverridePhase,
 }) {
-  const { phase, source, scheduledPhase, gpsPhase } = phaseInfo
+  const { phase, source, scheduledPhase } = phaseInfo
   const { position, status, error, retry } = geo
   const [trocandoFase, setTrocandoFase] = useState(false)
   const [busca, setBusca] = useState('')
@@ -79,15 +79,7 @@ export default function Agora({
         <BookedAlert key={i} block={block} />
       ))}
 
-      <LocationStatus
-        status={status}
-        error={error}
-        onRetry={retry}
-        position={position}
-        source={source}
-        gpsPhase={gpsPhase}
-        scheduledPhase={scheduledPhase}
-      />
+      <LocationStatus status={status} error={error} onRetry={retry} position={position} />
 
       <SearchBar
         value={busca}
@@ -313,7 +305,7 @@ function BookedAlert({ block }) {
   )
 }
 
-function LocationStatus({ status, error, onRetry, position, source, gpsPhase, scheduledPhase }) {
+function LocationStatus({ status, error, onRetry, position }) {
   if (status === 'granted' && position) {
     return (
       <div className="mt-3 flex items-center gap-2.5 rounded-2xl bg-white px-4 py-3">
