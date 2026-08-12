@@ -12,9 +12,12 @@ const HOTEL_SVG = `<svg viewBox="0 0 24 24" width="15" height="15" fill="none"
   <path d="M3 16.5h18" /><path d="M7 11V9h4.5v2" />
 </svg>`
 
-const TERRA = '#B4522F'
-const OLIVE = '#4F6B4A'
-const INK = '#1F1A17'
+/* Espelham os tokens do index.css. O Leaflet monta os pinos como HTML cru
+   dentro de divIcon, entao aqui nao da pra usar classe do Tailwind. */
+const ACCENT = '#E8683C'
+const OLIVE = '#7FAE74'
+const NAVY = '#14263A'
+const SOMBRA = 'rgba(0,0,0,.55)'
 
 /** check_in vem em dois formatos no itinerario: "2026-09-08" e "2026-09-10T15:30". */
 function formatCheck(v) {
@@ -93,6 +96,7 @@ export default function TripMap({
   // tinha me dado um contador errado.
   visiveis = [],
   hoteis = [],
+  activePhaseId = null,
   onOpenPlace,
   onOpenChapter,
   // A tela de fora precisa do mapa pra centralizar no usuario, mas nao deveria
@@ -111,23 +115,40 @@ export default function TripMap({
   // Cria o mapa uma vez
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return
-    const map = L.map(containerRef.current, { zoomControl: false, attributionControl: true })
-    map.setView([44, 10], 4)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap',
-    }).addTo(map)
-    // bottomright, nao topright: em cima ele cobria os chips de fase, e Munique
-    // e justo o ultimo chip da fila. O deslocamento vertical esta no index.css.
-    L.control.zoom({ position: 'bottomright' }).addTo(map)
     /**
-     * A atribuicao sai do canto direito porque ele e o mesmo container do
-     * controle de zoom: o index.css levanta esse canto pra escapar do bottom
-     * nav, e a atribuicao subia junto, virando uma barra boiando no meio do
-     * mapa — bem em cima do pino de Roma. A esquerda ela fica no rodape, que e
-     * onde a licenca do OSM pede que ela esteja: visivel.
+     * Sem zoomControl e sem attributionControl.
+     *
+     * Os dois sao os elementos que mais denunciam mapa nao trabalhado: a
+     * caixinha cinza do +/- e a barra branca com link azul. O zoom virou botao
+     * proprio na tela, e a atribuicao virou uma linha de texto que eu controlo
+     * — brigar com o CSS do Leaflet pra despintar a barra dele custava mais
+     * `!important` do que renderizar o credito eu mesmo.
+     *
+     * A atribuicao continua na tela: OSM e CARTO exigem, e isso nao e opcional.
      */
-    map.attributionControl?.setPosition('bottomleft')
+    const map = L.map(containerRef.current, {
+      zoomControl: false,
+      attributionControl: false,
+    })
+    map.setView([44, 10], 4)
+    /**
+     * Tiles escuros do CARTO, nao o OSM claro.
+     *
+     * Nao e so combinar com o tema: sobre o mapa claro a rota terracota e os
+     * pinos brigavam com as estradas amarelas e os parques verdes do OSM. No
+     * escuro o mapa vira fundo e a rota e a unica coisa saturada na tela.
+     *
+     * `{r}` vira "@2x" quando detectRetina liga — dobra os bytes por tile
+     * (14,8 KB -> 38 KB), mas em tela 2x o tile 1x fica visivelmente borrado, e
+     * texto de mapa borrado nao se le.
+     *
+     * Sem key e sem cartao, so exige a atribuicao — que esta aqui embaixo.
+     */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19,
+      detectRetina: true,
+      subdomains: 'abcd',
+    }).addTo(map)
     layerRef.current = L.layerGroup().addTo(map)
     mapRef.current = map
     if (externalMapRef) externalMapRef.current = map
@@ -169,12 +190,20 @@ export default function TripMap({
       const desenharRota = () => {
         layer.clearLayers()
 
+        /**
+         * Percorrido em accent solido; a fazer em branco tracejado grosso.
+         *
+         * O tracejado e branco e nao um accent apagado porque sobre mapa escuro
+         * uma cor dessaturada some — e "o que falta" precisa ser tao legivel
+         * quanto "o que ja foi". Traco largo pra ler como intencao, nao como
+         * linha fraca.
+         */
         for (const leg of legs) {
           L.polyline(leg.arc, {
-            color: leg.done ? TERRA : '#B99B8C',
-            weight: leg.done ? 3.5 : 2.5,
-            opacity: leg.done ? 0.95 : 0.7,
-            dashArray: leg.done ? null : '2 8',
+            color: leg.done ? ACCENT : '#FFFFFF',
+            weight: 4,
+            opacity: leg.done ? 1 : 0.55,
+            dashArray: leg.done ? null : '1 10',
             lineCap: 'round',
           }).addTo(layer)
         }
@@ -194,27 +223,34 @@ export default function TripMap({
                 iconSize: [size, size],
                 iconAnchor: [size / 2 - dx, size / 2 - dy],
                 html: `<span style="display:block;width:${size}px;height:${size}px;border-radius:50%;
-                  background:${INK};border:2.5px solid #fff;box-shadow:0 1px 5px rgba(31,26,23,.45);"></span>`,
+                  background:${NAVY};border:2.5px solid #fff;box-shadow:0 1px 5px ${SOMBRA};"></span>`,
               }),
             }).addTo(layer)
             return
           }
 
-          const size = 28
-          const fundo = chegou ? TERRA : '#fff'
-          const texto = chegou ? '#fff' : TERRA
+          /**
+           * Navy solido com anel branco e numero branco. A fase ATUAL vira
+           * accent e cresce: no meio de 9 pinos iguais, "onde estou agora"
+           * precisa achar sozinho o olho, e cor e tamanho fazem isso melhor que
+           * qualquer legenda.
+           */
+          const atual = ponto.phaseId === activePhaseId
+          const size = atual ? 34 : 28
+          const fundo = atual ? ACCENT : NAVY
           L.marker([ponto.lat, ponto.lng], {
             title: `${ponto.number}. ${ponto.name}`,
-            zIndexOffset: 500 + i,
+            zIndexOffset: (atual ? 900 : 500) + i,
             icon: L.divIcon({
               className: '',
               iconSize: [size, size],
               iconAnchor: [size / 2 - dx, size / 2 - dy],
               html: `<span style="display:grid;place-items:center;width:${size}px;height:${size}px;
-                border-radius:50%;background:${fundo};color:${texto};
-                border:2.5px solid ${chegou ? '#fff' : TERRA};
-                box-shadow:0 2px 7px rgba(31,26,23,.4);
-                font:700 13px/1 Satoshi,system-ui,sans-serif;">${ponto.number}</span>`,
+                border-radius:50%;background:${fundo};color:#fff;
+                border:2px solid rgba(255,255,255,${chegou ? 0.95 : 0.45});
+                box-shadow:0 2px 10px ${SOMBRA};
+                opacity:${chegou || atual ? 1 : 0.75};
+                font:700 ${atual ? 15 : 13}px/1 Satoshi,system-ui,sans-serif;">${ponto.number}</span>`,
             }),
           })
             .addTo(layer)
@@ -249,7 +285,7 @@ export default function TripMap({
 
     for (const place of visiveis) {
       const secao = sectionOf(place)
-      const cor = secao === 'ver' ? OLIVE : TERRA
+      const cor = secao === 'ver' ? OLIVE : ACCENT
       const foiVisitado = visited.has(place.id)
       const icon = L.divIcon({
         className: '',
@@ -257,8 +293,8 @@ export default function TripMap({
         iconAnchor: [11, 11],
         html: `<span style="
           display:block;width:22px;height:22px;border-radius:50%;
-          background:${cor};border:3px solid #fff;
-          box-shadow:0 2px 6px rgba(31,26,23,.4);
+          background:${cor};border:2.5px solid #fff;
+          box-shadow:0 2px 8px ${SOMBRA};
           opacity:${foiVisitado ? 0.45 : 1};
         "></span>`,
       })
@@ -280,8 +316,8 @@ export default function TripMap({
         iconAnchor: [14, 14],
         html: `<span style="
           display:grid;place-items:center;width:28px;height:28px;border-radius:9px;
-          background:${INK};border:2.5px solid #fff;
-          box-shadow:0 2px 7px rgba(31,26,23,.45);
+          background:${NAVY};border:2.5px solid #fff;
+          box-shadow:0 2px 9px ${SOMBRA};
         ">${HOTEL_SVG}</span>`,
       })
       const entrada = formatCheck(hotel.check_in)
@@ -306,7 +342,7 @@ export default function TripMap({
       [...visiveis.map((p) => [p.lat, p.lng]), ...hoteis.map((h) => [h.lat, h.lng])],
       16
     )
-  }, [mode, legs, pontos, visiveis, hoteis, visited, onOpenPlace, onOpenChapter])
+  }, [mode, legs, pontos, visiveis, hoteis, visited, activePhaseId, onOpenPlace, onOpenChapter])
 
   // Marcador da posicao atual
   useEffect(() => {

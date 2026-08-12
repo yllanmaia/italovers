@@ -38,13 +38,37 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2}'],
         runtimeCaching: [
           {
-            // Tiles do OSM. Ganho barato: os tiles que voce acabou de ver
-            // sobrevivem um pouco offline. Mapa offline de verdade e fora de escopo.
-            urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\/.*/i,
+            /**
+             * Tiles do CARTO. Ganho barato: os tiles que voce acabou de ver
+             * sobrevivem um pouco offline. Mapa offline de verdade e fora de
+             * escopo.
+             *
+             * O padrao TEM que acompanhar o provedor. Ele apontava pro
+             * tile.openstreetmap.org, e trocar o mapa sem trocar isto aqui nao
+             * quebra nada visivel — so faz o cache parar de casar em silencio,
+             * e a falha so aparece sem sinal, na Italia.
+             */
+            urlPattern: /^https:\/\/[a-d]\.basemaps\.cartocdn\.com\/.*/i,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'osm-tiles',
-              expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              // maxEntries maior que antes: com detectRetina cada tile tem
+              // duas versoes, e o zoom de continente ate o de rua gasta muitos.
+              cacheName: 'map-tiles',
+              expiration: { maxEntries: 800, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            /**
+             * As 31 fotos da galeria, que vem de CDN externo e somam 7,1 MB.
+             * CacheFirst porque foto nao muda: a segunda visita nao gasta rede
+             * nenhuma, e a galeria passa a abrir offline depois de vista uma vez.
+             */
+            urlPattern: /^https:\/\/(media\.base44\.com|base44\.app)\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'gallery-photos',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 180 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },

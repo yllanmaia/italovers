@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Icon from '../components/Icon.jsx'
 import TripMap from '../components/TripMap.jsx'
+import Gallery from '../components/Gallery.jsx'
+import galleryData from '../data/gallery.json'
 import { formatDateLong, upcomingBooked } from '../lib/phase.js'
 import {
   hasCoords,
@@ -9,15 +11,15 @@ import {
   sectionOf,
   suggestable,
 } from '../lib/places.js'
-import { formatKm, routeLegs, routeStats } from '../lib/route.js'
+import { ORIGIN, formatKm, routeLegs, routeStats } from '../lib/route.js'
 
 /**
- * A tela de abertura: a viagem inteira como uma linha so.
+ * A tela de abertura, agora uma pagina que rola: hero, galeria, mapa, numeros.
  *
- * O mapa antigo foi absorvido aqui. Sao dois modos na mesma instancia do
- * Leaflet — "Rota" mostra a linha do tempo geografica e "Lugares" e o mapa de
- * pinos com os filtros de fase e categoria, que continua sendo a unica forma de
- * ver os 83 lugares espalhados.
+ * Antes era layout de altura fixa com o mapa ocupando a sobra. Isso funcionava
+ * como painel e falhava como abertura — nao havia nada pra ver antes do mapa, e
+ * o app abria num retangulo de tiles. Agora a ordem conta uma historia: quem
+ * somos, o que a gente ja viveu junto, pra onde vamos, e o tamanho disso.
  */
 export default function Viagem({
   itinerary,
@@ -29,6 +31,7 @@ export default function Viagem({
   visited,
   onOpenPlace,
   onOpenChapter,
+  onOpenPhoto,
 }) {
   const [mode, setMode] = useState('rota')
   const [phaseFilter, setPhaseFilter] = useState(activePhase?.id ?? 'rome-terni')
@@ -57,166 +60,249 @@ export default function Viagem({
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="shrink-0 px-4 pt-4 pb-3">
-        <div className="w-full">
-          <ContextHeader
-            itinerary={itinerary}
-            dayInfo={dayInfo}
-            phase={activePhase}
-            now={now}
-            places={places}
-            visited={visited}
-          />
-          <StatsRow stats={stats} />
+    <div className="pad-nav">
+      <Hero
+        itinerary={itinerary}
+        dayInfo={dayInfo}
+        phase={activePhase}
+        now={now}
+        places={places}
+        visited={visited}
+      />
+
+      <Gallery onOpenPhoto={onOpenPhoto} />
+
+      <section className="pt-10">
+        <header className="mb-3 px-4">
+          <p className="text-[0.6875rem] font-bold tracking-[0.18em] text-fg-faint uppercase">
+            {stats.phases} capítulos
+          </p>
+          <h2 className="title-display mt-1 text-[2.25rem] leading-none text-fg">
+            O caminho
+          </h2>
+        </header>
+
+        <div className="px-4">
           <ModeToggle mode={mode} onChange={setMode} />
-          {mode === 'rota' && <RouteLegend />}
         </div>
-      </div>
 
-      <div className="relative min-h-0 flex-1">
-        <TripMap
-          mode={mode}
-          itinerary={itinerary}
-          now={now}
-          position={position}
-          visited={visited}
-          visiveis={mode === 'lugares' ? visiveis : []}
-          hoteis={mode === 'lugares' ? hoteis : []}
-          onOpenPlace={onOpenPlace}
-          onOpenChapter={onOpenChapter}
-          mapRef={mapRef}
-        />
-
-        {mode === 'lugares' && (
-          <PlaceFilters
-            fases={fasesComLugar}
-            phaseFilter={phaseFilter}
-            sectionFilter={sectionFilter}
-            onPhase={setPhaseFilter}
-            onSection={setSectionFilter}
-            total={visiveis.length + hoteis.length}
-            vazio={visiveis.length === 0 && hoteis.length === 0}
+        {/* O mapa sangra ate a borda da coluna, sem raio: e a unica secao alem
+            da galeria que faz isso, e e o que quebra o ritmo de cards. */}
+        <div className="relative mt-3 h-[70dvh]">
+          <TripMap
+            mode={mode}
+            itinerary={itinerary}
+            now={now}
+            position={position}
+            visited={visited}
+            visiveis={mode === 'lugares' ? visiveis : []}
+            hoteis={mode === 'lugares' ? hoteis : []}
+            activePhaseId={activePhase?.id}
+            onOpenPlace={onOpenPlace}
+            onOpenChapter={onOpenChapter}
+            mapRef={mapRef}
           />
-        )}
 
-        <button
-          type="button"
-          onClick={centralizarEmMim}
-          disabled={!position}
-          aria-label="Centralizar na minha localizacao"
-          className="absolute right-4 bottom-32 z-[500] grid size-13 cursor-pointer place-items-center rounded-full bg-surface text-fg shadow-lg transition duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        >
-          <Icon name="crosshair" size={22} />
-        </button>
-      </div>
+          {/* Fade nas duas bordas pro mapa se fundir na pagina em vez de ser um
+              retangulo colado. pointer-events-none pra nao roubar o arrasto. */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-[500] h-10 bg-gradient-to-b from-deep to-transparent"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[500] h-10 bg-gradient-to-t from-deep to-transparent"
+          />
+
+          {mode === 'lugares' && (
+            <PlaceFilters
+              fases={fasesComLugar}
+              phaseFilter={phaseFilter}
+              sectionFilter={sectionFilter}
+              onPhase={setPhaseFilter}
+              onSection={setSectionFilter}
+              total={visiveis.length + hoteis.length}
+              vazio={visiveis.length === 0 && hoteis.length === 0}
+            />
+          )}
+
+          {mode === 'rota' && <RouteLegend />}
+
+          {/* Credito dos tiles. Obrigatorio pelo OSM e pelo CARTO — e por isso
+              que ele nao pode ser mais discreto do que ja e. O Leaflet desenha
+              o dele numa barra branca com link azul, entao esse controle esta
+              desligado e o credito e nosso. */}
+          <p className="pointer-events-none absolute right-2 bottom-1 z-[600] text-[0.5625rem] leading-tight text-white/35 [text-shadow:0_1px_2px_rgb(0_0_0/0.9)]">
+            © OpenStreetMap · CARTO
+          </p>
+
+          {/* Controles proprios: o +/- do Leaflet e caixinha cinza com borda,
+              e denuncia mapa nao trabalhado. Circulos de 48px com blur. */}
+          <div className="absolute right-3 bottom-14 z-[600] flex flex-col gap-2">
+            <MapButton
+              label="Aproximar"
+              onClick={() => mapRef.current?.zoomIn()}
+              icone="mais"
+            />
+            <MapButton
+              label="Afastar"
+              onClick={() => mapRef.current?.zoomOut()}
+              icone="menos"
+            />
+            <MapButton
+              label="Centralizar na minha localizacao"
+              onClick={centralizarEmMim}
+              disabled={!position}
+              icone="crosshair"
+            />
+          </div>
+        </div>
+      </section>
+
+      <Stats stats={stats} />
     </div>
   )
 }
 
 /**
- * Tres estados, porque a mesma tela responde a tres perguntas diferentes:
- * antes da viagem "quando?", durante "onde estou e o que vem agora?", depois
- * "o que foi que a gente fez?".
+ * Hero. Tela cheia antes da viagem, faixa depois que ela comeca.
+ *
+ * O countdown merece 100dvh: enquanto a viagem nao chega, e a unica coisa que
+ * importa nesta tela. A partir do dia 1 ele vira uma faixa — manter tela cheia
+ * empurraria o mapa e os numeros pra fora da dobra justamente quando eles
+ * passam a ser o conteudo util.
  */
-function ContextHeader({ itinerary, dayInfo, phase, now, places, visited }) {
-  if (dayInfo.status === 'before') {
-    return (
-      <header className="rounded-3xl bg-elevated p-5 text-white">
-        <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
-          Ainda não começou
-        </p>
-        <h1 className="title-display mt-1 text-4xl leading-none tabular-nums">
-          faltam {dayInfo.daysUntil} dias
-        </h1>
-        <p className="mt-1 text-[0.9375rem] text-white/80">
-          Começa em {itinerary.phases[0].short} · {formatDateLong(dayInfo.firstDay.date)}
-        </p>
-      </header>
-    )
-  }
-
-  if (dayInfo.status === 'after') {
-    const mapeados = suggestable(places)
-    const visitados = mapeados.filter((p) => visited.has(p.id)).length
-    const km = routeLegs(itinerary, now).reduce((s, l) => s + l.km, 0)
-    return (
-      <header className="rounded-3xl bg-elevated p-5 text-white">
-        <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
-          Viagem encerrada
-        </p>
-        <h1 className="title-display mt-1 text-3xl leading-none">Acabou 😔</h1>
-        <dl className="mt-3 grid grid-cols-3 gap-2">
-          <Recap valor={`${visitados}/${mapeados.length}`} rotulo="visitados" />
-          <Recap valor={formatKm(km)} rotulo="percorridos" />
-          <Recap valor={itinerary.phases.length} rotulo="fases" />
-        </dl>
-      </header>
-    )
-  }
-
-  const proximo = upcomingBooked(dayInfo.day, now, 3)[0]
+function Hero({ itinerary, dayInfo, phase, now, places, visited }) {
+  const capa = galleryData.gallery.photos[0]?.url
+  const antes = dayInfo.status === 'before'
+  const proximo = dayInfo.status === 'during' ? upcomingBooked(dayInfo.day, now, 3)[0] : null
 
   return (
-    <header className="rounded-3xl bg-elevated p-5 text-white">
-      <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase tabular-nums">
-        Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {formatDateLong(dayInfo.day.date)}
-      </p>
-      <h1 className="title-display mt-1.5 text-[1.75rem] leading-[1.1]">{phase.name}</h1>
+    <header
+      className={[
+        'relative isolate flex flex-col justify-end overflow-hidden px-5',
+        // pad-nav, nao pb-8: o conteudo do hero e alinhado embaixo e a pilula
+        // do nav flutua por cima — sem isso o countdown nasce atras dela.
+        antes ? 'h-[100dvh] pad-nav' : 'h-[35dvh] min-h-[15rem] pb-6',
+      ].join(' ')}
+    >
+      {capa && (
+        <img
+          src={capa}
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="absolute inset-0 -z-20 size-full object-cover"
+        />
+      )}
+      {/* Overlay: sem ele o wordmark branco compete com a foto e some. Mais
+          denso embaixo, que e onde o texto vive. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-gradient-to-t from-deep via-deep/85 to-deep/40"
+      />
+
+      <h1
+        className={[
+          'title-display text-fg',
+          antes ? 'text-[3.5rem] leading-[0.9]' : 'text-[2rem] leading-none',
+        ].join(' ')}
+        style={{ letterSpacing: '-0.03em' }}
+      >
+        ITALOVERS
+      </h1>
+
+      {antes && (
+        <p className="mt-4 flex items-baseline gap-2 text-fg">
+          <span className="title-display text-[4rem] leading-none tabular-nums">
+            {dayInfo.daysUntil}
+          </span>
+          <span className="text-[1.125rem] font-semibold text-fg-dim">
+            {dayInfo.daysUntil === 1 ? 'dia' : 'dias'}
+          </span>
+        </p>
+      )}
+
+      {dayInfo.status === 'during' && (
+        <p className="mt-2 text-[0.9375rem] font-semibold text-fg-dim tabular-nums">
+          Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {phase?.short ?? phase?.name}
+        </p>
+      )}
+
+      {dayInfo.status === 'after' && <Recap itinerary={itinerary} places={places} visited={visited} />}
+
+      {antes && (
+        /* Rio, nao Frankfurt. O `phases[0]` e o aeroporto de chegada — ler dele
+           fazia a tela dizer que a viagem comeca na Alemanha. */
+        <p className="mt-3 text-[0.9375rem] text-fg-dim">
+          {ORIGIN.name} → {itinerary.phases[0].short} · {formatDateLong(dayInfo.firstDay.date)}
+        </p>
+      )}
+
       {proximo && (
-        <p className="mt-3 inline-flex items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-[0.8125rem] font-bold">
+        <p className="mt-3 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-[0.8125rem] font-bold text-white">
           <Icon name="ticket" size={14} />
           {proximo.time} · {proximo.title}
         </p>
+      )}
+
+      {antes && (
+        <span
+          aria-hidden="true"
+          className="respira absolute inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+7.5rem)] flex justify-center text-fg-faint"
+        >
+          <Icon name="chevron" size={22} />
+        </span>
       )}
     </header>
   )
 }
 
-function Recap({ valor, rotulo }) {
+function Recap({ itinerary, places, visited }) {
+  const mapeados = suggestable(places)
+  const visitados = mapeados.filter((p) => visited.has(p.id)).length
+  const km = routeLegs(itinerary, null).reduce((s, l) => s + l.km, 0)
   return (
-    <div>
-      <dt className="sr-only">{rotulo}</dt>
-      <dd className="text-[1.125rem] leading-none font-bold tabular-nums">{valor}</dd>
-      <p className="mt-1 text-[0.6875rem] text-white/60">{rotulo}</p>
-    </div>
+    <p className="mt-2 text-[0.9375rem] font-semibold text-fg-dim tabular-nums">
+      {visitados}/{mapeados.length} visitados · {formatKm(km)}
+    </p>
   )
 }
 
-/** Tudo calculado a partir do itinerario — nenhum numero escrito a mao. */
-function StatsRow({ stats }) {
-  // O "km" ja esta dentro do valor, entao a distancia nao repete o rotulo na
-  // tela — mas o leitor de tela precisa dele, senao o primeiro item e um numero
-  // solto sem dizer do que.
+/**
+ * Numeros em grid. Antes era uma linha de texto miudo indiferenciado, onde
+ * "22.624 km" pesava o mesmo que "de rota" — e o numero e que e a informacao.
+ */
+function Stats({ stats }) {
   const itens = [
-    { chave: 'distancia', valor: formatKm(stats.km), rotulo: 'de rota', visivel: false },
-    {
-      chave: 'paises',
-      valor: stats.countries,
-      rotulo: stats.countries === 1 ? 'país' : 'países',
-      visivel: true,
-    },
-    { chave: 'fases', valor: stats.phases, rotulo: 'fases', visivel: true },
-    { chave: 'dias', valor: stats.days, rotulo: 'dias', visivel: true },
-    { chave: 'lugares', valor: stats.places, rotulo: 'lugares', visivel: true },
+    { valor: formatKm(stats.km), rotulo: 'de rota' },
+    { valor: stats.countries, rotulo: stats.countries === 1 ? 'país' : 'países' },
+    { valor: stats.phases, rotulo: 'capítulos' },
+    { valor: stats.days, rotulo: 'dias' },
+    { valor: stats.places, rotulo: 'lugares' },
   ]
-  // Uma linha so, a 12px: em duas linhas o cabecalho comia 40% da tela e
-  // sobrava pouco mapa, que e o conteudo.
   return (
-    <dl className="mt-2 flex flex-nowrap items-baseline gap-x-2 px-1 text-[0.75rem] whitespace-nowrap text-fg-dim">
-      {itens.map(({ chave, valor, rotulo, visivel }, i) => (
-        <div key={chave} className="flex shrink-0 items-baseline gap-1">
-          {i > 0 && (
-            <span aria-hidden="true" className="mr-1 text-fg-faint">
-              ·
-            </span>
-          )}
-          <dt className="sr-only">{rotulo}</dt>
-          <dd className="font-bold text-fg tabular-nums">{valor}</dd>
-          {visivel && <span aria-hidden="true">{rotulo}</span>}
-        </div>
-      ))}
-    </dl>
+    <section className="px-4 pt-12">
+      <dl className="grid grid-cols-2 gap-px overflow-hidden bg-line">
+        {itens.map(({ valor, rotulo }, i) => (
+          <div
+            key={rotulo}
+            className={[
+              'bg-deep px-1 py-5',
+              // O ultimo, sozinho na linha, ocupa as duas colunas
+              i === itens.length - 1 && itens.length % 2 ? 'col-span-2' : '',
+            ].join(' ')}
+          >
+            <dd className="title-display text-[2rem] leading-none text-fg tabular-nums">
+              {valor}
+            </dd>
+            <dt className="mt-1.5 text-[0.6875rem] font-bold tracking-[0.14em] text-fg-faint uppercase">
+              {rotulo}
+            </dt>
+          </div>
+        ))}
+      </dl>
+    </section>
   )
 }
 
@@ -225,7 +311,7 @@ function ModeToggle({ mode, onChange }) {
     <div
       role="tablist"
       aria-label="Modo do mapa"
-      className="mt-3 flex gap-1 rounded-full bg-elevated p-1"
+      className="flex gap-1 rounded-full border border-line bg-surface p-1"
     >
       {[
         ['rota', 'Rota'],
@@ -241,7 +327,7 @@ function ModeToggle({ mode, onChange }) {
             'min-h-11 flex-1 cursor-pointer rounded-full text-[0.875rem] font-bold',
             'transition duration-200 active:scale-[0.98]',
             'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-            mode === id ? 'bg-surface text-fg shadow-sm' : 'text-fg-faint',
+            mode === id ? 'bg-accent text-white' : 'text-fg-faint',
           ].join(' ')}
         >
           {label}
@@ -251,25 +337,30 @@ function ModeToggle({ mode, onChange }) {
   )
 }
 
-/**
- * Sem isso, solido e pontilhado sao so dois tracos diferentes.
- *
- * Fica no cabecalho, nao flutuando sobre o mapa: como pilula centralizada ela
- * tapava o pino de Castellammare, e nao existe canto seguro — os pinos se
- * espalham por toda a tela conforme o zoom.
- */
+function MapButton({ label, onClick, icone, disabled = false }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={label}
+      className="grid size-12 cursor-pointer place-items-center rounded-full border border-line bg-white/12 text-fg backdrop-blur-xl transition duration-200 active:scale-90 disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+    >
+      <Icon name={icone} size={21} />
+    </button>
+  )
+}
+
+/** Chip sobre o mapa: sem isso, solido e tracejado sao so dois tracos. */
 function RouteLegend() {
   return (
-    <p className="mt-2 flex items-center justify-center gap-4 px-1 text-[0.75rem] font-semibold text-fg-faint">
+    <p className="pointer-events-none absolute bottom-3 left-3 z-[600] flex items-center gap-3 rounded-full border border-line bg-deep/70 px-3 py-1.5 text-[0.6875rem] font-semibold text-fg-dim backdrop-blur-xl">
       <span className="flex items-center gap-1.5">
-        <span aria-hidden="true" className="h-0.5 w-5 rounded-full bg-accent" />
+        <span aria-hidden="true" className="h-0.5 w-4 rounded-full bg-accent" />
         percorrido
       </span>
       <span className="flex items-center gap-1.5">
-        <span
-          aria-hidden="true"
-          className="w-5 border-t-2 border-dotted border-[#B99B8C]"
-        />
+        <span aria-hidden="true" className="w-4 border-t-2 border-dashed border-white/70" />
         a fazer
       </span>
     </p>
@@ -278,8 +369,8 @@ function RouteLegend() {
 
 function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, total, vazio }) {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-0 z-[500] p-3">
-      <div className="pointer-events-auto space-y-2">
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-[600] p-3">
+      <div className="pointer-events-auto w-full space-y-2">
         <div className="flex gap-2 overflow-x-auto pb-1">
           {fases.map((fase) => (
             <Chip
@@ -299,19 +390,19 @@ function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, t
           <Chip
             active={sectionFilter === 'comer'}
             onClick={() => onSection('comer')}
-            tone="terra"
+            tone="accent"
           >
             Comer
           </Chip>
           <Chip active={sectionFilter === 'ver'} onClick={() => onSection('ver')} tone="olive">
             Ver
           </Chip>
-          <span className="ml-auto self-center rounded-full bg-surface/90 px-3 py-1.5 text-[0.75rem] font-semibold text-fg-dim shadow-sm tabular-nums">
+          <span className="ml-auto self-center rounded-full border border-line bg-deep/70 px-3 py-1.5 text-[0.75rem] font-semibold text-fg-dim backdrop-blur-xl tabular-nums">
             {total}
           </span>
         </div>
         {vazio && (
-          <p className="rounded-2xl bg-surface/95 px-4 py-3 text-center text-[0.875rem] font-medium text-fg-dim shadow-lg">
+          <p className="rounded-2xl border border-line bg-deep/85 px-4 py-3 text-center text-[0.875rem] font-medium text-fg-dim backdrop-blur-xl">
             Nenhum lugar mapeado com esse filtro.
           </p>
         )}
@@ -335,9 +426,9 @@ function Chip({ active, onClick, children, tone = 'ink', autoScroll = false }) {
   const ativo =
     tone === 'olive'
       ? 'bg-olive text-white'
-      : tone === 'terra'
+      : tone === 'accent'
         ? 'bg-accent text-white'
-        : 'bg-elevated text-white'
+        : 'bg-fg text-on-light'
   return (
     <button
       ref={ref}
@@ -345,10 +436,10 @@ function Chip({ active, onClick, children, tone = 'ink', autoScroll = false }) {
       onClick={onClick}
       aria-pressed={active}
       className={[
-        'shrink-0 cursor-pointer rounded-full px-3.5 py-2 text-[0.8125rem] font-semibold whitespace-nowrap shadow-sm',
+        'shrink-0 cursor-pointer rounded-full border border-line px-3.5 py-2 text-[0.8125rem] font-semibold whitespace-nowrap backdrop-blur-xl',
         'transition duration-200 active:scale-95',
         'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent',
-        active ? ativo : 'bg-surface/95 text-fg-dim',
+        active ? ativo : 'bg-deep/70 text-fg-dim',
       ].join(' ')}
     >
       {children}

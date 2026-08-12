@@ -141,6 +141,76 @@
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6.5rem);
 }
 
+/**
+ * Shimmer do <Photo>. Anima so `transform`, que roda no compositor — animar
+ * `background-position` faria o navegador repintar 31 retangulos a cada frame
+ * enquanto a galeria carrega, que e exatamente quando ele esta mais ocupado.
+ */
+@utility shimmer {
+  background: var(--color-surface);
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.06),
+      transparent
+    );
+    animation: shimmer-pass 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer-pass {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/**
+ * Pula o render do que esta fora da tela. Com 31 fotos na colagem isso e a
+ * diferenca entre o navegador fazer layout de tudo e fazer so do visivel; o
+ * `contain-intrinsic-size` da a altura estimada pra barra de rolagem nao
+ * pular enquanto o resto ainda nao foi medido.
+ */
+/** Chevron do hero: respiro curto pra dizer "tem mais abaixo", sem puxar atencao. */
+@utility respira {
+  animation: respira-y 2.4s ease-in-out infinite;
+}
+
+@keyframes respira-y {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+@utility defer-offscreen {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @utility safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -149,7 +219,14 @@
 .leaflet-popup-content-wrapper {
   border-radius: 1rem;
   padding: 0;
-  box-shadow: 0 8px 30px rgb(31 26 23 / 0.18);
+  background: var(--color-elevated);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.6);
+}
+.leaflet-popup-tip {
+  background: var(--color-elevated);
+}
+.leaflet-popup-close-button {
+  color: var(--color-fg-faint) !important;
 }
 .leaflet-popup-content {
   margin: 0;
@@ -157,22 +234,16 @@
 }
 .leaflet-container {
   font: inherit;
-  background: var(--color-sand-100);
+  /* Cor do vao enquanto o tile nao chega. Precisa ser escura tambem, senao
+     cada tile faltando pisca um retangulo claro no meio do mapa. */
+  background: var(--color-deep);
 }
-/* Zoom acima do botao "centralizar em mim" (que fica em bottom-32, 3.25rem de
-   altura) e acima do bottom nav. No topo ele cobria os chips de fase. */
-.leaflet-bottom.leaflet-right {
-  bottom: 11.75rem;
-}
-/* A atribuicao so precisa escapar do bottom nav — ela nao divide o canto com
-   mais nada. Manter baixa deixa o mapa livre. */
-.leaflet-bottom.leaflet-left {
-  bottom: 5rem;
-}
+/* O Leaflet tem attributionControl desligado: o credito e renderizado pela
+   propria tela, em Viagem.jsx, pra nao herdar a barra branca com link azul. */
 
 /* Rotulo dos pinos da rota. Permanente, entao precisa ser discreto: sao 9
    capitulos e no zoom de continente eles ficam perto uns dos outros. Sem caixa,
-   sem seta, so o nome com um halo branco pra ler por cima do mapa. */
+   sem seta, so o nome com um halo escuro pra ler por cima do mapa. */
 .leaflet-tooltip.route-label {
   background: transparent;
   border: 0;
@@ -181,11 +252,13 @@
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-ink);
+  color: #fff;
+  /* O halo inverteu junto com o tema: era branco pra destacar sobre mapa claro,
+     agora e preto. Sem ele o rotulo some sobre o cinza claro das cidades. */
   text-shadow:
-    0 0 3px #fbf7f2,
-    0 0 6px #fbf7f2,
-    0 1px 2px #fbf7f2;
+    0 0 3px rgb(0 0 0 / 0.9),
+    0 0 7px rgb(0 0 0 / 0.7),
+    0 1px 2px rgb(0 0 0 / 0.9);
   white-space: nowrap;
 }
 .leaflet-tooltip.route-label::before {
@@ -202,12 +275,12 @@
 .hotel-popup strong {
   font-size: 0.9375rem;
   line-height: 1.25;
-  color: var(--color-ink);
+  color: var(--color-fg);
 }
 .hotel-popup span {
   font-size: 0.8125rem;
   line-height: 1.35;
-  color: var(--color-ink-soft);
+  color: var(--color-fg-dim);
 }
 .hotel-popup .datas {
   font-weight: 600;

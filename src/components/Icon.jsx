@@ -131,6 +131,8 @@ const PATHS = {
     </>
   ),
   close: <path d="M18 6 6 18M6 6l12 12" />,
+  mais: <path d="M12 5v14M5 12h14" />,
+  menos: <path d="M5 12h14" />,
   pin: (
     <>
       <path d="M20 10.5c0 6-8 11.5-8 11.5s-8-5.5-8-11.5a8 8 0 0 1 16 0Z" />

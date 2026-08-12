@@ -416,35 +416,50 @@ describe('componente Photo', () => {
    * de foto novos estao vazios, e vao ficar ate as URLs entrarem.
    */
   it('sem src nao renderiza img nenhuma, so o fallback', async () => {
-    const { default: Photo, CoverFallback } = await import('./components/Photo.jsx')
+    const { default: Photo } = await import('./components/Photo.jsx')
     const { container } = render(
-      <Photo fallback={<CoverFallback numero={3} nome="Castellammare" />} />
+      <Photo aspect="3 / 4" fallback={<span>vazio</span>} />
     )
     expect(container.querySelector('img')).toBeNull()
-    expect(screen.getByText('Castellammare')).toBeTruthy()
-    expect(screen.getByText('3')).toBeTruthy()
+    expect(screen.getByText('vazio')).toBeTruthy()
   })
 
-  it('reserva a proporcao mesmo vazio, pra nao empurrar a pagina depois', async () => {
+  it('reserva a proporcao antes de carregar, pra colagem nao pular', async () => {
     const { default: Photo } = await import('./components/Photo.jsx')
-    const { container } = render(<Photo ratio="16 / 9" />)
-    expect(container.querySelector('figure').style.aspectRatio).toBe('16 / 9')
+    const { container } = render(<Photo aspect="3 / 4" src="https://x/y.jpg" alt="x" />)
+    expect(container.querySelector('figure').style.aspectRatio).toBe('3 / 4')
   })
 
   it('erro de carga cai no fallback em vez de imagem quebrada', async () => {
     const { default: Photo } = await import('./components/Photo.jsx')
     const { container } = render(
-      <Photo src="https://exemplo.invalido/foto.jpg" alt="x" fallback={<span>vazio</span>} />
+      <Photo
+        aspect="3 / 4"
+        src="https://exemplo.invalido/foto.jpg"
+        alt="x"
+        fallback={<span>vazio</span>}
+      />
     )
     fireEvent.error(container.querySelector('img'))
     expect(container.querySelector('img')).toBeNull()
     expect(screen.getByText('vazio')).toBeTruthy()
   })
 
+  it('a imagem so fica visivel depois do onLoad', async () => {
+    const { default: Photo } = await import('./components/Photo.jsx')
+    const { container } = render(<Photo aspect="1 / 1" src="/places/p079.webp" alt="x" />)
+    const img = container.querySelector('img')
+    expect(img.className).toContain('opacity-0')
+    fireEvent.load(img)
+    expect(container.querySelector('img').className).toContain('opacity-100')
+  })
+
   it('credito so aparece depois que a imagem carrega', async () => {
     const { default: Photo } = await import('./components/Photo.jsx')
     const credito = { author: 'FeaturedPics', license: 'CC BY-SA 4.0' }
-    const { container } = render(<Photo src="/places/p079.webp" alt="x" credito={credito} />)
+    const { container } = render(
+      <Photo aspect="1 / 1" src="/places/p079.webp" alt="x" credito={credito} />
+    )
     expect(screen.queryByText(/FeaturedPics/)).toBeNull()
     fireEvent.load(container.querySelector('img'))
     expect(screen.getByText(/FeaturedPics · CC BY-SA 4.0/)).toBeTruthy()

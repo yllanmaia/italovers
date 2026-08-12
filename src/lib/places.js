@@ -1,17 +1,13 @@
 /**
  * Filtro, split e ordenacao dos 83 lugares.
  *
- * CAMPOS DE FOTO RESERVADOS, hoje ausentes em 100% dos dados. Todos opcionais:
- * o app tem que ficar bonito sem nenhum deles, porque e assim que ele esta.
+ * CAMPO DE FOTO RESERVADO, hoje ausente em 100% dos lugares e opcional:
  *
- *   trip.hero_photo         string        capa da viagem
- *   phases[].cover_photo    string        capa do capitulo, 16:9
- *   days[].photos[]         {url, caption}[]
  *   places[].photos[]       string[]      nossas fotos, por URL externa
  *
- * URL externa porque foto nao cabe no localStorage (~5 MB) e porque commitar
- * as fotos da viagem num repositorio publico e outra conversa. O componente
- * <Photo> distingue a origem pelo prefixo: http e externa, o resto e /public.
+ * Foto POR FASE nao existe e nao deve ser preparada: as fotos do casal vivem
+ * numa galeria propria (gallery.json), que nao pertence a fase nenhuma. Slot
+ * vazio de fase so criaria buraco pra nunca preencher.
  */
 import { haversine, parseCount, parseRating } from './geo.js'
 import photos from '../data/photos.json'

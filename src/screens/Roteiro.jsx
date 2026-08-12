@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import DayCard from '../components/DayCard.jsx'
 import Icon from '../components/Icon.jsx'
-import Photo, { CoverFallback, photoSrc } from '../components/Photo.jsx'
 import { formatDateShort, splitDayByPhase, toDateKey } from '../lib/phase.js'
 import { dynamicSuggestions, suggestable } from '../lib/places.js'
 
@@ -205,18 +204,7 @@ function Capitulo({
 
       {aberto && !vazio && (
         <>
-          {/* Capa do capitulo. Full-bleed dentro do card e sem foto nenhuma
-              ainda — o gradiente com o numero em marca d'agua e o estado
-              permanente ate as URLs entrarem, entao ele precisa parecer
-              decisao, nao falta. */}
-          <Photo
-            src={photoSrc(cap.cover_photo)}
-            alt={cap.cover_photo ? `Foto de ${cap.name}` : ''}
-            ratio="16 / 9"
-            className="border-t border-line"
-            fallback={<CoverFallback numero={cap.numero} nome={cap.short ?? cap.name} />}
-          />
-          <div className="space-y-3 bg-deep p-3">
+          <div className="space-y-3 border-t border-line bg-deep p-3">
           {cap.entradas.map(({ day, dayNumber, segmento }) => (
             <DayCard
               key={`${day.date}-${segmento.phaseId}`}
