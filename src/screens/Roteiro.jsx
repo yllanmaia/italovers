@@ -11,18 +11,27 @@ export default function Roteiro({
   position,
   visited,
   decisions,
+  openChapter = null,
   onChooseOption,
   onOpenPlace,
 }) {
   const hoje = toDateKey(now)
-  const refHoje = useRef(null)
+  const refAlvo = useRef(null)
   const jaRolou = useRef(false)
 
-  // Abre no dia de hoje se ele existir no roteiro
+  /**
+   * Onde a tela abre. Vindo de um pino da rota, no primeiro dia daquela fase —
+   * senao o toque no pino de Palermo cairia em Roma so porque hoje e dia 16.
+   * Sem pino, no dia de hoje.
+   */
+  const dataAlvo = openChapter
+    ? (itinerary.days.find((d) => d.phase_id === openChapter)?.date ?? hoje)
+    : hoje
+
   useEffect(() => {
     if (jaRolou.current) return
     jaRolou.current = true
-    refHoje.current?.scrollIntoView?.({ block: 'start' })
+    refAlvo.current?.scrollIntoView?.({ block: 'start' })
   }, [])
 
   const phaseById = (id) => itinerary.phases.find((p) => p.id === id)
@@ -40,7 +49,11 @@ export default function Roteiro({
         {itinerary.days.map((day, i) => {
           const isToday = day.date === hoje
           return (
-            <div key={day.date} ref={isToday ? refHoje : null} className="scroll-mt-4">
+            <div
+              key={day.date}
+              ref={day.date === dataAlvo ? refAlvo : null}
+              className="scroll-mt-4"
+            >
               <DayCard
                 day={day}
                 dayNumber={i + 1}

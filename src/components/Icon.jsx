@@ -5,10 +5,27 @@
  */
 const PATHS = {
   // Navegacao
+  // Rota serpenteando entre dois pinos: a viagem inteira como uma linha so.
+  viagem: (
+    <>
+      <path d="M6.5 20c0-3 3-3.2 5-4.4s4-1.6 4-4.1" />
+      <circle cx="5.5" cy="5" r="2.5" />
+      <path d="M5.5 9.5C4 8 3 6.7 3 5a2.5 2.5 0 0 1 5 0c0 1.7-1 3-2.5 4.5Z" />
+      <circle cx="18.5" cy="17.5" r="2" />
+    </>
+  ),
   agora: (
     <>
       <circle cx="12" cy="12" r="9" />
       <path d="m16.2 7.8-2.9 6.5-6.5 2.9 2.9-6.5 6.5-2.9Z" />
+    </>
+  ),
+  // Cartoes empilhados: o catalogo, diferente da lista numerada do roteiro.
+  lugares: (
+    <>
+      <rect x="3" y="4" width="18" height="7" rx="2" />
+      <rect x="3" y="14" width="18" height="6" rx="2" />
+      <path d="M7 17h5" />
     </>
   ),
   roteiro: (

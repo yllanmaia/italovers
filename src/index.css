@@ -143,6 +143,33 @@
 .leaflet-bottom.leaflet-right {
   bottom: 11.75rem;
 }
+/* A atribuicao so precisa escapar do bottom nav — ela nao divide o canto com
+   mais nada. Manter baixa deixa o mapa livre. */
+.leaflet-bottom.leaflet-left {
+  bottom: 5rem;
+}
+
+/* Rotulo dos pinos da rota. Permanente, entao precisa ser discreto: sao 9
+   capitulos e no zoom de continente eles ficam perto uns dos outros. Sem caixa,
+   sem seta, so o nome com um halo branco pra ler por cima do mapa. */
+.leaflet-tooltip.route-label {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-shadow:
+    0 0 3px #fbf7f2,
+    0 0 6px #fbf7f2,
+    0 1px 2px #fbf7f2;
+  white-space: nowrap;
+}
+.leaflet-tooltip.route-label::before {
+  display: none;
+}
 
 /* O unico popup do app e o do hotel. As regras acima zeram padding e margem
    pro popup nao ter cara de 2011, entao o espaco interno vem daqui. */

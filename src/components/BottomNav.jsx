@@ -1,14 +1,13 @@
 import Icon from './Icon.jsx'
-
-const TABS = [
-  { id: 'agora', label: 'Agora', icon: 'agora' },
-  { id: 'roteiro', label: 'Roteiro', icon: 'roteiro' },
-  { id: 'mapa', label: 'Mapa', icon: 'mapa' },
-]
+import { TABS } from '../lib/tabs.js'
 
 /**
  * Navegacao de baixo, preenchida (nao flutuante). Uso com uma mao: os controles
  * principais ficam no alcance do polegar. Sempre com icone + rotulo.
+ *
+ * Com 4 abas cada celula fica com 25% da largura — 90px num aparelho de 360px.
+ * O rotulo mais longo ("Roteiro", "Lugares") ocupa ~48px a 11px, entao ainda
+ * sobra folga. Por isso o layout nao mudou ao passar de 3 pra 4.
  */
 export default function BottomNav({ active, onChange }) {
   return (

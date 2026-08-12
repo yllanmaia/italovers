@@ -14,14 +14,20 @@ import App from './App.jsx'
  * desenhar, que e a nossa logica. Se o pino sai no lugar certo na tela, isso se
  * confere no olho — via scripts/shot.mjs.
  */
-const { marcadores } = vi.hoisted(() => ({ marcadores: [] }))
+const { marcadores, linhas } = vi.hoisted(() => ({ marcadores: [], linhas: [] }))
 
 vi.mock('leaflet', () => {
   const chain = () => ({
     addTo: () => chain(),
     on: () => chain(),
     bindPopup: () => chain(),
-    clearLayers: () => {},
+    bindTooltip: () => chain(),
+    // Zera junto com a camada, senao um redraw soma em cima do anterior e a
+    // contagem de pinos e de trechos vira lixo acumulado.
+    clearLayers: () => {
+      marcadores.length = 0
+      linhas.length = 0
+    },
   })
   return {
     default: {
@@ -30,11 +36,23 @@ vi.mock('leaflet', () => {
         remove: () => {},
         fitBounds: () => {},
         removeLayer: () => {},
+        // O mapa da rota se redesenha no zoomend pra reespalhar os pinos
+        // empilhados. Aqui basta aceitar o registro; o desenho inicial ja roda.
+        on: () => {},
+        off: () => {},
+        // Sem latLngToLayerPoint o TripMap cai no caminho "sem projecao" e usa
+        // deslocamento zero — que e exatamente o que queremos no jsdom.
       }),
       tileLayer: chain,
       layerGroup: chain,
       marker: (latlng, options) => {
         marcadores.push({ latlng, ...options })
+        return chain()
+      },
+      // A rota vira polyline: registrar deixa testar quantos trechos o app
+      // desenha e quais estao solidos, que e a logica de "ja percorri isso".
+      polyline: (coords, options) => {
+        linhas.push({ coords, ...options })
         return chain()
       },
       circleMarker: chain,
@@ -45,13 +63,18 @@ vi.mock('leaflet', () => {
   }
 })
 
-function setDate(date, time = '12:00') {
-  window.history.replaceState({}, '', `/?d=${date}&t=${time}`)
+/**
+ * A aba entra na URL porque o app agora abre na Viagem, nao na Agora — sem
+ * dizer qual aba, todo teste montaria o mapa.
+ */
+function setDate(date, time = '12:00', tab = 'agora') {
+  window.history.replaceState({}, '', `/?tab=${tab}&d=${date}&t=${time}`)
 }
 
 beforeEach(() => {
   localStorage.clear()
   marcadores.length = 0
+  linhas.length = 0
   // jsdom nao tem geolocation; o app tem que lidar com isso sem quebrar
   Object.defineProperty(navigator, 'geolocation', {
     value: undefined,
@@ -194,29 +217,76 @@ describe('aba Roteiro', () => {
   })
 })
 
-describe('aba Mapa', () => {
-  const abrirMapa = () => {
+describe('aba Viagem · modo Rota', () => {
+  const abrirViagem = (date = '2026-09-15', time = '12:00') => {
+    setDate(date, time, 'viagem')
     render(<App />)
-    fireEvent.click(screen.getByRole('button', { name: /Mapa/ }))
+  }
+
+  it('e a aba que abre por padrao', () => {
+    window.history.replaceState({}, '', '/?d=2026-09-15&t=12:00')
+    render(<App />)
+    expect(screen.getByRole('tab', { name: 'Rota' })).toBeTruthy()
+  })
+
+  it('desenha um trecho a mais que o numero de fases: o Rio entra nas duas pontas', () => {
+    abrirViagem()
+    // 9 fases + Rio na origem e no destino = 11 pontos, 10 trechos
+    expect(linhas).toHaveLength(10)
+  })
+
+  it('separa ida e volta do Atlantico em vez de sobrepor', () => {
+    abrirViagem()
+    // Rio->Frankfurt e Frankfurt->Rio ligam o mesmo par de coordenadas. Se os
+    // arcos fossem retas, o meio dos dois seria o mesmo ponto e a volta sumiria
+    // debaixo da ida.
+    const meioIda = linhas[0].coords[24]
+    const meioVolta = linhas[9].coords[24]
+    const separacao = Math.hypot(meioIda[0] - meioVolta[0], meioIda[1] - meioVolta[1])
+    expect(separacao).toBeGreaterThan(5)
+  })
+
+  it('marca como percorrido so o que ja aconteceu', () => {
+    abrirViagem('2026-09-15')
+    const solidos = linhas.filter((l) => !l.dashArray).length
+    expect(solidos).toBeGreaterThan(0)
+    expect(solidos).toBeLessThan(linhas.length)
+  })
+
+  it('antes da viagem nenhum trecho esta percorrido', () => {
+    abrirViagem('2026-07-29')
+    expect(linhas.every((l) => l.dashArray)).toBe(true)
+  })
+
+  it('mostra os numeros calculados, nada escrito a mao', () => {
+    abrirViagem()
+    expect(screen.getByText('22.624 km')).toBeTruthy()
+    expect(screen.getByText('83')).toBeTruthy()
+  })
+})
+
+describe('aba Viagem · modo Lugares', () => {
+  // O modo Lugares absorveu a aba Mapa. Estes testes vieram de la.
+  const abrirLugares = () => {
+    setDate('2026-09-15', '12:00', 'viagem')
+    render(<App />)
+    fireEvent.click(screen.getByRole('tab', { name: 'Lugares' }))
   }
 
   it('monta sem quebrar', () => {
-    setDate('2026-09-15')
-    abrirMapa()
+    abrirLugares()
     expect(screen.getByRole('button', { name: /Centralizar/ })).toBeTruthy()
   })
 
   it('Munique aparece no filtro, apesar de nao ter nenhum lugar mapeado', () => {
     // Antes o filtro contava so places[], e a fase era omitida — o pino do
     // hotel existia mas era inalcancavel.
-    setDate('2026-09-15')
-    abrirMapa()
+    abrirLugares()
     expect(screen.getByRole('button', { name: 'Munique' })).toBeTruthy()
   })
 
   it('em Munique desenha o hotel e mais nada', () => {
-    setDate('2026-09-15')
-    abrirMapa()
+    abrirLugares()
     marcadores.length = 0
     fireEvent.click(screen.getByRole('button', { name: 'Munique' }))
     const titulos = marcadores.map((m) => m.title)
@@ -224,8 +294,7 @@ describe('aba Mapa', () => {
   })
 
   it('nao esconde o pino do hotel quando o filtro e Ver', () => {
-    setDate('2026-09-15')
-    abrirMapa()
+    abrirLugares()
     fireEvent.click(screen.getByRole('button', { name: 'Palermo' }))
     marcadores.length = 0
     fireEvent.click(screen.getByRole('button', { name: 'Ver' }))
@@ -236,6 +305,13 @@ describe('aba Mapa', () => {
     marcadores.length = 0
     fireEvent.click(screen.getByRole('button', { name: 'Todos' }))
     expect(marcadores.length).toBeGreaterThan(comVer.length)
+  })
+
+  it('nao desenha a rota quando esta no modo Lugares', () => {
+    abrirLugares()
+    linhas.length = 0
+    fireEvent.click(screen.getByRole('button', { name: 'Palermo' }))
+    expect(linhas).toHaveLength(0)
   })
 })
 
@@ -316,13 +392,23 @@ describe('credito da foto', () => {
 })
 
 describe('navegacao', () => {
-  it('tem as 3 abas com icone e rotulo', () => {
+  it('tem uma aba por item de TABS, com icone e rotulo', async () => {
+    const { TABS } = await import('./lib/tabs.js')
     setDate('2026-09-15')
     render(<App />)
     const nav = screen.getByRole('navigation', { name: /Navegacao principal/ })
-    for (const label of ['Agora', 'Roteiro', 'Mapa']) {
-      expect(within(nav).getByRole('button', { name: new RegExp(label) })).toBeTruthy()
+    for (const tab of TABS) {
+      expect(within(nav).getByRole('button', { name: new RegExp(tab.label) })).toBeTruthy()
     }
+    expect(within(nav).getAllByRole('button')).toHaveLength(TABS.length)
+  })
+
+  it('um pino da rota leva pro roteiro naquela fase', () => {
+    // O pino de Palermo tem que cair no dia 12, nao no dia de hoje (16, Roma).
+    setDate('2026-09-16', '12:00', 'viagem')
+    render(<App />)
+    const palermo = marcadores.find((m) => /Palermo/.test(m.title ?? ''))
+    expect(palermo).toBeTruthy()
   })
 
   it('mostra a tarja de simulacao de data', () => {

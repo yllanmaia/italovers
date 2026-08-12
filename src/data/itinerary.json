@@ -9,6 +9,8 @@
     {
       "id": "travel-outbound",
       "name": "Ida Rio -> Frankfurt",
+      "short": "Frankfurt",
+      "country": "Alemanha",
       "start_date": "2026-09-04",
       "end_date": "2026-09-05",
       "center": {
@@ -20,6 +22,8 @@
     {
       "id": "germany-1",
       "name": "Alemanha (Darmstadt) - ida",
+      "short": "Darmstadt",
+      "country": "Alemanha",
       "start_date": "2026-09-05",
       "end_date": "2026-09-08",
       "center": {
@@ -31,6 +35,8 @@
     {
       "id": "sicily-castellammare",
       "name": "Sicilia - Castellammare del Golfo / Scopello",
+      "short": "Castellammare",
+      "country": "Italia",
       "start_date": "2026-09-08",
       "end_date": "2026-09-10",
       "center": {
@@ -42,6 +48,8 @@
     {
       "id": "favignana",
       "name": "Favignana",
+      "short": "Favignana",
+      "country": "Italia",
       "start_date": "2026-09-10",
       "end_date": "2026-09-12",
       "center": {
@@ -53,6 +61,8 @@
     {
       "id": "palermo",
       "name": "Palermo",
+      "short": "Palermo",
+      "country": "Italia",
       "start_date": "2026-09-12",
       "end_date": "2026-09-14",
       "center": {
@@ -64,6 +74,8 @@
     {
       "id": "rome-terni",
       "name": "Roma (base em Terni)",
+      "short": "Roma",
+      "country": "Italia",
       "start_date": "2026-09-14",
       "end_date": "2026-09-17",
       "center": {
@@ -75,6 +87,8 @@
     {
       "id": "germany-2",
       "name": "Alemanha (Darmstadt) - volta rapida",
+      "short": "Darmstadt",
+      "country": "Alemanha",
       "start_date": "2026-09-17",
       "end_date": "2026-09-18",
       "center": {
@@ -86,6 +100,8 @@
     {
       "id": "munich-oktoberfest",
       "name": "Munique - Oktoberfest",
+      "short": "Munique",
+      "country": "Alemanha",
       "start_date": "2026-09-18",
       "end_date": "2026-09-21",
       "center": {
@@ -97,6 +113,8 @@
     {
       "id": "travel-return",
       "name": "Volta Frankfurt -> Rio",
+      "short": "Frankfurt",
+      "country": "Alemanha",
       "start_date": "2026-09-21",
       "end_date": "2026-09-22",
       "center": {

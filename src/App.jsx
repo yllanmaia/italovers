@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import itinerary from './data/itinerary.json'
 import placesData from './data/places.json'
 
+import Viagem from './screens/Viagem.jsx'
 import Agora from './screens/Agora.jsx'
 import Roteiro from './screens/Roteiro.jsx'
-import Mapa from './screens/Mapa.jsx'
 import BottomNav from './components/BottomNav.jsx'
 import PlaceSheet from './components/PlaceSheet.jsx'
 import Icon from './components/Icon.jsx'
@@ -14,22 +14,20 @@ import { useLocalStorage, useVisited } from './hooks/useLocalStorage.js'
 import { KEYS, readDateSim, clearDateSim, resolveNow } from './lib/storage.js'
 import { resolveDay, resolvePhase, toDateKey } from './lib/phase.js'
 import { haversine } from './lib/geo.js'
+import { initialTab } from './lib/tabs.js'
 
 const places = placesData.places
-
-const TABS = ['agora', 'roteiro', 'mapa']
-
-/** ?tab=roteiro abre direto na aba. Serve pra atalho e pra teste. */
-function initialTab() {
-  const t = new URLSearchParams(window.location.search).get('tab')
-  return TABS.includes(t) ? t : 'agora'
-}
 
 export default function App() {
   const [tab, setTab] = useState(initialTab)
   const [sheetPlace, setSheetPlace] = useState(null)
   const [dateSim, setDateSim] = useState(() => readDateSim())
   const [tick, setTick] = useState(0)
+  /**
+   * Capitulo que o Roteiro deve abrir. E como o pino da rota leva pro texto:
+   * a aba Viagem pede, o Roteiro monta ja expandido naquele capitulo.
+   */
+  const [chapterToOpen, setChapterToOpen] = useState(null)
 
   const geo = useGeolocation()
   const { visited, toggleVisited } = useVisited(KEYS.visited)
@@ -75,13 +73,26 @@ export default function App() {
     [setDecisions]
   )
 
+  const onOpenChapter = useCallback((phaseId) => {
+    if (!phaseId) return
+    setChapterToOpen(phaseId)
+    setTab('roteiro')
+  }, [])
+
   const sheetMeters =
     sheetPlace && geo.position && sheetPlace.lat != null
       ? haversine(geo.position.lat, geo.position.lng, sheetPlace.lat, sheetPlace.lng)
       : null
 
+  /**
+   * Coluna de altura fixa, nao `min-h`. A aba Viagem tem um mapa que ocupa a
+   * sobra da tela, e isso so funciona se a sobra for calculavel — com min-h a
+   * tarja de simulacao somava 44px em cima de 100dvh e o mapa vazava por baixo,
+   * escondendo a Sicilia. O <main> e quem rola; as telas de lista continuam
+   * usando pad-nav pro bottom nav nao cobrir o fim.
+   */
   return (
-    <div className="min-h-[100dvh]">
+    <div className="flex h-[100dvh] flex-col">
       {dateSim && (
         <DateSimBanner
           sim={dateSim}
@@ -89,6 +100,22 @@ export default function App() {
             clearDateSim()
             setDateSim(null)
           }}
+        />
+      )}
+
+      <main className="min-h-0 flex-1 overflow-y-auto">
+
+      {tab === 'viagem' && (
+        <Viagem
+          itinerary={itinerary}
+          places={places}
+          now={now}
+          dayInfo={dayInfo}
+          activePhase={phaseInfo.phase}
+          position={geo.position}
+          visited={visited}
+          onOpenPlace={setSheetPlace}
+          onOpenChapter={onOpenChapter}
         />
       )}
 
@@ -114,21 +141,12 @@ export default function App() {
           position={geo.position}
           visited={visited}
           decisions={decisions}
+          openChapter={chapterToOpen}
           onChooseOption={onChooseOption}
           onOpenPlace={setSheetPlace}
         />
       )}
-
-      {tab === 'mapa' && (
-        <Mapa
-          itinerary={itinerary}
-          places={places}
-          activePhase={phaseInfo.phase}
-          position={geo.position}
-          visited={visited}
-          onOpenPlace={setSheetPlace}
-        />
-      )}
+      </main>
 
       <BottomNav active={tab} onChange={setTab} />
 
