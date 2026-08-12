@@ -428,6 +428,12 @@ describe('aba Notas', () => {
     render(<App />)
   }
 
+  /** Rotulo da estrela, lido do AVALIADORES: renomear os dois nao quebra teste. */
+  const estrela = async (indice, n) => {
+    const { AVALIADORES } = await import('./lib/ratings.js')
+    return `${AVALIADORES[indice].label}: ${n} de 5`
+  }
+
   it('sem nada visitado, explica o gatilho em vez de mostrar vazio mudo', () => {
     abrirNotas()
     expect(screen.getByText(/Nenhum lugar visitado ainda/)).toBeTruthy()
@@ -451,35 +457,35 @@ describe('aba Notas', () => {
     expect(screen.getAllByText(nome).length).toBeGreaterThan(0)
   })
 
-  it('dar nota tira o lugar da fila e joga em avaliados', () => {
+  it('dar nota tira o lugar da fila e joga em avaliados', async () => {
     comVisitados('p037')
     abrirNotas()
     expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
     expect(screen.queryByText(/Avaliados ·/)).toBeNull()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Eu: 4 de 5' }))
+    fireEvent.click(screen.getByRole('button', { name: await estrela(0, 4) }))
 
     expect(screen.queryByText(/A avaliar ·/)).toBeNull()
     expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()
   })
 
-  it('as duas notas convivem, e a discordancia aparece', () => {
+  it('as duas notas convivem, e a discordancia aparece', async () => {
     comVisitados('p037')
     abrirNotas()
-    fireEvent.click(screen.getByRole('button', { name: 'Eu: 5 de 5' }))
-    fireEvent.click(screen.getByRole('button', { name: 'Ela: 2 de 5' }))
+    fireEvent.click(screen.getByRole('button', { name: await estrela(0, 5) }))
+    fireEvent.click(screen.getByRole('button', { name: await estrela(1, 2) }))
 
     // 3,5 aparece duas vezes de proposito: na media do resumo e na linha
     expect(screen.getAllByText('3,5').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText(/discordamos/i)).toBeTruthy()
   })
 
-  it('tocar de novo na mesma estrela desmarca', () => {
+  it('tocar de novo na mesma estrela desmarca', async () => {
     comVisitados('p037')
     abrirNotas()
-    fireEvent.click(screen.getByRole('button', { name: 'Eu: 3 de 5' }))
+    fireEvent.click(screen.getByRole('button', { name: await estrela(0, 3) }))
     expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()
-    fireEvent.click(screen.getByRole('button', { name: 'Eu: 3 de 5' }))
+    fireEvent.click(screen.getByRole('button', { name: await estrela(0, 3) }))
     expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
   })
 
@@ -492,11 +498,11 @@ describe('aba Notas', () => {
     expect(screen.getByRole('textbox', { name: /Comentário/ }).value).toBe(texto)
   })
 
-  it('o resumo conta avaliados, media e voltariamos', () => {
+  it('o resumo conta avaliados, media e voltariamos', async () => {
     comVisitados('p037', 'p001')
     abrirNotas()
     // Avalia so um dos dois visitados
-    fireEvent.click(screen.getAllByRole('button', { name: 'Eu: 5 de 5' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: await estrela(0, 5) })[0])
     fireEvent.click(screen.getAllByRole('button', { name: 'Sim' })[0])
 
     expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()

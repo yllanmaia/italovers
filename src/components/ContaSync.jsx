@@ -11,7 +11,8 @@ import { temBackend } from '../lib/supabase.js'
  */
 export default function ContaSync({ auth, sync, onLimparTudo }) {
   const [email, setEmail] = useState('')
-  const [codigo, setCodigo] = useState('')
+  const [senha, setSenha] = useState('')
+  const [criando, setCriando] = useState(false)
   const [confirmandoLimpeza, setConfirmandoLimpeza] = useState(false)
 
   if (!temBackend) {
@@ -93,79 +94,71 @@ export default function ContaSync({ auth, sync, onLimparTudo }) {
     )
   }
 
-  // Deslogado: pede e-mail e depois o codigo
+  // Deslogado: e-mail e senha, num formulario so
   return (
     <Bloco>
       <p className="text-[0.875rem] leading-relaxed text-fg-dim">
-        Entrando com o e-mail, o que vocês marcarem aparece{' '}
+        Entrando, o que vocês marcarem aparece{' '}
         <strong className="text-fg">nos dois celulares</strong>. Sem entrar, o app
         funciona igual — só não sincroniza.
       </p>
 
-      {auth.enviadoPara ? (
-        <form
-          className="mt-4 space-y-3"
-          onSubmit={(e) => {
-            e.preventDefault()
-            auth.confirmarCodigo(codigo)
+      <form
+        className="mt-4 space-y-2"
+        onSubmit={(e) => {
+          e.preventDefault()
+          if (criando) auth.cadastrar(email, senha)
+          else auth.entrar(email, senha)
+        }}
+      >
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value)
+            auth.limparErro()
           }}
-        >
-          <p className="text-[0.8125rem] text-fg-dim">
-            Enviei um código de 6 dígitos para{' '}
-            <strong className="text-fg">{auth.enviadoPara}</strong>.
-          </p>
-          <input
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
-            inputMode="numeric"
-            autoComplete="one-time-code"
-            maxLength={6}
-            placeholder="000000"
-            aria-label="Código de 6 dígitos"
-            className="min-h-12 w-full rounded-2xl border border-line bg-deep px-4 text-center text-[1.375rem] font-bold tracking-[0.4em] text-fg tabular-nums placeholder:tracking-[0.4em] placeholder:text-fg-faint focus-visible:border-accent focus-visible:outline-none"
-          />
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              className="min-h-11 flex-1 cursor-pointer rounded-full bg-accent px-4 text-[0.875rem] font-bold text-white transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              Entrar
-            </button>
-            <button
-              type="button"
-              onClick={auth.recomecar}
-              className="min-h-11 cursor-pointer rounded-full border border-line px-4 text-[0.8125rem] font-bold text-fg-dim transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-            >
-              Trocar e-mail
-            </button>
-          </div>
-        </form>
-      ) : (
-        <form
-          className="mt-4 flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault()
-            auth.enviarCodigo(email)
+          required
+          autoComplete="username"
+          placeholder="e-mail"
+          aria-label="E-mail"
+          className="min-h-12 w-full rounded-2xl border border-line bg-deep px-4 text-[0.9375rem] text-fg placeholder:text-fg-faint focus-visible:border-accent focus-visible:outline-none"
+        />
+        <input
+          type="password"
+          value={senha}
+          onChange={(e) => {
+            setSenha(e.target.value)
+            auth.limparErro()
           }}
+          required
+          minLength={6}
+          autoComplete={criando ? 'new-password' : 'current-password'}
+          placeholder="senha"
+          aria-label="Senha"
+          className="min-h-12 w-full rounded-2xl border border-line bg-deep px-4 text-[0.9375rem] text-fg placeholder:text-fg-faint focus-visible:border-accent focus-visible:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={auth.ocupado}
+          className="min-h-12 w-full cursor-pointer rounded-2xl bg-accent px-4 text-[0.9375rem] font-bold text-white transition duration-200 active:scale-[0.98] disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            placeholder="seu@email.com"
-            aria-label="Seu e-mail"
-            className="min-h-12 min-w-0 flex-1 rounded-2xl border border-line bg-deep px-4 text-[0.9375rem] text-fg placeholder:text-fg-faint focus-visible:border-accent focus-visible:outline-none"
-          />
-          <button
-            type="submit"
-            className="min-h-12 shrink-0 cursor-pointer rounded-2xl bg-accent px-4 text-[0.875rem] font-bold text-white transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-          >
-            Enviar código
-          </button>
-        </form>
-      )}
+          {auth.ocupado ? '…' : criando ? 'Criar conta' : 'Entrar'}
+        </button>
+      </form>
+
+      {/* O cadastro roda uma vez pra cada um e depois nunca mais, entao fica
+          como link discreto e nao como opcao de peso igual ao entrar. */}
+      <button
+        type="button"
+        onClick={() => {
+          setCriando((v) => !v)
+          auth.limparErro()
+        }}
+        className="mt-3 min-h-11 cursor-pointer text-[0.8125rem] font-semibold text-fg-faint transition duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        {criando ? 'Já tenho conta — entrar' : 'Primeira vez? Criar conta'}
+      </button>
 
       {auth.erro && (
         <p className="mt-3 flex items-start gap-2 rounded-xl bg-warn-bg px-3 py-2 text-[0.8125rem] font-medium text-warn">

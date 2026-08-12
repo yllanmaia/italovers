@@ -27,8 +27,8 @@
  * se quem estiver com o telefone na mao preencher as duas.
  */
 export const AVALIADORES = [
-  { id: 'a', label: 'Eu' },
-  { id: 'b', label: 'Ela' },
+  { id: 'a', label: 'Yllan' },
+  { id: 'b', label: 'Gigi' },
 ]
 
 /** Escala de 1 a 5, a mesma do Google que ja aparece no card. */

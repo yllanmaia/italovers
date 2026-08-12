@@ -23,15 +23,10 @@ export const supabase =
           persistSession: true,
           autoRefreshToken: true,
           /**
-           * Ligado pra cobrir os dois caminhos.
-           *
-           * O login desenhado e por codigo digitado — num PWA instalado, clicar
-           * um link no e-mail abre o Safari e a sessao cairia no navegador
-           * errado. Mas enquanto o template de e-mail do Supabase nao tiver o
-           * `{{ .Token }}`, ele manda link; e quem abrir esse link no navegador
-           * merece entrar em vez de ver uma tela que nao reage.
+           * Desligado: o login e por e-mail e senha, entao nao ha token nenhum
+           * voltando pela URL pra detectar. O app nao manda e-mail nenhum.
            */
-          detectSessionInUrl: true,
+          detectSessionInUrl: false,
         },
       })
     : null
