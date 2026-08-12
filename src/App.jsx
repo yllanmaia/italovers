@@ -7,6 +7,7 @@ import Agora from './screens/Agora.jsx'
 import Lugares from './screens/Lugares.jsx'
 import Roteiro from './screens/Roteiro.jsx'
 import BottomNav from './components/BottomNav.jsx'
+import Lightbox, { comTransicao } from './components/Lightbox.jsx'
 import PlaceSheet from './components/PlaceSheet.jsx'
 import Icon from './components/Icon.jsx'
 
@@ -29,6 +30,8 @@ export default function App() {
    * a aba Viagem pede, o Roteiro monta ja expandido naquele capitulo.
    */
   const [chapterToOpen, setChapterToOpen] = useState(null)
+  /** Foto da galeria aberta em tela cheia, por id. */
+  const [photoAberta, setPhotoAberta] = useState(null)
 
   const geo = useGeolocation()
   const { visited, toggleVisited } = useVisited(KEYS.visited)
@@ -55,12 +58,12 @@ export default function App() {
         position: geo.position,
         override: phaseOverride,
       }),
-    [now, geo.position, phaseOverride]
+    [now, geo.position, phaseOverride],
   )
 
   const onOverridePhase = useCallback(
     (phaseId) => setPhaseOverride(phaseId ? { date: toDateKey(now), phaseId } : null),
-    [now, setPhaseOverride]
+    [now, setPhaseOverride],
   )
 
   /**
@@ -76,8 +79,13 @@ export default function App() {
         else next[chave] = optionId
         return next
       }),
-    [setDecisions]
+    [setDecisions],
   )
+
+  // A View Transition tem que envolver a MUDANCA DE ESTADO, nao o render: e
+  // comparando o antes e o depois do DOM que o browser sabe o que animar.
+  const onOpenPhoto = useCallback((id) => comTransicao(() => setPhotoAberta(id)), [])
+  const onClosePhoto = useCallback(() => comTransicao(() => setPhotoAberta(null)), [])
 
   const onOpenChapter = useCallback((phaseId) => {
     if (!phaseId) return
@@ -99,12 +107,16 @@ export default function App() {
    * na mesma coluna fica claro que e um app mobile, e o mapa full-bleed passa a
    * sangrar ate a borda DA COLUNA, que e o que o full-bleed devia significar.
    *
-   * Altura fixa, nao `min-h`: a aba Viagem da ao mapa a sobra da tela, e sobra
-   * so e calculavel se o total for fixo. O <main> e quem rola; as telas de
-   * lista usam pad-nav pro bottom nav nao cobrir o fim.
+   * Quem rola e a PAGINA, nao um <main> interno. Ela chegou a ser um container
+   * proprio de rolagem, porque a aba Viagem dava ao mapa a sobra exata da tela
+   * — mas agora a Viagem e uma pagina que rola e o mapa tem altura propria
+   * (70dvh), entao a sobra nao precisa mais ser calculada. Voltar pro scroll da
+   * pagina resolve tres coisas de graca: o `useScroll` do parallax passa a ler
+   * a janela sem precisar de container, a barra de endereco do celular volta a
+   * sumir ao rolar, e window.scrollTo volta a funcionar.
    */
   return (
-    <div className="mx-auto flex h-[100dvh] max-w-[480px] flex-col">
+    <div className="mx-auto min-h-[100dvh] max-w-[480px]">
       {dateSim && (
         <DateSimBanner
           sim={dateSim}
@@ -115,65 +127,67 @@ export default function App() {
         />
       )}
 
-      <main className="min-h-0 flex-1 overflow-y-auto">
+      <main>
+        {tab === 'viagem' && (
+          <Viagem
+            itinerary={itinerary}
+            places={places}
+            now={now}
+            dayInfo={dayInfo}
+            activePhase={phaseInfo.phase}
+            position={geo.position}
+            visited={visited}
+            onOpenPlace={setSheetPlace}
+            onOpenChapter={onOpenChapter}
+            onOpenPhoto={onOpenPhoto}
+          />
+        )}
 
-      {tab === 'viagem' && (
-        <Viagem
-          itinerary={itinerary}
-          places={places}
-          now={now}
-          dayInfo={dayInfo}
-          activePhase={phaseInfo.phase}
-          position={geo.position}
-          visited={visited}
-          onOpenPlace={setSheetPlace}
-          onOpenChapter={onOpenChapter}
-        />
-      )}
+        {tab === 'agora' && (
+          <Agora
+            itinerary={itinerary}
+            places={places}
+            now={now}
+            dayInfo={dayInfo}
+            phaseInfo={phaseInfo}
+            geo={geo}
+            visited={visited}
+            onToggleVisited={toggleVisited}
+            onOverridePhase={onOverridePhase}
+          />
+        )}
 
-      {tab === 'agora' && (
-        <Agora
-          itinerary={itinerary}
-          places={places}
-          now={now}
-          dayInfo={dayInfo}
-          phaseInfo={phaseInfo}
-          geo={geo}
-          visited={visited}
-          onToggleVisited={toggleVisited}
-          onOverridePhase={onOverridePhase}
-        />
-      )}
+        {tab === 'lugares' && (
+          <Lugares
+            itinerary={itinerary}
+            places={places}
+            now={now}
+            activePhase={phaseInfo.phase}
+            position={geo.position}
+            visited={visited}
+            onToggleVisited={toggleVisited}
+            onOpenPlace={setSheetPlace}
+          />
+        )}
 
-      {tab === 'lugares' && (
-        <Lugares
-          itinerary={itinerary}
-          places={places}
-          now={now}
-          activePhase={phaseInfo.phase}
-          position={geo.position}
-          visited={visited}
-          onToggleVisited={toggleVisited}
-          onOpenPlace={setSheetPlace}
-        />
-      )}
-
-      {tab === 'roteiro' && (
-        <Roteiro
-          itinerary={itinerary}
-          places={places}
-          now={now}
-          position={geo.position}
-          visited={visited}
-          decisions={decisions}
-          openChapter={chapterToOpen}
-          onChooseOption={onChooseOption}
-          onOpenPlace={setSheetPlace}
-        />
-      )}
+        {tab === 'roteiro' && (
+          <Roteiro
+            itinerary={itinerary}
+            places={places}
+            now={now}
+            position={geo.position}
+            visited={visited}
+            decisions={decisions}
+            openChapter={chapterToOpen}
+            onChooseOption={onChooseOption}
+            onOpenPlace={setSheetPlace}
+          />
+        )}
       </main>
 
       <BottomNav active={tab} onChange={setTab} />
+
+      {photoAberta && <Lightbox photoId={photoAberta} onClose={onClosePhoto} />}
 
       <PlaceSheet
         place={sheetPlace}

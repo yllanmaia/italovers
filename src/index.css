@@ -200,6 +200,39 @@
   contain-intrinsic-size: auto 320px;
 }
 
+/**
+ * Entrada das fotos, dirigida pelo scroll — em CSS, sem JS por elemento.
+ *
+ * `animation-timeline: view()` roda no compositor: o navegador amarra o
+ * progresso da animacao a posicao do elemento na viewport e nao chama JS
+ * nenhum. Com 31 fotos isso e a diferenca entre 31 observers e zero.
+ *
+ * O @supports nao e cinto de seguranca decorativo — onde a propriedade nao
+ * existe, o bloco inteiro e ignorado e a foto simplesmente nasce visivel. Quem
+ * cobre esse caso com animacao de verdade e o Framer Motion, e o componente so
+ * liga o dele quando o CSS aqui NAO pega, pra os dois nunca animarem juntos.
+ */
+@utility reveal-scroll {
+  /* O @supports vai DENTRO do @utility: o Tailwind 4 nao aceita @utility
+     aninhado, e inverter isso quebra o build inteiro do CSS. */
+  @supports (animation-timeline: view()) {
+    animation: reveal-entrada linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 55%;
+  }
+}
+
+@keyframes reveal-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -213,6 +246,33 @@
 
 @utility safe-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/**
+ * Ilha clara dentro do app escuro — o bottom sheet.
+ *
+ * Em vez de dar variante clara a cada componente, redefine os TOKENS dentro
+ * deste escopo. Funciona porque os nomes sao por papel: `bg-surface` compila
+ * pra `var(--color-surface)`, entao trocar a variavel aqui reveste a subarvore
+ * inteira sem que PlaceCard, HoursBadge ou Icon saibam que existe tema claro.
+ *
+ * Foi o unico retorno concreto de ter renomeado 256 utilitarios: se os tokens
+ * ainda se chamassem "sand" e "ink", esta inversao seria impossivel.
+ */
+@utility on-sheet {
+  --color-deep: #ffffff;
+  --color-surface: #ffffff;
+  --color-elevated: #eef2f6;
+  --color-line: rgb(15 41 66 / 0.12);
+  --color-fg: #0f2942;
+  --color-fg-dim: rgb(15 41 66 / 0.68);
+  --color-fg-faint: rgb(15 41 66 / 0.45);
+  --color-accent-soft: rgb(232 104 60 / 0.12);
+  --color-olive-soft: rgb(127 174 116 / 0.16);
+  --color-olive: #4f6b4a;
+  --color-warn: #8a5a06;
+  --color-warn-bg: #fdf3e0;
+  color: var(--color-fg);
 }
 
 /* Leaflet: o popup padrao tem cara de 2011, deixa combinar com os cards */

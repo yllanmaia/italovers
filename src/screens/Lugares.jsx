@@ -34,12 +34,12 @@ export default function Lugares({
   const buscando = busca.trim().length >= 2
   const resultados = useMemo(
     () => (buscando ? searchPlaces(places, busca, position, visited) : []),
-    [buscando, places, busca, position, visited]
+    [buscando, places, busca, position, visited],
   )
 
   const porFase = useMemo(
     () => agrupar(itinerary, places, { filtro, ordem, position, visited }),
-    [itinerary, places, filtro, ordem, position, visited]
+    [itinerary, places, filtro, ordem, position, visited],
   )
 
   const totalFiltrado = porFase.reduce((s, f) => s + f.total, 0)
@@ -117,7 +117,7 @@ export default function Lugares({
  */
 function agrupar(itinerary, places, { filtro, ordem, position, visited }) {
   const elegiveis = suggestable(places).filter(
-    (p) => filtro === 'todos' || sectionOf(p) === filtro
+    (p) => filtro === 'todos' || sectionOf(p) === filtro,
   )
 
   return itinerary.phases.map((fase) => {
@@ -236,7 +236,7 @@ function FaseAccordion({ fase, aberta, onAlternar, onOpenPlace, cardProps }) {
         type="button"
         onClick={onAlternar}
         aria-expanded={aberta}
-        className="flex w-full cursor-pointer items-center gap-3 px-4 py-3.5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
+        className="flex w-full cursor-pointer items-center gap-3 px-4 py-3.5 text-left transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
       >
         <div className="min-w-0 flex-1">
           <h2 className="title-display text-[1.25rem] leading-tight text-fg">

@@ -29,7 +29,7 @@ function formatCheck(v) {
 const escapeHtml = (s) =>
   String(s ?? '').replace(
     /[&<>"']/g,
-    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c],
   )
 
 /** Quao perto dois pinos precisam estar, em pixels, pra contarem como pilha. */
@@ -109,8 +109,14 @@ export default function TripMap({
   const layerRef = useRef(null)
   const meRef = useRef(null)
 
-  const legs = useMemo(() => (mode === 'rota' ? routeLegs(itinerary, now) : []), [mode, itinerary, now])
-  const pontos = useMemo(() => (mode === 'rota' ? routePoints(itinerary) : []), [mode, itinerary])
+  const legs = useMemo(
+    () => (mode === 'rota' ? routeLegs(itinerary, now) : []),
+    [mode, itinerary, now],
+  )
+  const pontos = useMemo(
+    () => (mode === 'rota' ? routePoints(itinerary) : []),
+    [mode, itinerary],
+  )
 
   // Cria o mapa uma vez
   useEffect(() => {
@@ -274,7 +280,7 @@ export default function TripMap({
        */
       enquadrar(
         pontos.filter((p) => p.number != null).map((p) => [p.lat, p.lng]),
-        7
+        7,
       )
       desenharRota()
       // O leque depende de quantos pixels separam os pinos, entao muda com o
@@ -329,7 +335,7 @@ export default function TripMap({
             `<strong>${escapeHtml(hotel.name)}</strong>` +
             (hotel.address ? `<span>${escapeHtml(hotel.address)}</span>` : '') +
             (entrada && saida ? `<span class="datas">${entrada} → ${saida}</span>` : '') +
-            '</div>'
+            '</div>',
         )
     }
 
@@ -340,9 +346,19 @@ export default function TripMap({
      */
     enquadrar(
       [...visiveis.map((p) => [p.lat, p.lng]), ...hoteis.map((h) => [h.lat, h.lng])],
-      16
+      16,
     )
-  }, [mode, legs, pontos, visiveis, hoteis, visited, activePhaseId, onOpenPlace, onOpenChapter])
+  }, [
+    mode,
+    legs,
+    pontos,
+    visiveis,
+    hoteis,
+    visited,
+    activePhaseId,
+    onOpenPlace,
+    onOpenChapter,
+  ])
 
   // Marcador da posicao atual
   useEffect(() => {

@@ -148,7 +148,9 @@ describe('aba Roteiro', () => {
   it('agrupa os 19 dias em 9 capitulos', () => {
     setDate('2026-09-15')
     abrirRoteiro()
-    expect(screen.getAllByRole('button', { name: /^\d+ ?[A-Za-zÀ-ú]/ }).length).toBeGreaterThan(0)
+    expect(
+      screen.getAllByRole('button', { name: /^\d+ ?[A-Za-zÀ-ú]/ }).length,
+    ).toBeGreaterThan(0)
     expect(screen.getByText(/9 capítulos · 19 dias/)).toBeTruthy()
   })
 
@@ -183,7 +185,9 @@ describe('aba Roteiro', () => {
     abrirRoteiro()
     abrirTodosCapitulos()
     expect(
-      screen.getByText(/nao coberto pelo Deutschlandticket|não coberto pelo Deutschlandticket/)
+      screen.getByText(
+        /nao coberto pelo Deutschlandticket|não coberto pelo Deutschlandticket/,
+      ),
     ).toBeTruthy()
   })
 
@@ -372,10 +376,14 @@ describe('aba Lugares', () => {
     abrirLugares('2026-09-16') // Roma
     // Pelo nome completo do botao: so "Roma" casaria com "Taverna Romana"
     expect(
-      screen.getByRole('button', { name: /^Roma 51 lugares/ }).getAttribute('aria-expanded')
+      screen
+        .getByRole('button', { name: /^Roma 51 lugares/ })
+        .getAttribute('aria-expanded'),
     ).toBe('true')
     expect(
-      screen.getByRole('button', { name: /^Palermo 11 lugares/ }).getAttribute('aria-expanded')
+      screen
+        .getByRole('button', { name: /^Palermo 11 lugares/ })
+        .getAttribute('aria-expanded'),
     ).toBe('false')
   })
 
@@ -410,6 +418,47 @@ describe('aba Lugares', () => {
   })
 })
 
+describe('galeria e lightbox', () => {
+  const abrirViagem = () => {
+    setDate('2026-08-20', '10:00', 'viagem')
+    render(<App />)
+  }
+
+  it('renderiza as 31 fotos na colagem', () => {
+    abrirViagem()
+    expect(screen.getAllByAltText(/Foto nossa antes da viagem/)).toHaveLength(31)
+  })
+
+  it('as 4 primeiras carregam com prioridade, o resto e lazy', () => {
+    // Sao 7,1 MB no total; sem lazy a aba puxaria tudo de uma vez no 4G
+    abrirViagem()
+    const imgs = screen.getAllByAltText(/Foto nossa antes da viagem/)
+    expect(imgs.filter((i) => i.getAttribute('loading') === 'eager')).toHaveLength(4)
+    expect(imgs.filter((i) => i.getAttribute('loading') === 'lazy')).toHaveLength(27)
+  })
+
+  it('tocar numa foto abre o lightbox, e da pra fechar', () => {
+    abrirViagem()
+    expect(screen.queryByRole('dialog', { name: /Foto em tela cheia/ })).toBeNull()
+
+    fireEvent.click(screen.getAllByAltText(/Foto nossa antes da viagem/)[0])
+    const lightbox = screen.getByRole('dialog', { name: /Foto em tela cheia/ })
+    expect(lightbox).toBeTruthy()
+    expect(within(lightbox).getByText('1 / 31')).toBeTruthy()
+
+    fireEvent.click(screen.getByRole('button', { name: /Fechar foto/ }))
+    expect(screen.queryByRole('dialog', { name: /Foto em tela cheia/ })).toBeNull()
+  })
+
+  it('Escape fecha o lightbox', () => {
+    abrirViagem()
+    fireEvent.click(screen.getAllByAltText(/Foto nossa antes da viagem/)[0])
+    expect(screen.getByRole('dialog', { name: /Foto em tela cheia/ })).toBeTruthy()
+    fireEvent.keyDown(document, { key: 'Escape' })
+    expect(screen.queryByRole('dialog', { name: /Foto em tela cheia/ })).toBeNull()
+  })
+})
+
 describe('componente Photo', () => {
   /**
    * O caso que importa aqui e a ausencia, nao o carregamento: 100% dos campos
@@ -417,9 +466,7 @@ describe('componente Photo', () => {
    */
   it('sem src nao renderiza img nenhuma, so o fallback', async () => {
     const { default: Photo } = await import('./components/Photo.jsx')
-    const { container } = render(
-      <Photo aspect="3 / 4" fallback={<span>vazio</span>} />
-    )
+    const { container } = render(<Photo aspect="3 / 4" fallback={<span>vazio</span>} />)
     expect(container.querySelector('img')).toBeNull()
     expect(screen.getByText('vazio')).toBeTruthy()
   })
@@ -438,7 +485,7 @@ describe('componente Photo', () => {
         src="https://exemplo.invalido/foto.jpg"
         alt="x"
         fallback={<span>vazio</span>}
-      />
+      />,
     )
     fireEvent.error(container.querySelector('img'))
     expect(container.querySelector('img')).toBeNull()
@@ -458,7 +505,7 @@ describe('componente Photo', () => {
     const { default: Photo } = await import('./components/Photo.jsx')
     const credito = { author: 'FeaturedPics', license: 'CC BY-SA 4.0' }
     const { container } = render(
-      <Photo aspect="1 / 1" src="/places/p079.webp" alt="x" credito={credito} />
+      <Photo aspect="1 / 1" src="/places/p079.webp" alt="x" credito={credito} />,
     )
     expect(screen.queryByText(/FeaturedPics/)).toBeNull()
     fireEvent.load(container.querySelector('img'))
@@ -524,7 +571,7 @@ describe('credito da foto', () => {
         visited={false}
         onToggleVisited={() => {}}
         onClose={() => {}}
-      />
+      />,
     )
     expect(screen.getByText(new RegExp(photos.p079.author))).toBeTruthy()
     expect(screen.getByText(photos.p079.license)).toBeTruthy()
@@ -543,7 +590,7 @@ describe('credito da foto', () => {
         visited={false}
         onToggleVisited={() => {}}
         onClose={() => {}}
-      />
+      />,
     )
     expect(screen.queryByText(/^Foto:/)).toBeNull()
   })
@@ -556,7 +603,9 @@ describe('navegacao', () => {
     render(<App />)
     const nav = screen.getByRole('navigation', { name: /Navegacao principal/ })
     for (const tab of TABS) {
-      expect(within(nav).getByRole('button', { name: new RegExp(tab.label) })).toBeTruthy()
+      expect(
+        within(nav).getByRole('button', { name: new RegExp(tab.label) }),
+      ).toBeTruthy()
     }
     expect(within(nav).getAllByRole('button')).toHaveLength(TABS.length)
   })

@@ -20,7 +20,7 @@ export default function Section({
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-1 py-2 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-1 py-2 text-left transition duration-200 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <span className={`grid size-9 place-items-center rounded-xl ${fundo} ${cor}`}>
           <Icon name={icon} size={19} />

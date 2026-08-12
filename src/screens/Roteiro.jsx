@@ -27,7 +27,7 @@ export default function Roteiro({
 
   const capitulos = useMemo(
     () => montarCapitulos(itinerary, places, hoje),
-    [itinerary, places, hoje]
+    [itinerary, places, hoje],
   )
 
   /**
@@ -37,7 +37,7 @@ export default function Roteiro({
    */
   const deHoje = capitulos.find((c) => c.temHoje)?.id
   const [abertos, setAbertos] = useState(
-    () => new Set([openChapter ?? deHoje ?? capitulos[0]?.id])
+    () => new Set([openChapter ?? deHoje ?? capitulos[0]?.id]),
   )
 
   const refAlvo = useRef(null)
@@ -70,7 +70,11 @@ export default function Roteiro({
 
       <div className="space-y-3">
         {capitulos.map((cap) => (
-          <div key={cap.id} ref={cap.id === alvo ? refAlvo : null} className="scroll-mt-4">
+          <div
+            key={cap.id}
+            ref={cap.id === alvo ? refAlvo : null}
+            className="scroll-mt-4"
+          >
             <Capitulo
               cap={cap}
               aberto={abertos.has(cap.id)}
@@ -157,6 +161,7 @@ function Capitulo({
         disabled={vazio}
         className={[
           'flex w-full items-center gap-3 px-4 py-3.5 text-left',
+          'transition duration-200 active:scale-[0.99]',
           'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent',
           vazio ? 'cursor-default' : 'cursor-pointer',
         ].join(' ')}
@@ -205,20 +210,20 @@ function Capitulo({
       {aberto && !vazio && (
         <>
           <div className="space-y-3 border-t border-line bg-deep p-3">
-          {cap.entradas.map(({ day, dayNumber, segmento }) => (
-            <DayCard
-              key={`${day.date}-${segmento.phaseId}`}
-              day={day}
-              dayNumber={dayNumber}
-              phase={cap}
-              segmento={segmento}
-              isToday={day.date === hoje}
-              decisions={decisions}
-              onChooseOption={onChooseOption}
-              onOpenPlace={onOpenPlace}
-              suggestionsFor={suggestionsFor}
-            />
-          ))}
+            {cap.entradas.map(({ day, dayNumber, segmento }) => (
+              <DayCard
+                key={`${day.date}-${segmento.phaseId}`}
+                day={day}
+                dayNumber={dayNumber}
+                phase={cap}
+                segmento={segmento}
+                isToday={day.date === hoje}
+                decisions={decisions}
+                onChooseOption={onChooseOption}
+                onOpenPlace={onOpenPlace}
+                suggestionsFor={suggestionsFor}
+              />
+            ))}
           </div>
         </>
       )}

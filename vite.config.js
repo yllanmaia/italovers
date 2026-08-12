@@ -94,7 +94,13 @@ export default defineConfig({
       },
       {
         extends: true,
-        test: { name: 'render', environment: 'jsdom', include: ['src/**/*.test.jsx'] },
+        test: {
+          name: 'render',
+          environment: 'jsdom',
+          include: ['src/**/*.test.jsx'],
+          // Tocos pro que o jsdom nao tem e o Framer Motion usa
+          setupFiles: ['./src/test-setup.js'],
+        },
       },
     ],
   },

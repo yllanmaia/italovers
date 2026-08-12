@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import Icon from '../components/Icon.jsx'
 import TripMap from '../components/TripMap.jsx'
 import Gallery from '../components/Gallery.jsx'
@@ -43,7 +44,7 @@ export default function Viagem({
 
   const hoteis = useMemo(
     () => hotelsForPhase(itinerary, phaseFilter),
-    [itinerary, phaseFilter]
+    [itinerary, phaseFilter],
   )
 
   const visiveis = useMemo(
@@ -52,11 +53,12 @@ export default function Viagem({
         .filter(hasCoords)
         .filter((p) => p.phase_id === phaseFilter)
         .filter((p) => sectionFilter === 'todos' || sectionOf(p) === sectionFilter),
-    [places, phaseFilter, sectionFilter]
+    [places, phaseFilter, sectionFilter],
   )
 
   const centralizarEmMim = () => {
-    if (position && mapRef.current) mapRef.current.setView([position.lat, position.lng], 16)
+    if (position && mapRef.current)
+      mapRef.current.setView([position.lat, position.lng], 16)
   }
 
   return (
@@ -175,10 +177,29 @@ export default function Viagem({
 function Hero({ itinerary, dayInfo, phase, now, places, visited }) {
   const capa = galleryData.gallery.photos[0]?.url
   const antes = dayInfo.status === 'before'
-  const proximo = dayInfo.status === 'during' ? upcomingBooked(dayInfo.day, now, 3)[0] : null
+  const proximo =
+    dayInfo.status === 'during' ? upcomingBooked(dayInfo.day, now, 3)[0] : null
+
+  const semMovimento = useReducedMotion()
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  })
+
+  /**
+   * Parallax: a foto sobe menos que o texto, entao o fundo "fica pra tras" ao
+   * rolar. So o hero de tela cheia leva isso — na faixa de 35dvh nao ha curso
+   * de scroll suficiente pra o efeito virar outra coisa que nao tremor.
+   */
+  const yFoto = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
+  const yTexto = useTransform(scrollYProgress, [0, 1], ['0%', '-30%'])
+  const opacidade = useTransform(scrollYProgress, [0, 0.75], [1, 0])
+  const parallax = antes && !semMovimento
 
   return (
     <header
+      ref={ref}
       className={[
         'relative isolate flex flex-col justify-end overflow-hidden px-5',
         // pad-nav, nao pb-8: o conteudo do hero e alinhado embaixo e a pilula
@@ -187,11 +208,12 @@ function Hero({ itinerary, dayInfo, phase, now, places, visited }) {
       ].join(' ')}
     >
       {capa && (
-        <img
+        <motion.img
           src={capa}
           alt=""
           aria-hidden="true"
           fetchPriority="high"
+          style={parallax ? { y: yFoto, scale: 1.12 } : undefined}
           className="absolute inset-0 -z-20 size-full object-cover"
         />
       )}
@@ -202,49 +224,54 @@ function Hero({ itinerary, dayInfo, phase, now, places, visited }) {
         className="absolute inset-0 -z-10 bg-gradient-to-t from-deep via-deep/85 to-deep/40"
       />
 
-      <h1
-        className={[
-          'title-display text-fg',
-          antes ? 'text-[3.5rem] leading-[0.9]' : 'text-[2rem] leading-none',
-        ].join(' ')}
-        style={{ letterSpacing: '-0.03em' }}
-      >
-        ITALOVERS
-      </h1>
+      <motion.div style={parallax ? { y: yTexto, opacity: opacidade } : undefined}>
+        <h1
+          className={[
+            'title-display text-fg',
+            antes ? 'text-[3.5rem] leading-[0.9]' : 'text-[2rem] leading-none',
+          ].join(' ')}
+          style={{ letterSpacing: '-0.03em' }}
+        >
+          ITALOVERS
+        </h1>
 
-      {antes && (
-        <p className="mt-4 flex items-baseline gap-2 text-fg">
-          <span className="title-display text-[4rem] leading-none tabular-nums">
-            {dayInfo.daysUntil}
-          </span>
-          <span className="text-[1.125rem] font-semibold text-fg-dim">
-            {dayInfo.daysUntil === 1 ? 'dia' : 'dias'}
-          </span>
-        </p>
-      )}
+        {antes && (
+          <p className="mt-4 flex items-baseline gap-2 text-fg">
+            <span className="title-display text-[4rem] leading-none tabular-nums">
+              {dayInfo.daysUntil}
+            </span>
+            <span className="text-[1.125rem] font-semibold text-fg-dim">
+              {dayInfo.daysUntil === 1 ? 'dia' : 'dias'}
+            </span>
+          </p>
+        )}
 
-      {dayInfo.status === 'during' && (
-        <p className="mt-2 text-[0.9375rem] font-semibold text-fg-dim tabular-nums">
-          Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {phase?.short ?? phase?.name}
-        </p>
-      )}
+        {dayInfo.status === 'during' && (
+          <p className="mt-2 text-[0.9375rem] font-semibold text-fg-dim tabular-nums">
+            Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {phase?.short ?? phase?.name}
+          </p>
+        )}
 
-      {dayInfo.status === 'after' && <Recap itinerary={itinerary} places={places} visited={visited} />}
+        {dayInfo.status === 'after' && (
+          <Recap itinerary={itinerary} places={places} visited={visited} />
+        )}
 
-      {antes && (
-        /* Rio, nao Frankfurt. O `phases[0]` e o aeroporto de chegada — ler dele
-           fazia a tela dizer que a viagem comeca na Alemanha. */
-        <p className="mt-3 text-[0.9375rem] text-fg-dim">
-          {ORIGIN.name} → {itinerary.phases[0].short} · {formatDateLong(dayInfo.firstDay.date)}
-        </p>
-      )}
+        {antes && (
+          /* Rio, nao Frankfurt. O `phases[0]` e o aeroporto de chegada — ler
+             dele fazia a tela dizer que a viagem comeca na Alemanha. */
+          <p className="mt-3 text-[0.9375rem] text-fg-dim">
+            {ORIGIN.name} → {itinerary.phases[0].short} ·{' '}
+            {formatDateLong(dayInfo.firstDay.date)}
+          </p>
+        )}
 
-      {proximo && (
-        <p className="mt-3 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-[0.8125rem] font-bold text-white">
-          <Icon name="ticket" size={14} />
-          {proximo.time} · {proximo.title}
-        </p>
-      )}
+        {proximo && (
+          <p className="mt-3 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-3 py-1.5 text-[0.8125rem] font-bold text-white">
+            <Icon name="ticket" size={14} />
+            {proximo.time} · {proximo.title}
+          </p>
+        )}
+      </motion.div>
 
       {antes && (
         <span
@@ -276,7 +303,10 @@ function Recap({ itinerary, places, visited }) {
 function Stats({ stats }) {
   const itens = [
     { valor: formatKm(stats.km), rotulo: 'de rota' },
-    { valor: stats.countries, rotulo: stats.countries === 1 ? 'país' : 'países' },
+    {
+      valor: stats.countries,
+      rotulo: stats.countries === 1 ? 'país' : 'países',
+    },
     { valor: stats.phases, rotulo: 'capítulos' },
     { valor: stats.days, rotulo: 'dias' },
     { valor: stats.places, rotulo: 'lugares' },
@@ -360,14 +390,25 @@ function RouteLegend() {
         percorrido
       </span>
       <span className="flex items-center gap-1.5">
-        <span aria-hidden="true" className="w-4 border-t-2 border-dashed border-white/70" />
+        <span
+          aria-hidden="true"
+          className="w-4 border-t-2 border-dashed border-white/70"
+        />
         a fazer
       </span>
     </p>
   )
 }
 
-function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, total, vazio }) {
+function PlaceFilters({
+  fases,
+  phaseFilter,
+  sectionFilter,
+  onPhase,
+  onSection,
+  total,
+  vazio,
+}) {
   return (
     <div className="pointer-events-none absolute inset-x-0 top-0 z-[600] p-3">
       <div className="pointer-events-auto w-full space-y-2">
@@ -394,7 +435,11 @@ function PlaceFilters({ fases, phaseFilter, sectionFilter, onPhase, onSection, t
           >
             Comer
           </Chip>
-          <Chip active={sectionFilter === 'ver'} onClick={() => onSection('ver')} tone="olive">
+          <Chip
+            active={sectionFilter === 'ver'}
+            onClick={() => onSection('ver')}
+            tone="olive"
+          >
             Ver
           </Chip>
           <span className="ml-auto self-center rounded-full border border-line bg-deep/70 px-3 py-1.5 text-[0.75rem] font-semibold text-fg-dim backdrop-blur-xl tabular-nums">
@@ -420,7 +465,8 @@ function Chip({ active, onClick, children, tone = 'ink', autoScroll = false }) {
    * O `?.` cobre o jsdom, que nao implementa scrollIntoView.
    */
   useEffect(() => {
-    if (autoScroll && active) ref.current?.scrollIntoView?.({ inline: 'center', block: 'nearest' })
+    if (autoScroll && active)
+      ref.current?.scrollIntoView?.({ inline: 'center', block: 'nearest' })
   }, [autoScroll, active])
 
   const ativo =
