@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import Icon from '../components/Icon.jsx'
 import PlaceCard from '../components/PlaceCard.jsx'
 import RatingEditor from '../components/RatingEditor.jsx'
+import ContaSync from '../components/ContaSync.jsx'
 import { suggestable } from '../lib/places.js'
 import {
   AVALIADORES,
@@ -23,7 +24,16 @@ import {
  * A fila vem antes dos avaliados porque e a unica parte acionavel da tela — o
  * resto e consulta.
  */
-export default function Notas({ places, visited, ratings, onRating, now }) {
+export default function Notas({
+  places,
+  visited,
+  ratings,
+  onRating,
+  now,
+  auth,
+  sync,
+  onLimparTudo,
+}) {
   const navegaveis = useMemo(() => suggestable(places), [places])
 
   const { pendentes, avaliados } = useMemo(() => {
@@ -162,6 +172,8 @@ export default function Notas({ places, visited, ratings, onRating, now }) {
           )}
         </>
       )}
+
+      <ContaSync auth={auth} sync={sync} onLimparTudo={onLimparTudo} />
     </div>
   )
 }

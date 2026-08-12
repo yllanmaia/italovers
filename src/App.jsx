@@ -13,12 +13,13 @@ import PlaceSheet from './components/PlaceSheet.jsx'
 import Icon from './components/Icon.jsx'
 
 import { useGeolocation } from './hooks/useGeolocation.js'
-import { useLocalStorage, useVisited } from './hooks/useLocalStorage.js'
+import { useLocalStorage } from './hooks/useLocalStorage.js'
+import { useAuth } from './hooks/useAuth.js'
+import { useTripSync } from './hooks/useTripSync.js'
 import { KEYS, readDateSim, clearDateSim, resolveNow } from './lib/storage.js'
 import { resolveDay, resolvePhase, toDateKey } from './lib/phase.js'
 import { haversine } from './lib/geo.js'
 import { initialTab } from './lib/tabs.js'
-import { aplicar, comNota } from './lib/ratings.js'
 
 const places = placesData.places
 
@@ -36,10 +37,26 @@ export default function App() {
   const [photoAberta, setPhotoAberta] = useState(null)
 
   const geo = useGeolocation()
-  const { visited, toggleVisited } = useVisited(KEYS.visited)
-  const [decisions, setDecisions] = useLocalStorage(KEYS.decisions, {})
+
+  /**
+   * O que e DE VOCES DOIS vem daqui e sincroniza: visitados, avaliacoes e as
+   * escolhas de roteiro. O phaseOverride e o dateSim ficam de fora de proposito
+   * — "estou nesta fase agora" e "simular esta data" sao do aparelho e do
+   * momento, nao do casal.
+   */
+  const auth = useAuth()
+  const {
+    visited,
+    toggleVisited,
+    ratings,
+    onRating,
+    decisions,
+    onChooseOption,
+    limparTudo,
+    sync,
+  } = useTripSync(auth.sessao)
+
   const [phaseOverride, setPhaseOverride] = useLocalStorage(KEYS.phaseOverride, null)
-  const [ratings, setRatings] = useLocalStorage(KEYS.ratings, {})
 
   // Sem simulacao, reavalia de minuto em minuto: o alerta de bloco booked e o
   // phase_id_override das 18:55 dependem da hora corrente.
@@ -69,43 +86,10 @@ export default function App() {
     [now, setPhaseOverride],
   )
 
-  /**
-   * A chave e "data:indice do bloco", nao so a data. Um dia com dois blocos de
-   * decisao compartilharia a escolha — nao acontece hoje, mas o roteiro e dado,
-   * nao codigo, e o custo de fechar essa porta e uma string.
-   */
-  const onChooseOption = useCallback(
-    (chave, optionId) =>
-      setDecisions((prev) => {
-        const next = { ...prev }
-        if (optionId == null) delete next[chave]
-        else next[chave] = optionId
-        return next
-      }),
-    [setDecisions],
-  )
-
   // A View Transition tem que envolver a MUDANCA DE ESTADO, nao o render: e
   // comparando o antes e o depois do DOM que o browser sabe o que animar.
   const onOpenPhoto = useCallback((id) => comTransicao(() => setPhotoAberta(id)), [])
   const onClosePhoto = useCallback(() => comTransicao(() => setPhotoAberta(null)), [])
-
-  /**
-   * As tres escritas da avaliacao, agrupadas num objeto so pra tela nao receber
-   * tres props soltas. Cada uma delega pro lib/ratings.js, que e quem conhece o
-   * formato aninhado e sabe limpar a entrada quando ela fica vazia.
-   */
-  const onRating = useMemo(
-    () => ({
-      nota: (placeId, avaliadorId, nota) =>
-        setRatings((prev) => comNota(prev, placeId, avaliadorId, nota)),
-      voltaria: (placeId, valor) =>
-        setRatings((prev) => aplicar(prev, placeId, { voltaria: valor })),
-      comentario: (placeId, texto) =>
-        setRatings((prev) => aplicar(prev, placeId, { comentario: texto })),
-    }),
-    [setRatings],
-  )
 
   const onOpenChapter = useCallback((phaseId) => {
     if (!phaseId) return
@@ -210,6 +194,9 @@ export default function App() {
             ratings={ratings}
             onRating={onRating}
             now={now}
+            auth={auth}
+            sync={sync}
+            onLimparTudo={limparTudo}
           />
         )}
       </main>

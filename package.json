@@ -22,6 +22,7 @@
     "strip-secrets": "node scripts/strip-secrets.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
     "framer-motion": "^13.1.0",
     "leaflet": "^1.9.4",
     "react": "^19.2.7",

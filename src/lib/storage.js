@@ -15,6 +15,13 @@ export const KEYS = {
    * que voces acharam de cada lugar.
    */
   ratings: `${PREFIX}ratings`,
+  /**
+   * Fila do que ainda nao subiu pro servidor. Vive no localStorage e nao em
+   * memoria porque o app pode ser fechado entre a alteracao e a proxima rede —
+   * e o caso normal: marcar um lugar no jantar sem sinal e so abrir o app de
+   * novo no hotel.
+   */
+  pendentes: `${PREFIX}pendentes`,
 }
 
 export function read(key, fallback) {
