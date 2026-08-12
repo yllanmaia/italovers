@@ -34,6 +34,13 @@ const PATHS = {
       <path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01" />
     </>
   ),
+  // Estrela dentro de um card: a nota que a gente deu, nao a do Google.
+  notas: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="4" />
+      <path d="m12 7.5 1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5Z" />
+    </>
+  ),
   mapa: (
     <>
       <path d="M9.5 3.5 3 6.5v14l6.5-3 5 2.5 6.5-3v-14l-6.5 3Z" />

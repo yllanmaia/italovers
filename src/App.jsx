@@ -6,6 +6,7 @@ import Viagem from './screens/Viagem.jsx'
 import Agora from './screens/Agora.jsx'
 import Lugares from './screens/Lugares.jsx'
 import Roteiro from './screens/Roteiro.jsx'
+import Notas from './screens/Notas.jsx'
 import BottomNav from './components/BottomNav.jsx'
 import Lightbox, { comTransicao } from './components/Lightbox.jsx'
 import PlaceSheet from './components/PlaceSheet.jsx'
@@ -17,6 +18,7 @@ import { KEYS, readDateSim, clearDateSim, resolveNow } from './lib/storage.js'
 import { resolveDay, resolvePhase, toDateKey } from './lib/phase.js'
 import { haversine } from './lib/geo.js'
 import { initialTab } from './lib/tabs.js'
+import { aplicar, comNota } from './lib/ratings.js'
 
 const places = placesData.places
 
@@ -37,6 +39,7 @@ export default function App() {
   const { visited, toggleVisited } = useVisited(KEYS.visited)
   const [decisions, setDecisions] = useLocalStorage(KEYS.decisions, {})
   const [phaseOverride, setPhaseOverride] = useLocalStorage(KEYS.phaseOverride, null)
+  const [ratings, setRatings] = useLocalStorage(KEYS.ratings, {})
 
   // Sem simulacao, reavalia de minuto em minuto: o alerta de bloco booked e o
   // phase_id_override das 18:55 dependem da hora corrente.
@@ -86,6 +89,23 @@ export default function App() {
   // comparando o antes e o depois do DOM que o browser sabe o que animar.
   const onOpenPhoto = useCallback((id) => comTransicao(() => setPhotoAberta(id)), [])
   const onClosePhoto = useCallback(() => comTransicao(() => setPhotoAberta(null)), [])
+
+  /**
+   * As tres escritas da avaliacao, agrupadas num objeto so pra tela nao receber
+   * tres props soltas. Cada uma delega pro lib/ratings.js, que e quem conhece o
+   * formato aninhado e sabe limpar a entrada quando ela fica vazia.
+   */
+  const onRating = useMemo(
+    () => ({
+      nota: (placeId, avaliadorId, nota) =>
+        setRatings((prev) => comNota(prev, placeId, avaliadorId, nota)),
+      voltaria: (placeId, valor) =>
+        setRatings((prev) => aplicar(prev, placeId, { voltaria: valor })),
+      comentario: (placeId, texto) =>
+        setRatings((prev) => aplicar(prev, placeId, { comentario: texto })),
+    }),
+    [setRatings],
+  )
 
   const onOpenChapter = useCallback((phaseId) => {
     if (!phaseId) return
@@ -181,6 +201,15 @@ export default function App() {
             openChapter={chapterToOpen}
             onChooseOption={onChooseOption}
             onOpenPlace={setSheetPlace}
+          />
+        )}
+        {tab === 'notas' && (
+          <Notas
+            places={places}
+            visited={visited}
+            ratings={ratings}
+            onRating={onRating}
+            now={now}
           />
         )}
       </main>

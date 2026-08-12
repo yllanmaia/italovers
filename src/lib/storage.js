@@ -9,6 +9,12 @@ export const KEYS = {
   decisions: `${PREFIX}decisions`,
   phaseOverride: `${PREFIX}phaseOverride`,
   dateSim: `${PREFIX}dateSim`,
+  /**
+   * A avaliacao do casal, por lugar. E o unico dado do app que nao da pra
+   * recuperar de lugar nenhum se sumir: limpar os dados do navegador apaga o
+   * que voces acharam de cada lugar.
+   */
+  ratings: `${PREFIX}ratings`,
 }
 
 export function read(key, fallback) {

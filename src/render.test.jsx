@@ -418,6 +418,100 @@ describe('aba Lugares', () => {
   })
 })
 
+describe('aba Notas', () => {
+  /** Semeia o visitado direto no storage — e o mesmo formato que o app grava. */
+  const comVisitados = (...ids) =>
+    localStorage.setItem('italovers:visited', JSON.stringify(ids))
+
+  const abrirNotas = () => {
+    setDate('2026-09-16', '12:00', 'notas')
+    render(<App />)
+  }
+
+  it('sem nada visitado, explica o gatilho em vez de mostrar vazio mudo', () => {
+    abrirNotas()
+    expect(screen.getByText(/Nenhum lugar visitado ainda/)).toBeTruthy()
+    expect(screen.getByText(/marcarem um lugar como visitado/)).toBeTruthy()
+  })
+
+  it('marcar visitado na Agora faz o lugar aparecer aqui', () => {
+    // A integracao que importa: o gatilho e o check que ja existia, e ele vive
+    // na Agora (na aba Lugares o card e so leitura).
+    // Roma sem GPS: o EmptyNearby entra no modo "no-gps" e lista os melhores da
+    // fase, e esses cards levam o botao de visitado. Munique nao serve — la a
+    // fase nao tem lugar nenhum e a lista vem vazia.
+    setDate('2026-09-16', '12:00', 'agora')
+    render(<App />)
+    const alvo = screen.getAllByRole('button', { name: /^Marcar .* como visitado/ })[0]
+    const nome = alvo.getAttribute('aria-label').replace(/^Marcar | como visitado$/g, '')
+    fireEvent.click(alvo)
+
+    fireEvent.click(screen.getByRole('button', { name: /Notas/ }))
+    expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
+    expect(screen.getAllByText(nome).length).toBeGreaterThan(0)
+  })
+
+  it('dar nota tira o lugar da fila e joga em avaliados', () => {
+    comVisitados('p037')
+    abrirNotas()
+    expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
+    expect(screen.queryByText(/Avaliados ·/)).toBeNull()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Eu: 4 de 5' }))
+
+    expect(screen.queryByText(/A avaliar ·/)).toBeNull()
+    expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()
+  })
+
+  it('as duas notas convivem, e a discordancia aparece', () => {
+    comVisitados('p037')
+    abrirNotas()
+    fireEvent.click(screen.getByRole('button', { name: 'Eu: 5 de 5' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Ela: 2 de 5' }))
+
+    // 3,5 aparece duas vezes de proposito: na media do resumo e na linha
+    expect(screen.getAllByText('3,5').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByText(/discordamos/i)).toBeTruthy()
+  })
+
+  it('tocar de novo na mesma estrela desmarca', () => {
+    comVisitados('p037')
+    abrirNotas()
+    fireEvent.click(screen.getByRole('button', { name: 'Eu: 3 de 5' }))
+    expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: 'Eu: 3 de 5' }))
+    expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
+  })
+
+  it('o comentario fica exatamente como foi digitado', () => {
+    comVisitados('p037')
+    abrirNotas()
+    const texto = 'massa trufada absurdaaaa!!! fila de 40min mas VALEU'
+    const campo = screen.getByRole('textbox', { name: /Comentário/ })
+    fireEvent.change(campo, { target: { value: texto } })
+    expect(screen.getByRole('textbox', { name: /Comentário/ }).value).toBe(texto)
+  })
+
+  it('o resumo conta avaliados, media e voltariamos', () => {
+    comVisitados('p037', 'p001')
+    abrirNotas()
+    // Avalia so um dos dois visitados
+    fireEvent.click(screen.getAllByRole('button', { name: 'Eu: 5 de 5' })[0])
+    fireEvent.click(screen.getAllByRole('button', { name: 'Sim' })[0])
+
+    expect(screen.getByText(/Avaliados · 1/)).toBeTruthy()
+    expect(screen.getByText(/A avaliar · 1/)).toBeTruthy()
+
+    // Escopado no <dl> do resumo: "voltaríamos" tambem e o badge da linha
+    const resumo = document.querySelector('dl')
+    const valorDe = (rotulo) =>
+      within(resumo).getByText(rotulo).closest('div').querySelector('dd').textContent
+    expect(valorDe('avaliados')).toBe('1')
+    expect(valorDe('média')).toBe('5')
+    expect(valorDe('voltaríamos')).toBe('1')
+  })
+})
+
 describe('galeria e lightbox', () => {
   const abrirViagem = () => {
     setDate('2026-08-20', '10:00', 'viagem')

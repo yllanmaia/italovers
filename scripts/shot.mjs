@@ -108,17 +108,23 @@ try {
   }
   await sleep(3500)
 
-  // --click=<seletor CSS>: pra fotografar estado que so existe depois de tocar
-  // em algo (o popup do hotel, por exemplo)
-  const clickArg = process.argv.find((a) => a.startsWith('--click='))
-  if (clickArg) {
-    const seletor = clickArg.slice(8)
+  /**
+   * --click=<seletor CSS>: pra fotografar estado que so existe depois de tocar
+   * em algo (o popup do hotel, por exemplo).
+   *
+   * Aceita repetido, e executa na ordem em que aparece na linha de comando.
+   * Estado interessante costuma estar a mais de um toque de distancia — marcar
+   * um lugar como visitado numa aba e depois abrir a aba Notas, por exemplo.
+   */
+  const clickArgs = process.argv.filter((a) => a.startsWith('--click='))
+  for (const arg of clickArgs) {
+    const seletor = arg.slice(8)
     const r = await send('Runtime.evaluate', {
       expression: `(() => {
         const el = document.querySelector(${JSON.stringify(seletor)})
         if (!el) return 'nao achou: ' + ${JSON.stringify(seletor)}
         el.click()
-        return 'clicou'
+        return 'clicou em ' + ${JSON.stringify(seletor)}
       })()`,
       returnByValue: true,
     })

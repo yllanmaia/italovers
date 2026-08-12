@@ -8,12 +8,18 @@
  *
  * A ordem aqui e a ordem na tela, e ela conta a viagem de fora pra dentro:
  * a rota inteira, depois onde estou agora, depois o catalogo, depois o plano.
+ * "Notas" fecha a fila porque e a aba do DEPOIS — a unica que so faz sentido
+ * quando alguma coisa ja aconteceu.
+ *
+ * Com 5 abas cada celula cai pra ~78px numa tela de 390px. Cabe: o rotulo mais
+ * longo ("Lugares", "Roteiro") ocupa ~48px a 11px. Passar de 5 ja nao caberia.
  */
 export const TABS = [
   { id: 'viagem', label: 'Viagem', icon: 'viagem' },
   { id: 'agora', label: 'Agora', icon: 'agora' },
   { id: 'lugares', label: 'Lugares', icon: 'lugares' },
   { id: 'roteiro', label: 'Roteiro', icon: 'roteiro' },
+  { id: 'notas', label: 'Notas', icon: 'notas' },
 ]
 
 export const TAB_IDS = TABS.map((t) => t.id)
