@@ -37,7 +37,7 @@ aparecem no mapa como hotel mas nunca em lista de sugestão.)*
 ## Decisões que moldaram o projeto
 
 **Custo zero, sem cartão em lugar nenhum.** Isso elimina a API JS do Google Maps e o
-Mapbox. Mapa é **Leaflet + tiles do OpenStreetMap**, geolocalização é a `navigator.geolocation`
+Mapbox. Mapa é **Leaflet + tiles do CARTO** (dados do OpenStreetMap), geolocalização é a `navigator.geolocation`
 nativa, e a distância é Haversine escrito à mão — não vale uma dependência por 15 linhas.
 
 **Sem backend, sem banco, sem login.** Os dados são JSON estático no repositório. O que
@@ -100,11 +100,12 @@ ganha: ela não disputa com a nota pessoal.
 |---|---|
 | Framework | React 19 + Vite 8 |
 | Estilo | Tailwind CSS 4 |
-| Mapa | Leaflet + tiles do OpenStreetMap |
+| Mapa | Leaflet + tiles escuros do CARTO (dados OpenStreetMap) |
 | PWA | vite-plugin-pwa (manifest + service worker) |
 | Geocoding | Nominatim (OSM), via script one-off |
 | Tipografia | Clash Display nos títulos, Satoshi na interface, Caveat nas notas — todas variáveis e auto-hospedadas |
-| Testes | Vitest + Testing Library — 193 testes |
+| Movimento | Framer Motion + scroll-driven animations nativas |
+| Testes | Vitest + Testing Library — 208 testes |
 | Lint | Oxlint |
 
 ## Rodando
@@ -117,12 +118,13 @@ npm run dev
 | Script | O que faz |
 |---|---|
 | `npm run dev` | servidor de desenvolvimento |
-| `npm test` | 193 testes (lógica pura em node, render em jsdom) |
+| `npm test` | 208 testes (lógica pura em node, render em jsdom) |
 | `npm run build` | verifica que não há dado sensível e builda |
 | `npm run lint` | Oxlint |
 | `npm run geocode` | geocodifica lugares e hotéis sem coordenada via Nominatim |
 | `npm run sublocal` | deriva o bairro de cada lugar e normaliza `city_raw` |
 | `npm run fonts` | baixa e vendoriza as três fontes em `public/fonts/` |
+| `npm run gallery` | mede a proporção das 31 fotos da galeria |
 | `npm run photos` | baixa as fotos dos lugares do Wikimedia Commons |
 | `npm run hours` | busca horário de funcionamento no OpenStreetMap (retomável) |
 | `npm run icons` | gera os ícones do PWA a partir do SVG |
@@ -174,6 +176,27 @@ Detalhes que viraram código:
   e a outra metade em Roma, então os capítulos o fatiam no pouso das 18:55: manhã e tarde
   num, noite no outro. Os 19 dias rendem 20 segmentos.
 
+### A galeria, e por que ela não é do roteiro
+
+31 fotos nossas de **antes** da viagem. Elas não pertencem a fase nenhuma e não são
+distribuídas pelo itinerário — são de casa, do Rio, de antes. Vivem numa seção própria.
+
+Colagem em duas colunas de larguras diferentes, e a repartição equilibra **altura**, não
+contagem: com 24 retratos (3:4) e 7 paisagens (4:3) misturados, alternar par/ímpar deixaria
+uma coluna vários centímetros mais alta. Cada foto entra na coluna mais curta no momento —
+e como a largura entra na conta, a coluna larga acaba com *menos* fotos (14 contra 17),
+porque cada uma ocupa mais espaço vertical nela.
+
+Nenhuma foto é recortada. Não existe foto quadrada no acervo, então o ciclo de alturas que
+a spec pedia exigiria cortar 3:4 para quadrado — o que, em foto de casal, corta cabeça ou pé.
+
+**São 7,1 MB e o CDN não tem thumbnail** (testei `?w=`, `?width=`, `?resize=`, `?tr=`: todos
+devolvem o original). Por isso o `loading="lazy"` e o `content-visibility` não são
+otimização, são o que impede a aba de puxar 7 MB de uma vez no 4G italiano. As proporções vão
+medidas no `gallery.json` pelo `npm run gallery`, que lê só o marcador SOF do JPEG em vez de
+baixar cada arquivo inteiro — sem medida gravada, cada foto que chega empurraria a coluna
+para baixo, e é justamente a posição do elemento que o parallax está lendo.
+
 ### Espaço reservado para fotos
 
 Quatro campos opcionais existem no formato e estão **ausentes em 100% dos dados**, à espera
@@ -208,6 +231,21 @@ worker já tem tudo.
 Um detalhe que sobreviveu à troca: o intervalo de horário do roteiro fica empilhado (início
 em cima, fim embaixo) em vez de `08:30–09:00` numa linha. São 11 caracteres numa coluna de
 56px — não cabe em fonte nenhuma, e alargar a coluna roubaria espaço do título.
+
+### Tema escuro
+
+A paleta era creme com terracota. Bonita, e exatamente por isso o problema: é a saída
+default mais comum de LLM, e o app inteiro parecia gerado. Agora é navy escuro, e os tokens
+passaram a ser nomeados **por papel** (`surface`, `line`, `fg-dim`) e não por cor —
+`sand-200` só dizia alguma coisa para quem soubesse que sand era o bege.
+
+Isso pagou um dividendo concreto: o bottom sheet é branco sobre o escuro, e em vez de dar
+variante clara a cada componente, um único bloco CSS redefine os tokens naquele escopo.
+Como `bg-surface` compila para `var(--color-surface)`, a subárvore inteira vira clara — o
+`PlaceCard` lá dentro nasce no tema certo sem saber que existe tema claro.
+
+O accent clareou de `#B4522F` para `#E8683C`: o antigo foi escolhido para contrastar com
+creme e fica lamacento sobre navy.
 
 ### Acento com parcimônia
 
