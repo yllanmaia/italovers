@@ -1,0 +1,7 @@
+ITF Free Font License
+
+Fonte: https://www.fontshare.com/fonts/clash-display
+Licenca na integra: https://www.fontshare.com/licenses/itf-ffl
+
+Baixada por scripts/fetch-fonts.mjs em 2026-08-12.
+Arquivo: clash-display-var.woff2

@@ -194,7 +194,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Ainda não começou
         </p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight tabular-nums">
+        <h1 className="title-display mt-1 text-4xl leading-none tabular-nums">
           faltam {dayInfo.daysUntil} dias
         </h1>
         <p className="mt-1 text-[0.9375rem] text-white/80">
@@ -210,7 +210,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
         <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase">
           Viagem encerrada
         </p>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight">Acabou 😔</h1>
+        <h1 className="title-display mt-1 text-3xl leading-none">Acabou 😔</h1>
         <p className="mt-1 text-[0.9375rem] text-white/80">
           Último dia: {formatDateLong(dayInfo.lastDay.date)}
         </p>
@@ -223,7 +223,7 @@ function ContextHeader({ dayInfo, phase, source, onTrocarFase, trocandoFase }) {
       <p className="text-[0.6875rem] font-bold tracking-wide text-white/60 uppercase tabular-nums">
         Dia {dayInfo.dayNumber} de {dayInfo.totalDays} · {formatDateLong(dayInfo.day.date)}
       </p>
-      <h1 className="mt-1.5 text-2xl leading-tight font-bold tracking-tight">
+      <h1 className="title-display mt-1.5 text-[1.75rem] leading-[1.1]">
         {phase.name}
       </h1>
       <p className="mt-1 text-[0.9375rem] leading-snug text-white/80">

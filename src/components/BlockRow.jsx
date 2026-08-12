@@ -29,9 +29,9 @@ export default function BlockRow({
     <li className="flex gap-3">
       {/* Trilho: horario + icone.
           Intervalo vai empilhado (inicio em cima, fim embaixo) em vez de
-          "08:30–09:00" numa linha so: Montserrat e larga e o texto quebrava
-          sozinho na coluna. Alargar a coluna resolveria, mas roubaria espaco
-          do titulo, que ja quebra em 2-3 linhas. */}
+          "08:30–09:00" numa linha so: sao 11 caracteres numa coluna de 56px,
+          nao cabe em fonte nenhuma. Alargar a coluna resolveria, mas roubaria
+          espaco do titulo, que ja quebra em 2-3 linhas. */}
       <div className="flex w-14 shrink-0 flex-col items-end pt-0.5">
         {intervalo ? (
           <span className="text-right text-[0.8125rem] leading-tight tabular-nums">
@@ -187,7 +187,7 @@ function DynamicSuggestions({ rows, onOpenPlace }) {
                   )}
                 </span>
                 {hero.isPersonal && (
-                  <span className="mt-0.5 block truncate font-note text-[0.8125rem] text-ink-soft">
+                  <span className="mt-0.5 block truncate font-note text-[0.9375rem] leading-snug text-ink-soft">
                     {hero.text}
                   </span>
                 )}

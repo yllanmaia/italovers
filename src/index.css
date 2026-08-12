@@ -1,18 +1,41 @@
 @import 'tailwindcss';
 
 /**
- * Montserrat, hospedada aqui e nao no Google Fonts: o app e PWA e precisa abrir
- * sem sinal — @import de CDN quebra offline e adiciona dependencia de terceiro.
- * So o subconjunto latin (37 KB): portugues, italiano e alemao cabem nele.
- * Cirilico e vietnamita ficariam de peso morto no precache.
- * Fonte variavel: um arquivo cobre 100–900. Licenca em public/fonts/.
+ * Todas auto-hospedadas, nao puxadas de CDN: o app e PWA e precisa abrir sem
+ * sinal — @import de terceiro quebra o offline e entra no caminho critico do
+ * primeiro paint. As tres sao variaveis, um arquivo por familia, e vem do
+ * scripts/fetch-fonts.mjs. Licencas em public/fonts/.
+ *
+ * 144 KB no precache, contra 37 KB da Montserrat que saiu. Caro, mas e custo
+ * unico e a viagem inteira roda offline.
  */
 @font-face {
-  font-family: 'Montserrat';
+  font-family: 'Clash Display';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 200 700;
   font-display: swap;
-  src: url('/fonts/montserrat-latin-var.woff2') format('woff2-variations');
+  src: url('/fonts/clash-display-var.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url('/fonts/satoshi-var.woff2') format('woff2-variations');
+}
+
+/**
+ * Caveat existe pra um campo so: a nota pessoal. O subconjunto latin sozinho e
+ * 73 KB — mais que as outras duas juntas, porque manuscrita tem curva demais.
+ * Vale: e a nota que faz o card parecer escrito por gente.
+ */
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/caveat-latin-var.woff2') format('woff2-variations');
 }
 
 @theme {
@@ -40,10 +63,13 @@
   --color-warn: #8a5a06;
   --color-warn-bg: #fdf3e0;
 
-  /* Montserrat na interface, serifa na nota pessoal. O contraste entre as duas
-     e o que faz a nota parecer escrita por gente, e nao um campo de banco. */
-  --font-sans: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-note: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+  /* Tres papeis, tres fontes. Clash so em titulo de tela e cabecalho de
+     capitulo; Satoshi em todo o resto da interface; Caveat exclusivamente na
+     nota pessoal. O contraste entre a grotesca e a manuscrita e o que faz a
+     nota parecer escrita por gente, e nao um campo de banco de dados. */
+  --font-title: 'Clash Display', 'Satoshi', system-ui, sans-serif;
+  --font-sans: 'Satoshi', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-note: 'Caveat', 'Segoe Script', cursive;
 }
 
 @layer base {
@@ -62,17 +88,31 @@
   }
 
   /**
-   * Montserrat e geometrica e larga: no corpo isso e legivel, mas em titulo
-   * grande e negrito as letras ficam frouxas. Apertar o tracking conforme o
-   * tamanho sobe e o que faz ela parecer desenhada, e nao so aplicada.
+   * Satoshi ja nasce com espacamento resolvido — nao precisa do -0.02em que a
+   * Montserrat exigia pra nao ficar frouxa em negrito grande. Sobra um aperto
+   * de leve nos titulos de bloco, que ainda sao Satoshi.
    */
-  h1,
-  h2 {
-    letter-spacing: -0.02em;
-  }
+  h2,
   h3 {
     letter-spacing: -0.01em;
   }
+}
+
+/**
+ * Titulo de tela e cabecalho de capitulo. So a Clash aparece aqui — nome de
+ * fase, contagem regressiva, numero de capitulo. Titulo de secao continua em
+ * Satoshi: espalhar a display por toda h2 mata o contraste que ela existe pra
+ * criar.
+ *
+ * Familia, peso e tracking andam juntos; leading fica de fora de proposito,
+ * porque depende do tamanho e de quantas linhas o texto quebra — "Sicilia -
+ * Castellammare del Golfo / Scopello" ocupa duas e precisa respirar mais que
+ * "Roteiro".
+ */
+@utility title-display {
+  font-family: var(--font-title);
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 @utility pad-nav {

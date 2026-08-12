@@ -12,11 +12,22 @@
     <meta name="apple-mobile-web-app-title" content="Italovers" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <!-- A fonte e usada em toda a interface: sem preload o texto pisca no
-         fallback antes de assentar, e no 4G isso e visivel. -->
+    <!-- So as duas que aparecem no primeiro paint: Satoshi carrega a interface
+         inteira e Clash o titulo da tela. Sem preload o texto pisca no fallback
+         antes de assentar, e no 4G isso e visivel.
+         Caveat fica de fora de proposito: sao 73 KB pra um campo so, e disputar
+         banda com o bundle atrasaria o resto. Na primeira carga a nota pessoal
+         pisca uma vez; da segunda em diante o service worker ja tem tudo. -->
     <link
       rel="preload"
-      href="/fonts/montserrat-latin-var.woff2"
+      href="/fonts/satoshi-var.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/clash-display-var.woff2"
       as="font"
       type="font/woff2"
       crossorigin

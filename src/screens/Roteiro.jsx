@@ -30,7 +30,7 @@ export default function Roteiro({
   return (
     <div className="mx-auto max-w-lg px-4 pt-4 pad-nav">
       <header className="mb-4 px-1">
-        <h1 className="text-2xl font-bold tracking-tight text-ink">Roteiro</h1>
+        <h1 className="title-display text-3xl leading-none text-ink">Roteiro</h1>
         <p className="mt-0.5 text-[0.875rem] text-ink-soft">
           {itinerary.days.length} dias · {itinerary.trip.name}
         </p>

@@ -20,7 +20,12 @@ export default function PlaceCard({
   const count = formatCount(place.review_count)
   const distancia = formatDistance(meters)
   const secao = sectionOf(place)
-  const accent = secao === 'ver' ? 'text-olive-600' : 'text-terra-600'
+  /* Comer e terracota, ver e oliva — as mesmas cores dos pinos no mapa. Aqui a
+     cor vira um ponto em vez de pintar o texto: o accent fica reservado pra CTA
+     e estado ativo, e rotulo de categoria e informacao secundaria. A hospedagem
+     nao tem secao, entao fica neutra. */
+  const marcador =
+    secao === 'ver' ? 'bg-olive-600' : secao === 'comer' ? 'bg-terra-600' : 'bg-ink-faint'
   const foto = photoFor(place)
 
   return (
@@ -52,7 +57,11 @@ export default function PlaceCard({
             {place.name}
           </h3>
           <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[0.8125rem] text-ink-faint">
-            <span className={`font-medium ${accent}`}>
+            <span className="inline-flex items-center gap-1.5 font-medium">
+              <span
+                aria-hidden="true"
+                className={`size-1.5 shrink-0 rounded-full ${marcador}`}
+              />
               {CATEGORY_LABELS[place.category] ?? place.category}
             </span>
             {distancia && (
@@ -102,7 +111,11 @@ export default function PlaceCard({
         <p
           className={
             hero.isPersonal
-              ? 'mt-3 font-note text-[1.0625rem] leading-[1.45] text-ink'
+              ? /* Caveat corre pequena: a 22px ela le como uns 17px de sans, que
+                   e o tamanho do nome do lugar logo acima. Precisa empatar em
+                   tamanho pra ganhar em presenca — a nota e o texto heroi do
+                   card, o nome e so a etiqueta. */
+                'mt-3 font-note text-[1.375rem] leading-[1.25] font-medium text-ink'
               : 'mt-2 text-[0.9375rem] leading-snug text-ink-soft'
           }
         >
@@ -116,12 +129,9 @@ export default function PlaceCard({
             <p className="mt-3 flex flex-wrap items-center gap-x-2 text-[0.8125rem] text-ink-soft">
               {rating != null && (
                 <span className="inline-flex items-center gap-1">
-                  <Icon
-                    name="star"
-                    size={14}
-                    filled
-                    className="text-terra-500"
-                  />
+                  {/* Estrela em cinza, nao no accent: a nota do Google e
+                      secundaria e nao disputa com a nota pessoal. */}
+                  <Icon name="star" size={14} filled className="text-ink-faint" />
                   <span className="font-semibold tabular-nums">
                     {place.rating}
                   </span>

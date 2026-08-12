@@ -1,0 +1,7 @@
+ITF Free Font License
+
+Fonte: https://www.fontshare.com/fonts/satoshi
+Licenca na integra: https://www.fontshare.com/licenses/itf-ffl
+
+Baixada por scripts/fetch-fonts.mjs em 2026-08-12.
+Arquivo: satoshi-var.woff2
