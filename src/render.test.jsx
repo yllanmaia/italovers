@@ -1,6 +1,5 @@
-// @vitest-environment jsdom
 /**
- * Smoke test de renderizacao das tres abas nas datas que importam.
+ * Smoke test de renderizacao das quatro abas nas datas que importam.
  * Nao substitui olhar no celular, mas pega erro de runtime que o build nao pega:
  * prop indefinida, hook errado, campo nulo que quebra o card.
  */

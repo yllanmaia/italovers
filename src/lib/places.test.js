@@ -405,3 +405,72 @@ describe('heroText', () => {
     }
   })
 })
+
+describe('sublocal', () => {
+  const comSublocal = places.filter((p) => p.sublocal)
+
+  it('todo lugar de fase com lugares tem sublocal', () => {
+    const comLugar = new Set(places.map((p) => p.phase_id))
+    for (const p of places) {
+      if (!comLugar.has(p.phase_id)) continue
+      expect(p.sublocal, `${p.id} ${p.name}`).toBeTruthy()
+    }
+    expect(comSublocal).toHaveLength(83)
+  })
+
+  it('todo sublocal pertence a uma fase so', () => {
+    // Um mesmo nome em duas fases criaria dois grupos identicos na aba Lugares
+    const fasesPorSublocal = new Map()
+    for (const p of comSublocal) {
+      if (!fasesPorSublocal.has(p.sublocal)) fasesPorSublocal.set(p.sublocal, new Set())
+      fasesPorSublocal.get(p.sublocal).add(p.phase_id)
+    }
+    for (const [nome, fases] of fasesPorSublocal) {
+      expect([...fases], nome).toHaveLength(1)
+    }
+  })
+
+  it('Roma se divide em bairros; Palermo e Favignana ficam inteiras', () => {
+    const grupos = (faseId) =>
+      new Set(places.filter((p) => p.phase_id === faseId).map((p) => p.sublocal))
+    expect(grupos('rome-terni').size).toBe(10)
+    expect([...grupos('palermo')]).toEqual(['Palermo'])
+    expect([...grupos('favignana')]).toEqual(['Favignana'])
+    expect(grupos('sicily-castellammare').size).toBe(4)
+  })
+
+  it('os dois casos que atalho de CEP e de longitude erram', () => {
+    /**
+     * Foram medidos antes de escolher haversine: CEP nao serve porque 00153
+     * cobre Trastevere E Testaccio, lados opostos do rio; longitude nao serve
+     * porque inverte estes dois.
+     */
+    expect(byId('p033').sublocal).toBe('Testaccio') // Mordi & Vai
+    expect(byId('p023').sublocal).toBe('Trastevere') // Trattoria Da Teo
+    expect(byId('p033').address).toContain('00153')
+    expect(byId('p023').address).toContain('00153')
+  })
+
+  it('p008 nao arrasta o bairro de Roma pra dentro de Favignana', () => {
+    // Resto do bug da rua homonima: o endereco dele ainda e de Roma
+    const p008 = byId('p008')
+    expect(p008.phase_id).toBe('favignana')
+    expect(p008.sublocal).toBe('Favignana')
+    expect(p008.city_raw).toBe('Favignana (Egadi, Trapani)')
+  })
+
+  it('city_raw nao tem mais as duplicatas que criariam grupo fantasma', () => {
+    const valores = new Set(places.map((p) => p.city_raw))
+    expect(valores.has('Scopello (Castellammare del Golfo, Trapani)')).toBe(false)
+    expect(valores.has('Favignana (Egadi, TP)')).toBe(false)
+    expect(valores.has('Roma (Coliseu)')).toBe(false)
+    expect(valores.has('Roma (Prati)')).toBe(false)
+  })
+
+  it('a busca acha pelo bairro, que so existe no sublocal', () => {
+    // "Testaccio" nao aparece no nome nem no endereco do Mordi & Vai
+    const achados = searchPlaces(places, 'testaccio').map((r) => r.place.id)
+    expect(achados).toContain('p033')
+    expect(byId('p033').name.toLowerCase()).not.toContain('testaccio')
+  })
+})

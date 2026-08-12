@@ -14,6 +14,8 @@
     "test:watch": "vitest",
     "lint": "oxlint",
     "geocode": "node scripts/geocode.mjs",
+    "sublocal": "node scripts/derive-sublocal.mjs",
+    "fonts": "node scripts/fetch-fonts.mjs",
     "photos": "node scripts/fetch-photos.mjs",
     "hours": "node scripts/fetch-hours.mjs",
     "icons": "node scripts/make-icons.mjs",

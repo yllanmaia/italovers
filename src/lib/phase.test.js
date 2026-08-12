@@ -8,6 +8,7 @@ import {
   resolvePhase,
   nearestPhase,
   upcomingBooked,
+  splitDayByPhase,
 } from './phase.js'
 
 const at = (dateKey, hhmm = '12:00') => new Date(`${dateKey}T${hhmm}:00`)
@@ -238,5 +239,61 @@ describe('upcomingBooked', () => {
   it('existem exatamente 3 blocos booked na viagem toda', () => {
     const booked = itinerary.days.flatMap((d) => d.blocks).filter((b) => b.booked)
     expect(booked).toHaveLength(3)
+  })
+})
+
+describe('splitDayByPhase', () => {
+  const dia = (date) => itinerary.days.find((d) => d.date === date)
+
+  it('dia normal rende um segmento so, com os blocos todos', () => {
+    const d = dia('2026-09-15')
+    const segs = splitDayByPhase(d)
+    expect(segs).toHaveLength(1)
+    expect(segs[0].phaseId).toBe(d.phase_id)
+    expect(segs[0].blocks).toHaveLength(d.blocks.length)
+    expect(segs[0].parcial).toBe(false)
+  })
+
+  it('so o 14/09 se parte, e em dois', () => {
+    const partidos = itinerary.days.filter((d) => splitDayByPhase(d).length > 1)
+    expect(partidos.map((d) => d.date)).toEqual(['2026-09-14'])
+    expect(splitDayByPhase(dia('2026-09-14'))).toHaveLength(2)
+  })
+
+  it('a fronteira do 14/09 e o pouso das 18:55', () => {
+    const [palermo, roma] = splitDayByPhase(dia('2026-09-14'))
+    expect(palermo.phaseId).toBe('palermo')
+    expect(roma.phaseId).toBe('rome-terni')
+    // O bloco do override abre o segundo segmento, nao fecha o primeiro
+    expect(roma.blocks[0].time).toBe('18:55')
+    expect(roma.blocks[0].phase_id_override).toBe('rome-terni')
+    expect(palermo.blocks.at(-1).time).toBe('17:45')
+  })
+
+  it('nenhum bloco se perde nem se repete na divisao', () => {
+    for (const d of itinerary.days) {
+      const juntos = splitDayByPhase(d).flatMap((s) => s.blocks)
+      expect(juntos, d.date).toEqual(d.blocks)
+    }
+  })
+
+  it('os 19 dias rendem 20 segmentos', () => {
+    const total = itinerary.days.reduce((s, d) => s + splitDayByPhase(d).length, 0)
+    expect(total).toBe(20)
+  })
+
+  it('o rotulo do pedaco respeita o campo period antes da hora', () => {
+    /**
+     * O primeiro bloco do 14/09 so tem end_time 13:30, entao pela hora cairia
+     * em "tarde" — mas o period dele diz "manha", que e o certo: e uma manha
+     * livre que termina 13:30.
+     */
+    const [palermo, roma] = splitDayByPhase(dia('2026-09-14'))
+    expect(palermo.periodo).toBe('manhã e tarde')
+    expect(roma.periodo).toBe('noite')
+  })
+
+  it('dia inteiro nao ganha rotulo de periodo', () => {
+    expect(splitDayByPhase(dia('2026-09-15'))[0].periodo).toBeNull()
   })
 })

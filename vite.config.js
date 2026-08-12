@@ -52,10 +52,26 @@ export default defineConfig({
       },
     }),
   ],
+  /**
+   * Dois projetos em vez de environmentMatchGlobs, que foi removido no Vitest
+   * 4. O antigo ja nao fazia nada aqui: o render.test.jsx so rodava em jsdom
+   * por causa do docblock `@vitest-environment` na linha 1 dele, e um teste de
+   * render novo sem esse comentario teria rodado em node e estourado com
+   * "document is not defined". Agora o glob decide de verdade.
+   *
+   * A divisao importa: logica pura em node roda mais rapido e nao deixa um
+   * teste de haversine depender por acidente de alguma API de DOM.
+   */
   test: {
-    environment: 'node',
-    include: ['src/**/*.test.{js,jsx}'],
-    // Testes de render precisam de DOM; os de logica pura rodam em node
-    environmentMatchGlobs: [['src/**/*.test.jsx', 'jsdom']],
+    projects: [
+      {
+        extends: true,
+        test: { name: 'logica', environment: 'node', include: ['src/**/*.test.js'] },
+      },
+      {
+        extends: true,
+        test: { name: 'render', environment: 'jsdom', include: ['src/**/*.test.jsx'] },
+      },
+    ],
   },
 })

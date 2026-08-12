@@ -4,16 +4,24 @@
 Android. A localização só funciona sob HTTPS: o iOS Safari se recusa a dar posição em `http://`.
 
 PWA mobile-first que cruza os lugares que a gente salvou no Google Maps com o roteiro
-da viagem e o GPS do celular, pra responder bem uma única pergunta:
+da viagem e o GPS do celular. Tudo pendurado numa linha do tempo geográfica: a viagem é
+uma linha só, do Rio ao Rio, e cada aba é uma pergunta diferente sobre ela.
 
-> **"Estou parado aqui agora — o que a gente salvou por perto, e qual era o plano de hoje?"**
+> **Viagem** — por onde a gente passa?
+> **Agora** — estou parado aqui: o que salvamos por perto, e qual era o plano de hoje?
+> **Lugares** — o que a gente salvou, afinal?
+> **Roteiro** — o que está marcado, capítulo por capítulo?
 
 Ferramenta pessoal, feita pra uma viagem de 19 dias por Alemanha, Sicília, Roma e Munique
 em setembro de 2026. Dois usuários: eu e minha namorada.
 
-| Agora | Mapa |
+| Viagem | Agora |
 |---|---|
-| <img src="docs/tela-agora.png" width="300" alt="Aba Agora: fase atual, alerta de ingresso pago do Coliseu e lugares por perto" /> | <img src="docs/tela-mapa.png" width="300" alt="Aba Mapa: pinos por fase e categoria" /> |
+| <img src="docs/tela-viagem.png" width="300" alt="Aba Viagem: rota em arcos do Rio às 9 fases, com cabeçalho de estatísticas" /> | <img src="docs/tela-agora.png" width="300" alt="Aba Agora: fase atual, alerta de ingresso pago do Coliseu e lugares por perto" /> |
+
+| Lugares | Roteiro |
+|---|---|
+| <img src="docs/tela-lugares.png" width="300" alt="Aba Lugares: catálogo agrupado por fase e por bairro" /> | <img src="docs/tela-roteiro.png" width="300" alt="Aba Roteiro: capítulos expansíveis, um por fase" /> |
 
 ## O problema
 
@@ -22,6 +30,9 @@ anotações nossas, e um roteiro dia a dia. Na rua, nenhuma das duas serve: o Ma
 qual era o plano de hoje, e o roteiro não sabe onde eu estou.
 
 O app é a junção das duas com a posição do GPS. Todo o resto é secundário.
+
+*(Dos 83, o app navega **80**: os outros 3 são endereços das nossas hospedagens, que
+aparecem no mapa como hotel mas nunca em lista de sugestão.)*
 
 ## Decisões que moldaram o projeto
 
@@ -53,9 +64,35 @@ diferentes de propósito:
 **Split Comer / Ver.** 46 dos 83 lugares são restaurante. Numa lista única, todo ponto
 turístico fica soterrado sob uma parede de trattorias.
 
-**As anotações pessoais são o texto herói do card**, em serifa, acima da nota do Google.
+**A rota é desenhada em arcos, não em retas.** Frankfurt é o centro de duas fases (ida e
+volta) e Darmstadt de outras duas, então Rio→Frankfurt e Frankfurt→Rio ligam exatamente o
+mesmo par de pontos: em linha reta, a volta fica escondida embaixo da ida. Cada trecho
+arqueia sempre para a esquerda do sentido de viagem, e as duas curvam para lados opostos.
+
+O mesmo problema volta nos pinos, e pior: além dos pares exatos, Frankfurt e Darmstadt
+ficam a 19 km uma da outra — no zoom que mostra Alemanha até Sicília, isso dá 5 pixels, e
+os quatro pinos viravam uma mancha. Então o agrupamento é por proximidade **projetada em
+tela**, refeito a cada `zoomend`, e o leque é vertical porque o rótulo sai pela direita.
+
+**O enquadramento exclui o Rio.** Incluir põe o Atlântico inteiro na tela e a Europa — que
+é a viagem de verdade — vira um aglomerado no canto. Os arcos transatlânticos continuam
+desenhados e saem pela borda, o que já conta "viemos de longe" sem gastar a tela com oceano.
+
+**Roma precisou de um nível a mais de agrupamento.** 51 dos 80 lugares navegáveis estão
+lá, e uma lista de 51 não se lê. Cada lugar carrega um `sublocal` derivado por script e
+gravado no JSON, que quebra Roma em 10 bairros — Trastevere 12, Centro Storico 11, Trevi 9,
+e por aí.
+
+Os dois atalhos óbvios erram, e eu medi antes de escolher. **CEP não serve**: `00153` cobre
+Trastevere *e* Testaccio, lados opostos do rio. **Longitude não serve**: inverte o `Mordi &
+Vai` (é Testaccio, parece Trastevere) com a `Trattoria Da Teo` (é Trastevere, parece
+Testaccio). O que serve é haversine até centros de distrito definidos à mão. Palermo e
+Favignana ficam num grupo só — 11 e 5 lugares não justificam fronteira arbitrária.
+
+**As anotações pessoais são o texto herói do card**, em manuscrita, acima da nota do Google.
 Elas são informais e às vezes caóticas ("tiramisu parece insanoooooo") e ficam exatamente
-como foram escritas — a voz é o ponto. A nota do Google é secundária.
+como foram escritas — a voz é o ponto. A nota do Google é secundária, e nem estrela colorida
+ganha: ela não disputa com a nota pessoal.
 
 ## Stack
 
@@ -66,8 +103,8 @@ como foram escritas — a voz é o ponto. A nota do Google é secundária.
 | Mapa | Leaflet + tiles do OpenStreetMap |
 | PWA | vite-plugin-pwa (manifest + service worker) |
 | Geocoding | Nominatim (OSM), via script one-off |
-| Tipografia | Montserrat (variável, auto-hospedada) + Georgia nas notas pessoais |
-| Testes | Vitest + Testing Library — 104 testes |
+| Tipografia | Clash Display nos títulos, Satoshi na interface, Caveat nas notas — todas variáveis e auto-hospedadas |
+| Testes | Vitest + Testing Library — 193 testes |
 | Lint | Oxlint |
 
 ## Rodando
@@ -80,10 +117,12 @@ npm run dev
 | Script | O que faz |
 |---|---|
 | `npm run dev` | servidor de desenvolvimento |
-| `npm test` | 96 testes (lógica pura em node, render em jsdom) |
+| `npm test` | 193 testes (lógica pura em node, render em jsdom) |
 | `npm run build` | verifica que não há dado sensível e builda |
 | `npm run lint` | Oxlint |
 | `npm run geocode` | geocodifica lugares e hotéis sem coordenada via Nominatim |
+| `npm run sublocal` | deriva o bairro de cada lugar e normaliza `city_raw` |
+| `npm run fonts` | baixa e vendoriza as três fontes em `public/fonts/` |
 | `npm run photos` | baixa as fotos dos lugares do Wikimedia Commons |
 | `npm run hours` | busca horário de funcionamento no OpenStreetMap (retomável) |
 | `npm run icons` | gera os ícones do PWA a partir do SVG |
@@ -96,7 +135,7 @@ A viagem é em setembro de 2026, então sem simular data não há nada pra ver:
 ```
 ?d=2026-09-16&t=13:30   simula data e hora (mostra uma tarja avisando)
 ?d=off                  desliga a simulação
-?tab=roteiro            abre direto numa aba
+?tab=lugares            abre direto numa aba: viagem, agora, lugares ou roteiro
 ```
 
 E pra tirar print com viewport de celular de verdade (o `--window-size` do Chrome headless
@@ -114,10 +153,11 @@ que só aparece em tela estreita.
 
 Dois arquivos em `src/data/`:
 
-- **`places.json`** — 83 lugares com categoria, fase, coordenada, nota pessoal, nota e
-  contagem de avaliações do Google, faixa de preço e link do Maps
-- **`itinerary.json`** — 9 fases, 19 dias com blocos tipados (`transport`, `flight`,
-  `ferry`, `hotel`, `activity`, `food`, `decision`), 4 hospedagens, voos e balsas
+- **`places.json`** — 83 lugares com categoria, fase, **bairro (`sublocal`)**, coordenada,
+  nota pessoal, nota e contagem de avaliações do Google, faixa de preço e link do Maps
+- **`itinerary.json`** — 9 fases (com `country` e `short`), 19 dias com blocos tipados
+  (`transport`, `flight`, `ferry`, `hotel`, `activity`, `food`, `decision`), 4 hospedagens,
+  voos e balsas
 
 Detalhes que viraram código:
 
@@ -128,21 +168,52 @@ Detalhes que viraram código:
 - Blocos `decision` são os dias em que ainda há escolha a fazer; a opção escolhida persiste,
   e o aviso dela aparece quando é o caso (escolher o "Cenário B" em Roma mata a Audiência
   Papal da manhã seguinte).
+- O bloco com `phase_id_override` é único no arquivo, e é o que faz o **14/09 aparecer em
+  dois capítulos**. No dado ele é uma data só — e está certo, é uma data só de calendário,
+  que o roteiro original chamava de "DIA 7" e "DIA 8". Mas metade dele acontece em Palermo
+  e a outra metade em Roma, então os capítulos o fatiam no pouso das 18:55: manhã e tarde
+  num, noite no outro. Os 19 dias rendem 20 segmentos.
+
+### Espaço reservado para fotos
+
+Quatro campos opcionais existem no formato e estão **ausentes em 100% dos dados**, à espera
+das URLs: `trip.hero_photo`, `phases[].cover_photo`, `days[].photos[]` e `places[].photos[]`.
+
+O componente `<Photo>` já nasce com lazy loading, skeleton e `onError` caindo no fallback —
+o caso que ele precisa acertar não é a imagem carregando, é a ausência. Capa de fase sem
+foto vira gradiente do accent com o número do capítulo em marca d'água, e a proporção 16:9
+fica reservada para preencher as URLs depois não empurrar a página. Em lugar nenhum aparece
+ícone de imagem quebrada.
 
 ### Tipografia
 
-Montserrat na interface, Georgia nas notas pessoais. O contraste entre a geométrica e a
-serifa é o que faz a nota parecer escrita por gente, e não um campo de banco de dados.
+Três papéis, três fontes. **Clash Display** só em título de tela e cabeçalho de capítulo,
+**Satoshi** em toda a interface, **Caveat** exclusivamente na nota pessoal. O contraste
+entre a grotesca e a manuscrita é o que faz a nota parecer escrita por gente, e não um
+campo de banco de dados.
 
-A fonte é **auto-hospedada, não puxada do Google Fonts**: o app é PWA e precisa abrir sem
-sinal, e um `@import` de CDN quebra o offline e adiciona dependência de terceiro. Só o
-subconjunto `latin` é embarcado (37 KB, arquivo variável cobrindo 100–900) — português,
-italiano e alemão cabem nele, e cirílico e vietnamita seriam peso morto no precache.
+A Caveat é o ponto do redesenho. Ela sobe para 22px porque corre pequena: precisava empatar
+em tamanho com o nome do lugar para ganhar dele em presença. A nota é o texto herói do card;
+o nome é só a etiqueta.
 
-Montserrat é mais larga que a fonte de sistema, o que exigiu dois ajustes: tracking negativo
-nos títulos, que ficavam frouxos em negrito grande, e o intervalo de horário do roteiro
-empilhado (início em cima, fim embaixo) em vez de `08:30–09:00` numa linha, que quebrava
-sozinho na coluna estreita.
+As três são **auto-hospedadas, não puxadas de CDN**: o app é PWA e precisa abrir sem sinal,
+e um `@import` de terceiro quebra o offline e entra no caminho crítico do primeiro paint.
+São 144 KB no precache (a Caveat sozinha é 73 KB — manuscrita tem curva demais), contra
+37 KB da Montserrat que saiu. Caro, mas é custo único e a viagem inteira roda offline.
+
+Só Satoshi e Clash têm `preload`: os 73 KB da Caveat disputariam banda com o bundle para
+atender um campo só. Na primeira carga a nota pisca uma vez; da segunda em diante o service
+worker já tem tudo.
+
+Um detalhe que sobreviveu à troca: o intervalo de horário do roteiro fica empilhado (início
+em cima, fim embaixo) em vez de `08:30–09:00` numa linha. São 11 caracteres numa coluna de
+56px — não cabe em fonte nenhuma, e alargar a coluna roubaria espaço do título.
+
+### Acento com parcimônia
+
+`#B4522F` aparece só em CTA, estado ativo e trecho percorrido da rota. Ele saiu do rótulo de
+categoria, que virou um ponto colorido (mantendo o pareamento com os pinos do mapa sem
+gastar o accent em informação secundária), e saiu da estrela do rating.
 
 ### Horários: só o que o OpenStreetMap sabe
 
