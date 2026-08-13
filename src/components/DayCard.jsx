@@ -33,7 +33,9 @@ export default function DayCard({
   return (
     <article
       className={[
-        'rounded-3xl bg-surface p-5',
+        // p-4, nao p-5: o capitulo ganhou um trilho de 48px a esquerda, e essa
+        // largura sai de algum lugar. Sai daqui, que e padding.
+        'rounded-3xl bg-surface p-4',
         'shadow-[0_1px_2px_rgba(0,0,0,0.35),0_8px_24px_-14px_rgba(0,0,0,0.45)]',
         isToday ? 'ring-2 ring-accent' : '',
       ].join(' ')}

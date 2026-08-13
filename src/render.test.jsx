@@ -79,6 +79,13 @@ beforeEach(() => {
     value: undefined,
     configurable: true,
   })
+  /**
+   * E nasce inseguro. Nao e detalhe: `useGeolocation` desiste antes de tocar em
+   * `navigator.geolocation` quando o contexto nao e seguro, e e isso que segura
+   * o `geolocation: undefined` acima de virar TypeError. O teste que simula GPS
+   * liga os dois juntos, e este reset devolve o padrao pros seguintes.
+   */
+  Object.defineProperty(window, 'isSecureContext', { value: false, configurable: true })
 })
 
 afterEach(cleanup)
@@ -107,6 +114,45 @@ describe('aba Agora', () => {
     setDate('2026-09-15')
     render(<App />)
     expect(screen.getByText(/GPS indisponível|Localização/)).toBeTruthy()
+  })
+
+  /**
+   * O caminho `granted` nao tinha teste nenhum: o jsdom nao tem geolocation,
+   * entao tudo que existia exercitava o lado sem GPS. Com o card de localizacao
+   * o lado COM GPS virou a tela principal da Agora, e ele precisa de cobertura.
+   */
+  it('com GPS, mostra o card de localizacao e os 4 mais proximos', () => {
+    Object.defineProperty(window, 'isSecureContext', { value: true, configurable: true })
+    Object.defineProperty(navigator, 'geolocation', {
+      value: {
+        watchPosition: (ok) => {
+          ok({
+            coords: { latitude: 38.1157, longitude: 13.3615, accuracy: 12 },
+            timestamp: Date.now(),
+          })
+          return 1
+        },
+        clearWatch: () => {},
+      },
+      configurable: true,
+    })
+
+    setDate('2026-09-12') // Palermo
+    render(<App />)
+
+    const cabecalho = screen.getByRole('button', { name: /Localização ativa/ })
+    expect(cabecalho.textContent).toMatch(/±12 m/)
+    // Credito dos tiles: exigencia de licenca do OSM e do CARTO, nao enfeite
+    expect(cabecalho.textContent).toMatch(/OpenStreetMap · CARTO/)
+    expect(cabecalho.getAttribute('aria-expanded')).toBe('false')
+
+    const card = cabecalho.closest('section')
+    expect(within(card).getAllByRole('listitem')).toHaveLength(4)
+
+    fireEvent.click(cabecalho)
+    expect(
+      screen.getByRole('button', { name: /Localização ativa/ }).getAttribute('aria-expanded'),
+    ).toBe('true')
   })
 
   it('fase sem lugar mapeado avisa em vez de listar vazio', () => {
@@ -148,10 +194,24 @@ describe('aba Roteiro', () => {
   it('agrupa os 19 dias em 9 capitulos', () => {
     setDate('2026-09-15')
     abrirRoteiro()
-    expect(
-      screen.getAllByRole('button', { name: /^\d+ ?[A-Za-zÀ-ú]/ }).length,
-    ).toBeGreaterThan(0)
+    // Os cabecalhos de capitulo sao os unicos com aria-expanded nessa tela
+    const cabecalhos = [
+      ...screen.getAllByRole('button', { expanded: true }),
+      ...screen.getAllByRole('button', { expanded: false }),
+    ]
+    expect(cabecalhos).toHaveLength(9)
     expect(screen.getByText(/9 capítulos · 19 dias/)).toBeTruthy()
+  })
+
+  it('o numero do capitulo fica FORA do cabecalho, que e o que deixa ele grudar', () => {
+    // Dentro do botao o numero rolaria junto com o card. No trilho, ele e
+    // sticky e fica no topo enquanto a fase passa por baixo.
+    setDate('2026-09-15')
+    abrirRoteiro()
+    const palermo = screen.getByRole('button', { name: /^Palermo/ }).closest('article')
+    const numero = within(palermo).getByText('5')
+    expect(numero.closest('button')).toBeNull()
+    expect(numero.className).toContain('sticky')
   })
 
   it('so o capitulo de hoje nasce aberto', () => {

@@ -3,6 +3,7 @@ import Icon, { BLOCK_ICON } from '../components/Icon.jsx'
 import PlaceCard from '../components/PlaceCard.jsx'
 import Section, { ExpandableList } from '../components/Section.jsx'
 import EmptyNearby from '../components/EmptyNearby.jsx'
+import LocationCard from '../components/LocationCard.jsx'
 import SearchBar from '../components/SearchBar.jsx'
 import { formatDateLong, upcomingBooked } from '../lib/phase.js'
 import { nearby, searchPlaces, splitSections, topRatedInPhase } from '../lib/places.js'
@@ -24,6 +25,7 @@ export default function Agora({
   visited,
   onToggleVisited,
   onOverridePhase,
+  onOpenPlace,
 }) {
   const { phase, source, scheduledPhase } = phaseInfo
   const { position, status, error, retry } = geo
@@ -42,6 +44,17 @@ export default function Agora({
     [places, position, visited]
   )
   const { comer, ver } = useMemo(() => splitSections(linhas), [linhas])
+
+  /**
+   * Os 4 do card de localizacao sao por DISTANCIA pura. O `nearby` ordena
+   * visitado por ultimo, o que esta certo pra sugerir aonde ir — mas o card diz
+   * "mais perto", e o bar da esquina nao deixa de ser o mais perto porque a
+   * gente ja foi nele.
+   */
+  const maisPerto = useMemo(
+    () => [...linhas].sort((a, b) => a.meters - b.meters).slice(0, 4),
+    [linhas]
+  )
 
   const alertas = upcomingBooked(dayInfo.day, now, 3)
   const naFase = places.filter((p) => p.phase_id === phase.id)
@@ -79,7 +92,16 @@ export default function Agora({
         <BookedAlert key={i} block={block} />
       ))}
 
-      <LocationStatus status={status} error={error} onRetry={retry} position={position} />
+      {status === 'granted' && position ? (
+        <LocationCard
+          position={position}
+          phase={phase}
+          perto={maisPerto}
+          onOpenPlace={onOpenPlace}
+        />
+      ) : (
+        <LocationStatus status={status} error={error} onRetry={retry} />
+      )}
 
       <SearchBar
         value={busca}
@@ -305,24 +327,11 @@ function BookedAlert({ block }) {
   )
 }
 
-function LocationStatus({ status, error, onRetry, position }) {
-  if (status === 'granted' && position) {
-    return (
-      <div className="mt-3 flex items-center gap-2.5 rounded-2xl bg-surface px-4 py-3">
-        <span className="relative flex size-2.5 shrink-0">
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-olive opacity-60" />
-          <span className="relative inline-flex size-2.5 rounded-full bg-olive" />
-        </span>
-        <p className="min-w-0 flex-1 text-[0.8125rem] text-fg-dim">
-          Localização ativa
-          {position.accuracy && (
-            <span className="text-fg-faint"> · ±{Math.round(position.accuracy)} m</span>
-          )}
-        </p>
-      </div>
-    )
-  }
-
+/**
+ * O lado sem posicao. Com posicao quem entra e o LocationCard — este componente
+ * so trata os estados em que nao ha o que mostrar num mapa.
+ */
+function LocationStatus({ status, error, onRetry }) {
   const conteudo =
     status === 'denied'
       ? {
@@ -332,7 +341,7 @@ function LocationStatus({ status, error, onRetry, position }) {
         }
       : status === 'unavailable'
         ? { titulo: 'GPS indisponível', texto: error ?? 'Não deu pra obter a localização.' }
-        : status === 'prompting'
+        : status === 'prompting' || status === 'granted'
           ? { titulo: 'Procurando você…', texto: 'Aceita a permissão de localização pra ver o que tem por perto.' }
           : { titulo: 'Localização desligada', texto: 'Liga o GPS pra ver o que a gente salvou por perto.' }
 

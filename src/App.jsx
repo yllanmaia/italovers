@@ -119,8 +119,19 @@ export default function App() {
    * a janela sem precisar de container, a barra de endereco do celular volta a
    * sumir ao rolar, e window.scrollTo volta a funcionar.
    */
+  /**
+   * Onde o que gruda no topo tem que parar. Sem simulacao e uma folga curta; com
+   * a tarja de data ligada, ela ocupa o topo e o numero do capitulo ficava
+   * escondido atras dela — e a tarja fica ligada o tempo todo, porque a viagem
+   * ainda nao comecou.
+   */
+  const topoSticky = dateSim ? '3.25rem' : '0.75rem'
+
   return (
-    <div className="mx-auto min-h-[100dvh] max-w-[480px]">
+    <div
+      className="mx-auto min-h-[100dvh] max-w-[480px]"
+      style={{ '--topo-sticky': topoSticky }}
+    >
       {dateSim && (
         <DateSimBanner
           sim={dateSim}
@@ -158,6 +169,7 @@ export default function App() {
             visited={visited}
             onToggleVisited={toggleVisited}
             onOverridePhase={onOverridePhase}
+            onOpenPlace={setSheetPlace}
           />
         )}
 

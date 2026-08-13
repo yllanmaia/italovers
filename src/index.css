@@ -240,6 +240,9 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    /* Zerar a duracao nao basta: o stagger da lista de lugares proximos e feito
+       de delay, e sem isto os itens ainda entrariam escalonados em 160ms. */
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 }
@@ -292,11 +295,40 @@
   margin: 0;
   width: 17.5rem !important;
 }
-.leaflet-container {
+/**
+ * O seletor esta dobrado de proposito.
+ *
+ * O `leaflet.css` entra pelo import do componente, e o bundler o coloca DEPOIS
+ * deste arquivo — tanto no dev quanto no build. Com a mesma especificidade quem
+ * chega por ultimo vence, entao o `background:#ddd` dele estava ganhando e a
+ * regra escura daqui nunca valeu: no mapa grande isso pisca um retangulo claro
+ * onde falta tile, e no mini-mapa do card, sem sinal, o card inteiro virava uma
+ * mancha cinza no meio do app escuro. Repetir a classe sobe pra 0,2,0 e resolve
+ * sem `!important` e sem depender de ordem.
+ */
+.leaflet-container.leaflet-container {
   font: inherit;
-  /* Cor do vao enquanto o tile nao chega. Precisa ser escura tambem, senao
-     cada tile faltando pisca um retangulo claro no meio do mapa. */
   background: var(--color-deep);
+}
+
+/**
+ * O mini-mapa do card de localizacao, sem tile: offline, ou nos milissegundos
+ * antes do primeiro carregar. Um retangulo preto de 140px parece card quebrado;
+ * a malha diz "aqui e um mapa" mesmo sem rua nenhuma. As duas classes caem no
+ * mesmo elemento — o Leaflet acrescenta a dele no container que recebe a nossa.
+ */
+.mini-mapa.mini-mapa.leaflet-container {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.06) 0 1px,
+      transparent 1px 28px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.06) 0 1px,
+      transparent 1px 28px
+    );
 }
 /* O Leaflet tem attributionControl desligado: o credito e renderizado pela
    propria tela, em Viagem.jsx, pra nao herdar a barra branca com link azul. */

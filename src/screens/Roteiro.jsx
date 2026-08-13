@@ -69,14 +69,15 @@ export default function Roteiro({
       </header>
 
       <div className="space-y-3">
-        {capitulos.map((cap) => (
+        {capitulos.map((cap, i) => (
           <div
             key={cap.id}
             ref={cap.id === alvo ? refAlvo : null}
-            className="scroll-mt-4"
+            className="scroll-mt-[var(--topo-sticky,0.75rem)]"
           >
             <Capitulo
               cap={cap}
+              ultimo={i === capitulos.length - 1}
               aberto={abertos.has(cap.id)}
               onAlternar={() => alternar(cap.id)}
               hoje={hoje}
@@ -135,8 +136,21 @@ function montarCapitulos(itinerary, places, hoje) {
   })
 }
 
+/**
+ * Um capitulo, em duas colunas: trilho a esquerda, card a direita.
+ *
+ * O numero saiu de dentro do cabecalho pra virar `sticky`: enquanto o capitulo
+ * aberto rola — e Roma tem 6 dias de blocos — ele fica grudado no topo dizendo
+ * em qual voce esta, ate o proximo empurrar. Dentro do botao isso era
+ * impossivel: o botao rola junto com o card.
+ *
+ * A regra que faz funcionar e negativa: `overflow-hidden` fica SO no <section>
+ * da direita. Qualquer ancestral do numero com overflow mata o sticky em
+ * silencio — o elemento simplesmente nao gruda, sem erro nenhum.
+ */
 function Capitulo({
   cap,
+  ultimo = false,
   aberto,
   onAlternar,
   hoje,
@@ -147,69 +161,89 @@ function Capitulo({
 }) {
   const vazio = cap.entradas.length === 0
 
+  /**
+   * O -ml-2 e o trilho invadindo a margem da pagina de proposito. A coluna do
+   * conteudo aqui e tripla — capitulo > dia > bloco, cada um com seu padding —
+   * e 48px inteiros a mais tirados do texto faziam "Forum Romano + Palatino"
+   * quebrar em tres linhas. Trilho encostado na borda e o que o desenho pede de
+   * qualquer forma: ele e margem, nao conteudo.
+   */
   return (
-    <section
-      className={[
-        'overflow-hidden rounded-3xl border bg-surface',
-        cap.temHoje ? 'border-accent' : 'border-line',
-      ].join(' ')}
-    >
-      <button
-        type="button"
-        onClick={onAlternar}
-        aria-expanded={aberto}
-        disabled={vazio}
-        className={[
-          'flex w-full items-center gap-3 px-4 py-3.5 text-left',
-          'transition duration-200 active:scale-[0.99]',
-          'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent',
-          vazio ? 'cursor-default' : 'cursor-pointer',
-        ].join(' ')}
-      >
+    <article className="-ml-2 grid grid-cols-[3rem_1fr] items-start">
+      <div className="relative self-stretch">
+        {/* Emenda no space-y-3 ate o proximo capitulo; o ultimo nao continua */}
+        {!ultimo && (
+          <span
+            aria-hidden="true"
+            className="absolute top-0 -bottom-3 left-6 w-0.5 -translate-x-px bg-line"
+          />
+        )}
+        {/* z abaixo de 30: a tarja de simulacao de data e sticky top-0 z-30, e o
+            numero tem que passar POR BAIXO dela, nao por cima. */}
         <span
           className={[
-            'grid size-9 shrink-0 place-items-center rounded-full text-[0.9375rem] font-bold tabular-nums',
+            'sticky top-[var(--topo-sticky,0.75rem)] z-10 mx-auto',
+            'grid size-10 place-items-center rounded-full',
+            'text-[0.9375rem] font-bold tabular-nums',
             cap.temHoje ? 'bg-accent text-white' : 'bg-elevated text-fg-dim',
           ].join(' ')}
         >
           {cap.numero}
         </span>
+      </div>
 
-        {/* O badge fica na linha do titulo, nao ao lado do bloco inteiro: como
-            irmao do conjunto ele espremia a linha de metadados, que quebrava em
-            duas e colidia com ele. */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <h2 className="title-display truncate text-[1.25rem] leading-tight text-fg">
-              {cap.short ?? cap.name}
-            </h2>
-            {cap.temHoje && (
-              <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-[0.625rem] font-bold tracking-wide text-white uppercase">
-                Hoje
-              </span>
-            )}
+      <section
+        className={[
+          'overflow-hidden rounded-3xl border bg-surface',
+          cap.temHoje ? 'border-accent' : 'border-line',
+        ].join(' ')}
+      >
+        <button
+          type="button"
+          onClick={onAlternar}
+          aria-expanded={aberto}
+          disabled={vazio}
+          className={[
+            'flex w-full items-center gap-3 px-4 py-3.5 text-left',
+            'transition duration-200 active:scale-[0.99]',
+            'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent',
+            vazio ? 'cursor-default' : 'cursor-pointer',
+          ].join(' ')}
+        >
+          {/* O badge fica na linha do titulo, nao ao lado do bloco inteiro: como
+              irmao do conjunto ele espremia a linha de metadados, que quebrava em
+              duas e colidia com ele. */}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h2 className="title-display truncate text-[1.25rem] leading-tight text-fg">
+                {cap.short ?? cap.name}
+              </h2>
+              {cap.temHoje && (
+                <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-[0.625rem] font-bold tracking-wide text-white uppercase">
+                  Hoje
+                </span>
+              )}
+            </div>
+            <p className="mt-0.5 text-[0.8125rem] text-fg-faint tabular-nums">
+              {cap.intervalo}
+              {cap.dias > 0 && ` · ${cap.dias} ${cap.dias === 1 ? 'dia' : 'dias'}`}
+              {cap.lugares > 0 && ` · ${cap.lugares} lugares`}
+            </p>
           </div>
-          <p className="mt-0.5 text-[0.8125rem] text-fg-faint tabular-nums">
-            {cap.intervalo}
-            {cap.dias > 0 && ` · ${cap.dias} ${cap.dias === 1 ? 'dia' : 'dias'}`}
-            {cap.lugares > 0 && ` · ${cap.lugares} lugares`}
-          </p>
-        </div>
 
-        {!vazio && (
-          <Icon
-            name="chevron"
-            size={20}
-            className={`shrink-0 text-fg-faint transition-transform duration-200 ${
-              aberto ? '' : '-rotate-90'
-            }`}
-          />
-        )}
-      </button>
+          {!vazio && (
+            <Icon
+              name="chevron"
+              size={20}
+              className={`shrink-0 text-fg-faint transition-transform duration-200 ${
+                aberto ? '' : '-rotate-90'
+              }`}
+            />
+          )}
+        </button>
 
-      {aberto && !vazio && (
-        <>
-          <div className="space-y-3 border-t border-line bg-deep p-3">
+        {aberto && !vazio && (
+          <div className="space-y-3 border-t border-line bg-deep p-2">
             {cap.entradas.map(({ day, dayNumber, segmento }) => (
               <DayCard
                 key={`${day.date}-${segmento.phaseId}`}
@@ -225,8 +259,8 @@ function Capitulo({
               />
             ))}
           </div>
-        </>
-      )}
-    </section>
+        )}
+      </section>
+    </article>
   )
 }
